@@ -1,0 +1,117 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="dat255.refugeeevent.fragment.DetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        app:srcCompat="@drawable/Armit_0664"
+        android:id="@+id/coverImage"
+        android:scaleType="centerCrop" />
+
+    <ImageButton
+        app:srcCompat="@drawable/pinIcon"
+        android:id="@+id/showMapsBtn"
+        android:layout_gravity="end"
+        android:layout_marginTop="105dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_width="45dp"
+        android:layout_height="45dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="381dp"
+        android:layout_gravity="bottom"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
+        android:paddingStart="20dp"
+        android:paddingBottom="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:text="@string/title_example"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleText"
+            android:maxLength="100"
+            tools:textColor="#212121"
+            android:textSize="20sp"
+            android:layout_width="306dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:text="World Trade Center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/placeText"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:drawableStart="@drawable/ic_menu_camera"
+                android:drawableLeft="@drawable/ic_menu_camera"/>
+
+            <TextView
+                android:text="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/attendingText"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:drawableStart="@drawable/ic_menu_share"
+                android:drawableLeft="@drawable/ic_menu_share" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:text="September 11, 2001"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dateText"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:drawableStart="@drawable/ic_menu_slideshow"
+                android:drawableLeft="@drawable/ic_menu_slideshow" />
+
+            <TextView
+                android:text="08:00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeText"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableStart="@drawable/ic_menu_manage"
+                android:drawableLeft="@drawable/ic_menu_manage" />
+        </RelativeLayout>
+
+        <TextView
+            android:text="@string/description_example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp" />
+    </LinearLayout>
+
+</FrameLayout>
