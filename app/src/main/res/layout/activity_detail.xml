@@ -103,7 +103,7 @@
     </LinearLayout>
 
     <ImageButton
-        app:srcCompat="@drawable/pinicon"
+        app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/showMapsBtn"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
