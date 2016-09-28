@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.facebook.login.widget.LoginButton
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        facebook:com_facebook_login_text="@string/facebook_login_button_text"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/login_continue_without"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/login_continue_without"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="148dp"
+        android:text="@string/login_continue_without"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="200dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginBottom="69dp"
+        android:id="@+id/imageView2"
+        android:layout_height="200dp"
+        android:layout_above="@+id/login_button"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
