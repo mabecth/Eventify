@@ -1,9 +1,6 @@
 package dat255.refugeeevent;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,22 +11,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.drive.Drive;
-
-
+import android.view.View;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.widget.ProfilePictureView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnConnectionFailedListener {
+
+    //Google maps
     private String origin = "";
     private String destination = "";
     private static String url = "";
-    public static TextView data;
+    public TextView data;
+
+    //Facebook
+    private ProfileTracker profileTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,26 @@ public class MainActivity extends AppCompatActivity
         data = (TextView)findViewById(R.id.jsonItem);
         new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origin + "&destinations=" + destination + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
 
+        //Reach views from nav_header_main.xml
+        View view = navigationView.getHeaderView(0);
+        TextView fbName = (TextView) view.findViewById(R.id.nameTV);
+        ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
+
+        //Retrieve public profile info
+        if(Profile.getCurrentProfile() == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    profileTracker.stopTracking();
+                }
+            };
+
+        } else {
+            //Use available info to update views
+            fbName.setText(Profile.getCurrentProfile().getName());
+            fbPicture.setProfileId(Profile.getCurrentProfile().getId());
+        }
 
     }
 
@@ -66,9 +89,7 @@ public class MainActivity extends AppCompatActivity
         data.setText(origin + " to " + destination + ": " + text);
     }
 
-
-
-        @Override
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -77,7 +98,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -115,7 +134,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
-
+            LoginManager.getInstance().logOut();
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -126,6 +146,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        profileTracker.stopTracking();
     }
 }
 

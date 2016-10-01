@@ -5,6 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="login_continue_without">Continue without</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">342377189428679</string>
+    <string name="facebook_login_button_text">Log in with Facebook</string>
 
     //TEST STRINGS
     <string name="title_example">ArmIT\'s Football Night</string>
