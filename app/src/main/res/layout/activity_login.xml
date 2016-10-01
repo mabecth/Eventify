@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorClouds">
 
 
     <com.facebook.login.widget.LoginButton
@@ -10,11 +11,13 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         facebook:com_facebook_login_text="@string/facebook_login_button_text"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="25dp"
         android:layout_above="@+id/login_continue_without"
         android:layout_centerHorizontal="true" />
 
@@ -30,7 +33,6 @@
 
     <ImageView
         android:layout_width="300dp"
-        app:srcCompat="@drawable/logo"
         android:id="@+id/imageView2"
         android:layout_height="300dp"
         android:layout_above="@+id/login_button"
