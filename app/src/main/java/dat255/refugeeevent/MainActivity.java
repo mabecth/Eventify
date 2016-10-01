@@ -10,9 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.widget.ProfilePictureView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ProfileTracker profileTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,27 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Reach views from nav_header_main.xml
+        View view = navigationView.getHeaderView(0);
+        TextView fbName = (TextView) view.findViewById(R.id.nameTV);
+        ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
+
+        //Retrieve public profile info
+        if(Profile.getCurrentProfile() == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    profileTracker.stopTracking();
+                }
+            };
+
+        } else {
+            //Use available info to update views
+            fbName.setText(Profile.getCurrentProfile().getName());
+            fbPicture.setProfileId(Profile.getCurrentProfile().getId());
+        }
     }
 
     @Override
@@ -76,11 +105,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
-
+            LoginManager.getInstance().logOut();
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        profileTracker.stopTracking();
     }
 }
