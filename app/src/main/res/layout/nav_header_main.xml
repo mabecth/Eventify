@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_alignParentLeft="true"
+        android:text="@string/guest"
         android:layout_below="@+id/profilePictureIV"
         android:layout_alignParentStart="true"
         android:textSize="16sp" />

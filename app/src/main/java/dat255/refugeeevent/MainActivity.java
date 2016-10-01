@@ -79,8 +79,12 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             //Use available info to update views
-            fbName.setText(Profile.getCurrentProfile().getName());
-            fbPicture.setProfileId(Profile.getCurrentProfile().getId());
+            if (Profile.getCurrentProfile().getName() != null) {
+                fbName.setText(Profile.getCurrentProfile().getName());
+            }
+            if (Profile.getCurrentProfile().getId() != null) {
+                fbPicture.setProfileId(Profile.getCurrentProfile().getId());
+            }
         }
 
     }
