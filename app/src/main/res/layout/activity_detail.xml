@@ -39,7 +39,7 @@
             android:id="@+id/titleText"
             android:maxLength="100"
             tools:textColor="#212121"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:layout_width="306dp"
             android:textColor="#212121" />
 
@@ -53,7 +53,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/placeText"
                 android:textColor="#212121"
-                android:textSize="18sp" />
+                android:textSize="20sp"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <TextView
                 android:text="10"
@@ -61,9 +64,21 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/attendingText"
                 android:textColor="#212121"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/ic_supervisor_account"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/attendingText"
+                android:layout_toStartOf="@+id/attendingText" />
 
         </RelativeLayout>
 
