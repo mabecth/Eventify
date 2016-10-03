@@ -10,15 +10,18 @@
         android:weightSum="1"
         android:layout_height="120dp">
 
-        <TextView
-            android:text="TextView"
-            android:paddingTop="30dp"
-            android:paddingLeft="10dp"
+        <RelativeLayout
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/picTextView"
-            android:layout_weight="0.02"
-            android:layout_width="100dp" />
+            android:layout_weight="0.02">
+
+            <com.facebook.login.widget.ProfilePictureView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/eventProfilePictureView"
+                android:layout_width="80dp"
+                android:layout_centerInParent="true"
+                android:layout_height="80dp"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:orientation="vertical"
