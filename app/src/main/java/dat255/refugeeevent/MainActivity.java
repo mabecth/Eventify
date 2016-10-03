@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         origin = "Mölndal";
         destination = "Göteborg";
         data = (TextView)findViewById(R.id.jsonItem);
+        data.setVisibility(View.INVISIBLE);
         new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/" +
                 "json?units=metric&origins=" + origin + "&destinations=" + destination +
                 "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
