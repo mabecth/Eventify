@@ -21,6 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:id="@+id/jsonItem"
-        android:text="Hej"/>
+        android:id="@+id/destination"
+        android:text="Heden"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:id="@+id/distance"
+        />
+
 </RelativeLayout>
