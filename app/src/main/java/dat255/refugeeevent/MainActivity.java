@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -22,6 +23,8 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
+import dat255.refugeeevent.Adapter.MainListAdapter;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnConnectionFailedListener {
 
@@ -30,6 +33,10 @@ public class MainActivity extends AppCompatActivity
     private String destination = "";
     private static String url = "";
     public TextView data;
+
+    //EventList
+    private ListView listView;
+    private MainListAdapter adapter;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -61,6 +68,12 @@ public class MainActivity extends AppCompatActivity
         destination = "Göteborg";
         data = (TextView)findViewById(R.id.jsonItem);
         new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origin + "&destinations=" + destination + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+
+        //Longs skitkod rör ej
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+        listView = (ListView)findViewById(R.id.listView);
+        listView.setAdapter(adapter);
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
