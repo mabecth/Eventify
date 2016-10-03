@@ -41,8 +41,8 @@ public class MainListAdapter extends BaseAdapter{
         second.setTime("12:00");
         second.setTitle("Second Event");
 
-        listOfEvents.put(second,2);
         listOfEvents.put(first,1);
+        listOfEvents.put(second,2);
         mKeys = listOfEvents.keySet().toArray(new Event[listOfEvents.size()]);
     }
 
