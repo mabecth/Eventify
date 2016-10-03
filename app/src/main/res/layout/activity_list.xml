@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     tools:context="dat255.refugeeevent.ListActivity">
 
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:name="android.support.v4.app.ListFragment"
-        android:id="@+id/fragment2"
-        tools:layout="@layout/fragment_list"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/listView" />
 </RelativeLayout>

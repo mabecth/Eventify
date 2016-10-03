@@ -27,6 +27,8 @@ public class MainListAdapter extends BaseAdapter{
     public MainListAdapter(){
         Event first = new Event();
         Event second = new Event();
+        listOfEvents = new HashMap<>();
+
         first.setDate("29/10/2016");
         first.setNbrAttending(200);
         first.setPlace("Helvete");
@@ -39,8 +41,8 @@ public class MainListAdapter extends BaseAdapter{
         second.setTime("12:00");
         second.setTitle("Second Event");
 
-        listOfEvents.put(first,1);
         listOfEvents.put(second,2);
+        listOfEvents.put(first,1);
         mKeys = listOfEvents.keySet().toArray(new Event[listOfEvents.size()]);
     }
 
@@ -78,7 +80,7 @@ public class MainListAdapter extends BaseAdapter{
         dateTextView.setText(temp.getDate());
         timeTextView.setText(temp.getTime());
         locationTextView.setText(temp.getPlace());
-        attendeesTextView.setText(temp.getNbrAttending());
+        attendeesTextView.setText(temp.getNbrAttending() + "");
 
 
         return result;
