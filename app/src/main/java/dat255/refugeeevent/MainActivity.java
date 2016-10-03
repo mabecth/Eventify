@@ -22,7 +22,6 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
-
 import dat255.refugeeevent.Adapter.MainListAdapter;
 
 public class MainActivity extends AppCompatActivity
@@ -67,7 +66,9 @@ public class MainActivity extends AppCompatActivity
         origin = "Mölndal";
         destination = "Göteborg";
         data = (TextView)findViewById(R.id.jsonItem);
-        new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origin + "&destinations=" + destination + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+        new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/" +
+                "json?units=metric&origins=" + origin + "&destinations=" + destination +
+                "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
 
         //Longs skitkod rör ej
         listView = (ListView) findViewById(R.id.listView);

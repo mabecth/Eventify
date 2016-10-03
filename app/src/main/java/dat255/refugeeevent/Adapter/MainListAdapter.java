@@ -5,22 +5,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
+import com.facebook.login.widget.ProfilePictureView;
 import java.util.HashMap;
-
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
-
-/**
- * Created by Kotex on 26/09/2016.
- */
 
 public class MainListAdapter extends BaseAdapter{
 
     private HashMap<Event, Integer> listOfEvents;
     private Event[] mKeys;
     private Event temp;
-    private TextView picTextView, nameTextView, dateTextView, timeTextView,
+    private ProfilePictureView eventProfilePictureView;
+    private TextView nameTextView, dateTextView, timeTextView,
             locationTextView, attendeesTextView;
     private View result;
 
@@ -87,7 +83,7 @@ public class MainListAdapter extends BaseAdapter{
     }
 
     private void initializeView(){
-        picTextView = (TextView) result.findViewById(R.id.picTextView);
+        eventProfilePictureView = (ProfilePictureView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
         dateTextView = (TextView) result.findViewById(R.id.dateTextView);
         timeTextView = (TextView) result.findViewById(R.id.timeTextView);

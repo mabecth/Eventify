@@ -18,9 +18,9 @@
             <com.facebook.login.widget.ProfilePictureView
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/eventProfilePictureView"
-                android:layout_width="80dp"
+                android:layout_width="70dp"
                 android:layout_centerInParent="true"
-                android:layout_height="80dp"/>
+                android:layout_height="70dp"/>
         </RelativeLayout>
 
         <LinearLayout

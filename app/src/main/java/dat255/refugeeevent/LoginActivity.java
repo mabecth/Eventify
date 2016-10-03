@@ -17,8 +17,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import dat255.refugeeevent.model.Event;
-
 public class LoginActivity extends AppCompatActivity {
 
     private TextView continueWithout;

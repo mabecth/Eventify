@@ -1,12 +1,8 @@
 package dat255.refugeeevent.model;
 
 import java.util.ArrayList;
-
 import dat255.refugeeevent.helpers.SortByDate;
 
-/**
- * Created by Kristoffer on 2016-10-02.
- */
 public class EventHandler {
     private static EventHandler ourInstance = new EventHandler();
 
