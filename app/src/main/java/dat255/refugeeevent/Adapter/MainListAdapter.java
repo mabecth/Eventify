@@ -20,7 +20,6 @@ import dat255.refugeeevent.model.EventHandler;
 public class MainListAdapter extends BaseAdapter{
 
     private List<Event> listOfEvents;
-    private Event[] mKeys;
     private Event temp;
     private ProfilePictureView eventProfilePictureView;
     private TextView nameTextView, dateTextView, timeTextView,
@@ -28,27 +27,7 @@ public class MainListAdapter extends BaseAdapter{
     private View result;
 
     public MainListAdapter(){
-        Event first = new Event();
-        Event second = new Event();
         listOfEvents = EventHandler.getInstance().getEvents();
-
-        /*
-        first.setDate("29/10/2016");
-        first.setNbrAttending(200);
-        first.setPlace("Helvete");
-        first.setTime("23:59");
-        first.setTitle("First Event");
-
-        second.setDate("14/11/2016");
-        second.setNbrAttending(1111);
-        second.setPlace("Heden");
-        second.setTime("12:00");
-        second.setTitle("Second Event");
-
-        listOfEvents.put(first,1);
-        listOfEvents.put(second,2);
-        mKeys = listOfEvents.keySet().toArray(new Event[listOfEvents.size()]);
-        */
     }
 
     @Override

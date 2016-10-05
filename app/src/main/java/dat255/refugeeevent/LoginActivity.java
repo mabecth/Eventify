@@ -46,12 +46,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
 
-        /*TEST - DETAILED VIEW
-        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-        intent.putExtra("EventIndex", 0);
-        startActivity(intent);
-        */
-
     }
 
     private void initFacebookLogin() {
