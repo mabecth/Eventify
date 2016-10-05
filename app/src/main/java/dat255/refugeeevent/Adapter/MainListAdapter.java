@@ -1,5 +1,7 @@
 package dat255.refugeeevent.Adapter;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,12 +9,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 import java.util.HashMap;
+import java.util.List;
+
+import dat255.refugeeevent.DetailActivity;
+import dat255.refugeeevent.MainActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
+import dat255.refugeeevent.model.EventHandler;
 
 public class MainListAdapter extends BaseAdapter{
 
-    private HashMap<Event, Integer> listOfEvents;
+    private List<Event> listOfEvents;
     private Event[] mKeys;
     private Event temp;
     private ProfilePictureView eventProfilePictureView;
@@ -23,8 +30,9 @@ public class MainListAdapter extends BaseAdapter{
     public MainListAdapter(){
         Event first = new Event();
         Event second = new Event();
-        listOfEvents = new HashMap<>();
+        listOfEvents = EventHandler.getInstance().getEvents();
 
+        /*
         first.setDate("29/10/2016");
         first.setNbrAttending(200);
         first.setPlace("Helvete");
@@ -40,6 +48,7 @@ public class MainListAdapter extends BaseAdapter{
         listOfEvents.put(first,1);
         listOfEvents.put(second,2);
         mKeys = listOfEvents.keySet().toArray(new Event[listOfEvents.size()]);
+        */
     }
 
     @Override
@@ -49,7 +58,7 @@ public class MainListAdapter extends BaseAdapter{
 
     @Override
     public Object getItem(int position) {
-        return listOfEvents.get(mKeys[position]);
+        return listOfEvents.get(position);
     }
 
     @Override
@@ -58,9 +67,9 @@ public class MainListAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(final int position, View view, final ViewGroup viewGroup) {
 
-        temp = mKeys[position];
+        temp = listOfEvents.get(position);
 
         if (view == null)
         {
@@ -77,6 +86,18 @@ public class MainListAdapter extends BaseAdapter{
         timeTextView.setText(temp.getTime());
         locationTextView.setText(temp.getPlace());
         attendeesTextView.setText(temp.getNbrAttending() + "");
+
+        if (result!=null) {
+            result.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("Click", "You clicked item with position: " + position);
+                    Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                    intent.putExtra("EventIndex", position);
+                    v.getContext().startActivity(intent);
+                }
+            });
+        }
 
 
         return result;
