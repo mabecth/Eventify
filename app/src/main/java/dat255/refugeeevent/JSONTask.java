@@ -73,6 +73,6 @@ public class JSONTask extends AsyncTask<String, String, String> {
 @Override
 protected void onPostExecute(String result){
             super.onPostExecute(result);
-            ac.setText(result);
+            ac.setDistance(result);
         }
 }

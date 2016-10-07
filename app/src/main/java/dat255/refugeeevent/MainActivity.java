@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
         return destinationTextView.getText().toString();
     }
 
-    public void setText(String distance) {
+    public void setDistance(String distance) {
         distanceTextView.setText(distance);
     }
 
@@ -184,22 +184,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLocationChanged(Location location)
-    {
+    public void onLocationChanged(Location location) {
+
         mLastLocation = location;
 
-        //Place current location marker
+        //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
         calculateDistance();
-
-
-
-
     }
 
 
