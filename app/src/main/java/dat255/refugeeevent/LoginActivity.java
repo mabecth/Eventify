@@ -17,8 +17,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import dat255.refugeeevent.model.Event;
-
 public class LoginActivity extends AppCompatActivity {
 
     private TextView continueWithout;
@@ -47,12 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
-
-        /*TEST - DETAILED VIEW
-        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-        intent.putExtra("EventIndex", 0);
-        startActivity(intent);
-        */
 
     }
 

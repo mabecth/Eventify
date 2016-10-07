@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,6 +23,8 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import dat255.refugeeevent.Adapter.MainListAdapter;
+import dat255.refugeeevent.model.Event;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -49,6 +53,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -63,6 +69,11 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
+    private  List<Event> listOfEvents;
+
+    //EventList
+    private ListView listView;
+    private MainListAdapter adapter;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -83,24 +94,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-         /* Check for latest version of Play services */
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-            }
-        }
-        else {
-            buildGoogleApiClient();
-        }
 
-        setTextViews();
-        setDestination();
+
+
+
+        //Longs skitkod rör ej
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+        listView = (ListView)findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+        listOfEvents = adapter.getListOfEvents();
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
@@ -126,36 +129,48 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
-    }
-    public void setTextViews(){
-        destinationTextView = (TextView)findViewById(R.id.destination);
-        distanceTextView = (TextView)findViewById(R.id.distance);
-    }
 
-    public void setDestination(){
-        destination = getDestination().replaceAll(" ", "");
+          /* Check for latest version of Play services */
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
+        //Initialize Google Play Services
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                //calculateDistance();
+            }
+        }
+        else {
+            buildGoogleApiClient();
+            //calculateDistance();
+        }
+
     }
 
     public void calculateDistance() {
-        new JSONTask(this).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + destination + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+        System.out.print(adapter.getCount());
+        listView.getChildAt(1- listView.getFirstVisiblePosition());
+        for(int i = 0; i < adapter.getCount()-1; i++) {
+            new JSONTask(this, i, listOfEvents.get(i)).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace() + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+            adapter.notifyDataSetChanged();
+        }
+        adapter.notifyDataSetChanged();
     }
 
-    public String getDestination(){
-        return destinationTextView.getText().toString();
-    }
 
-    public void setDistance(String distance) {
-        distanceTextView.setText(distance);
-    }
 
     @Override
     public void onPause() {
         super.onPause();
 
         //stop location updates when Activity is no longer active
-        if (mGoogleApiClient != null) {
+       if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
     }
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -169,14 +184,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(10000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        mLocationRequest.setInterval(1);
+        mLocationRequest.setFastestInterval(1);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+
     }
     @Override
     public void onConnectionSuspended(int i) {
@@ -190,19 +206,19 @@ public class MainActivity extends AppCompatActivity
 
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
+        calculateDistance();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
 
-        calculateDistance();
+
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        calculateDistance();
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -331,6 +347,7 @@ public class MainActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 
     public void onDestroy() {
         super.onDestroy();

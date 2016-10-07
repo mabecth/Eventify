@@ -1,11 +1,7 @@
 package dat255.refugeeevent.model;
 
-/**
- * Created by Kristoffer on 2016-09-26.
- */
-
 public class Event {
-    private String title, place, date, time, destination,desc;
+    private String title, place, date, time,desc, distance;
     private int nbrAttending;
 
     public String getTitle() {
@@ -20,6 +16,13 @@ public class Event {
     }
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 
     public String getDate() {
@@ -43,12 +46,7 @@ public class Event {
         this.nbrAttending = nbrAttending;
     }
 
-    public String getDestination(){
-        return destination;
-    }
-    public void setDestination(String destination){
-        this.destination = destination;
-    }
+
 
     public String getDesc() {
         return desc;
