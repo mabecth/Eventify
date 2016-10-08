@@ -12,7 +12,8 @@ import com.facebook.HttpMethod;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.helpers.SortByDate;
 
@@ -20,7 +21,7 @@ public class EventHandler extends Service {
 
     private static EventHandler ourInstance = new EventHandler();
 
-    private ConcurrentLinkedQueue<Event> events;
+    private List<Event> events;
     private Event event;
     private int nbrOfOrganisations;
     private int dataCollectCycles;
@@ -29,7 +30,7 @@ public class EventHandler extends Service {
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        events = new ConcurrentLinkedQueue<>();
+        events = new CopyOnWriteArrayList<>();
         String[] organisations = EventHandler.this.getResources().getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
         dataCollectCycles = 0;
@@ -91,7 +92,7 @@ public class EventHandler extends Service {
                                         if (obj.has("start_time"))
                                             event.setDate(obj.getString("start_time"));
 
-                                        events.offer(event);
+                                        events.add(event);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -137,11 +138,11 @@ public class EventHandler extends Service {
         return ourInstance;
     }
 
-    public Event getEventAtTop() {
-        return events.poll();
+    public Event getEventAt(int index) {
+        return events.get(index);
     }
 
-    public ConcurrentLinkedQueue<Event> getEvents(){
+    public List<Event> getEvents(){
         return events;
     }
 }
