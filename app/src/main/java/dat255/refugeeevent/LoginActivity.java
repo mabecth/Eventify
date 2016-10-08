@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.CallbackManager;
@@ -19,7 +20,7 @@ import com.facebook.login.widget.LoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView continueWithout;
+    private ImageView continueWithout;
     private static String TAG = "LoginActivity";
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -33,8 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         // Facebook Analytics
         AppEventsLogger.activateApp(this);
 
-        continueWithout = (TextView) findViewById(R.id.login_continue_without);
-        continueWithout.setPaintFlags(continueWithout.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        continueWithout = (ImageView) findViewById(R.id.login_continue_without);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
@@ -86,5 +86,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void continueWithout(View view) {
         // Continue without login through Facebook
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 }

@@ -21,20 +21,22 @@
         android:layout_above="@+id/login_continue_without"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/login_continue_without"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="148dp"
-        android:text="@string/login_continue_without"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="continueWithout"/>
-
     <ImageView
         android:layout_width="300dp"
         android:id="@+id/imageView2"
         android:layout_height="300dp"
         android:layout_above="@+id/login_button"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/login_continue_without"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="92dp"
+        android:src="@drawable/ic_forward"
+        android:text="@string/login_continue_without"
+        android:onClick="continueWithout"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
