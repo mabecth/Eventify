@@ -36,7 +36,6 @@
         android:id="@+id/locationTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gothenburg"
         android:layout_marginRight="53dp"
         android:layout_marginEnd="53dp"
         android:layout_below="@+id/nameTV"
