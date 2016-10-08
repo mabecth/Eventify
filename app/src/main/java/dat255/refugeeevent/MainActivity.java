@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
-    private  List<Event> listOfEvents;
+    private List<Event> listOfEvents;
 
     //EventList
     private ListView listView;
@@ -96,12 +96,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-
         //Longs skitkod rör ej
         listView = (ListView) findViewById(R.id.listView);
         adapter = new MainListAdapter();
-        listView = (ListView)findViewById(R.id.listView);
         listView.setAdapter(adapter);
         listOfEvents = adapter.getListOfEvents();
 
@@ -151,15 +148,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void calculateDistance() {
-        System.out.print(adapter.getCount());
-        listView.getChildAt(1- listView.getFirstVisiblePosition());
-        for(int i = 0; i < adapter.getCount()-1; i++) {
-            new JSONTask(this, i, listOfEvents.get(i)).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace() + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
-            adapter.notifyDataSetChanged();
+        //listView.getChildAt(1- listView.getFirstVisiblePosition());
+        for(int i = 0; i < adapter.getCount(); i++) {
+            new JSONTask(this, i,adapter.getListOfEvents().get(i)).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace() + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
         }
-        adapter.notifyDataSetChanged();
+
+
     }
 
+    public void updateDistance(int id, String result){
+        adapter.getListOfEvents().get(id).setDistance(result);
+        listView.invalidateViews();
+    }
 
 
     @Override

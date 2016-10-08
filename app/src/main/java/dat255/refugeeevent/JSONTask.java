@@ -13,14 +13,14 @@ import dat255.refugeeevent.model.Event;
 
 public class JSONTask extends AsyncTask<String, String, String> {
 
-    MainActivity ac;
+    private MainActivity activity;
     private int id;
-    private Event event;
 
-    public JSONTask(MainActivity ac, int id, Event event) {
-        this.ac = ac;
+
+    public JSONTask(MainActivity activity, int id, Event even) {
+        this.activity = activity;
         this.id = id;
-        this.event = event;
+
     }
 
     @Override
@@ -40,6 +40,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
             StringBuffer buffer = new StringBuffer();
 
             String line = "";
+            //Extract distance from JSON
             while ((line = reader.readLine()) != null) {
                 if (line.contains("distance")) {
                     line = reader.readLine();
@@ -75,9 +76,11 @@ public class JSONTask extends AsyncTask<String, String, String> {
 
 @Override
 protected void onPostExecute(String result){
-            //super.onPostExecute(result);
-            event.setDistance(result);
-        }
+            super.onPostExecute(result);
+            activity.updateDistance(id, result);
+
+
+}
 
 
 }
