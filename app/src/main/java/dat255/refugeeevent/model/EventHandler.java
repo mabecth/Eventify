@@ -22,7 +22,7 @@ public class EventHandler {
 
         Event test2 = new Event();
         test2.setTitle("Come and meet us");
-        test2.setPlace("Cafe Monte");
+        test2.setPlace("Lindome");
         test2.setTime("18:00");
         test2.setDate("17/08/2017");
         test2.setDesc("Hi everyone!");
@@ -30,7 +30,7 @@ public class EventHandler {
 
         Event test3 = new Event();
         test3.setTitle("Game of thrones & chill");
-        test3.setPlace("Cafe Monte");
+        test3.setPlace("Lindome");
         test3.setTime("18:00");
         test3.setDate("17/08/2017");
         test3.setDesc("Hi everyone!");

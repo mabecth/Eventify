@@ -9,12 +9,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import dat255.refugeeevent.model.Event;
+
 public class JSONTask extends AsyncTask<String, String, String> {
 
-    MainActivity ac;
+    private MainActivity activity;
+    private int id;
 
-    public JSONTask(MainActivity ac) {
-        this.ac = ac;
+
+    public JSONTask(MainActivity activity, int id, Event even) {
+        this.activity = activity;
+        this.id = id;
+
     }
 
     @Override
@@ -34,6 +40,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
             StringBuffer buffer = new StringBuffer();
 
             String line = "";
+            //Extract distance from JSON
             while ((line = reader.readLine()) != null) {
                 if (line.contains("distance")) {
                     line = reader.readLine();
@@ -43,7 +50,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
             }
 
 
-            return buffer.toString();
+        return buffer.toString();
 
 
         } catch (MalformedURLException e) {
@@ -66,9 +73,12 @@ public class JSONTask extends AsyncTask<String, String, String> {
         return null;
     }
 
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        ac.setText(result);
-    }
+
+@Override
+protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            activity.updateDistance(id, result);
+}
+
+
 }

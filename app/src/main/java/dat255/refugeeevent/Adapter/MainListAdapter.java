@@ -23,7 +23,7 @@ public class MainListAdapter extends BaseAdapter{
     private Event temp;
     private ProfilePictureView eventProfilePictureView;
     private TextView nameTextView, dateTextView, timeTextView,
-            locationTextView, attendeesTextView;
+            locationTextView, attendeesTextView, distanceTextView;
     private View result;
 
     public MainListAdapter(){
@@ -45,6 +45,12 @@ public class MainListAdapter extends BaseAdapter{
         return i;
     }
 
+    public List<Event> getListOfEvents(){
+        return this.listOfEvents;
+    }
+
+
+
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
 
@@ -65,6 +71,7 @@ public class MainListAdapter extends BaseAdapter{
         timeTextView.setText(temp.getTime());
         locationTextView.setText(temp.getPlace());
         attendeesTextView.setText(temp.getNbrAttending() + "");
+        distanceTextView.setText(temp.getDistance());
 
         if (result!=null) {
             result.setOnClickListener(new View.OnClickListener() {
@@ -89,5 +96,6 @@ public class MainListAdapter extends BaseAdapter{
         timeTextView = (TextView) result.findViewById(R.id.timeTextView);
         locationTextView = (TextView) result.findViewById(R.id.locationTextView);
         attendeesTextView = (TextView) result.findViewById(R.id.attendeesTextView);
+        distanceTextView = (TextView) result.findViewById(R.id.distanceTextView);
     }
 }
