@@ -12,6 +12,14 @@
     <string name="facebook_app_id">342377189428679</string>
     <string name="facebook_login_button_text">Log in with Facebook</string>
 
+    <!-- Organisations -->
+    <string-array name="organisations">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
     //TEST STRINGS
     <string name="title_example">ArmIT\'s Football Night</string>
     <string name="description_example">Hi everyone!\n\nWe invite all newly arrived to a evening at Heden,
