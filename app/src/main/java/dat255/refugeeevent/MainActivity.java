@@ -1,6 +1,8 @@
 package dat255.refugeeevent;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
@@ -53,6 +56,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        
 
         //Longs skitkod rör ej
         listView = (ListView) findViewById(R.id.listView);
@@ -207,6 +211,9 @@ public class MainActivity extends AppCompatActivity
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
         calculateDistance();
+        TextView locationTextView = (TextView)findViewById(R.id.locationTV);
+        locationTextView.setText(latLng.toString());
+
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
