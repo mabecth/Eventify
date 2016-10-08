@@ -23,7 +23,7 @@ public class EventHandler extends Service {
     private ConcurrentLinkedQueue<Event> events;
     private Event event;
     private int nbrOfOrganisations;
-    private int dataCollectCycles = 0;
+    private int dataCollectCycles;
 
     @Override
     public void onCreate() {
@@ -32,6 +32,7 @@ public class EventHandler extends Service {
         events = new ConcurrentLinkedQueue<>();
         String[] organisations = EventHandler.this.getResources().getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
+        dataCollectCycles = 0;
 
         for(String s : organisations) {
             getEventsFromFacebook(s);
@@ -44,9 +45,9 @@ public class EventHandler extends Service {
         return null;
     }
 
-
     public void checkIfDone() {
         if (dataCollectCycles == nbrOfOrganisations) {
+            //Send events to view
             System.out.println("All done!");
         }
     }
@@ -54,7 +55,7 @@ public class EventHandler extends Service {
     public void getEventsFromFacebook(final String id) {
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + id + "/events",
+                "/" + id + "/events?fields=id,name,description,attending_count,cover,start_time,place",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -69,22 +70,28 @@ public class EventHandler extends Service {
                                     try {
                                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                                        event.setId(obj.getString("id"));
-                                        event.setTitle(obj.getString("name"));
-                                        event.setDesc(obj.getString("description"));
-                                        event.setNbrAttending(obj.getString("attending_count"));
+                                        if (obj.has("id"))
+                                            event.setId(obj.getString("id"));
 
-                                        if (obj.has("cover")) {
+                                        if (obj.has("name"))
+                                            event.setTitle(obj.getString("name"));
+
+                                        if (obj.has("description"))
+                                            event.setDesc(obj.getString("description"));
+
+                                        if (obj.has("attending_count"))
+                                            event.setNbrAttending(obj.getString("attending_count"));
+
+                                        if (obj.has("cover"))
                                             event.setCover(obj.getJSONObject("cover").getString("source"));
-                                        }
-                                        if (obj.has("place")) {
-                                            event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
-                                        }
-                                        if (obj.has("start_time")) {
-                                            event.setDate(obj.getString("start_time"));
-                                        }
 
-                                        events.offer(event); //Does not work
+                                        if (obj.has("place"))
+                                            event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
+
+                                        if (obj.has("start_time"))
+                                            event.setDate(obj.getString("start_time"));
+
+                                        events.offer(event);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -130,9 +137,9 @@ public class EventHandler extends Service {
         return ourInstance;
     }
 
-    /*public Event getEventAt(int index){
-        return events.get(index);
-    }*/
+    public Event getEventAtTop() {
+        return events.poll();
+    }
 
     public ConcurrentLinkedQueue<Event> getEvents(){
         return events;

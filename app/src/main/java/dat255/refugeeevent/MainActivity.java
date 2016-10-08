@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //Start collecting events
-        startService(new Intent(this, EventHandler.class));
+        startService(new Intent(MainActivity.this, EventHandler.class));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

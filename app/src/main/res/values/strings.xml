@@ -14,10 +14,10 @@
 
     <!-- Organisations -->
     <string-array name="organisations">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
+        <item>1561325850757258</item><!--Blå stället-->
+        <item>534633456670064</item><!-- Flyktingguide/Språkvän Göteborg  -->
+        <item>155193204865736</item><!-- Flyktingguide/Språkvän i Kungsbacka -->
+        <item>532748086901149</item><!-- Lundby församlings Flyktinghjälp -->
     </string-array>
 
     //TEST STRINGS
