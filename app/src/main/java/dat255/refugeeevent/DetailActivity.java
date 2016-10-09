@@ -59,6 +59,15 @@ public class DetailActivity extends AppCompatActivity {
         place.setText(event.getPlace());
         nbrAttending.setText(String.valueOf(event.getNbrAttending()));
         desc.setText(event.getDesc());
+
+        /* UNCOMMENT NÄR MACKE HAR MERGE'AT FACEBOOK
+        ImageView coverImg = (ImageView) findViewById(R.id.coverImage);
+        Glide.with(getApplicationContext())
+                .load(event.getCover())
+                .fitCenter()
+                .centerCrop()
+                .into(coverImg);
+         */
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -88,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
     class TranslateBtnOnClick implements View.OnClickListener{
 
         List<String> languages;
-        final ListPopupWindow mPopupWindow = new ListPopupWindow(getApplicationContext());
+        final ListPopupWindow mPopupWindow = new ListPopupWindow(DetailActivity.this);
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
@@ -106,7 +115,7 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            mPopupWindow.show();
+            //mPopupWindow.show();
         }
     }
 }
