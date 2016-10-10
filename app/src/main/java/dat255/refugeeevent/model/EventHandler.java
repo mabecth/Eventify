@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import dat255.refugeeevent.MainActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.helpers.SortByDate;
 import dat255.refugeeevent.util.Storage;
@@ -88,7 +90,9 @@ public class EventHandler extends Service {
                                             event.setCover(obj.getJSONObject("cover").getString("source"));
 
                                         if (obj.has("place"))
-                                            event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
+                                            if (obj.getJSONObject("place").has("location"))
+                                                if (obj.getJSONObject("place").getJSONObject("location").has("street"))
+                                                    event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
 
                                         if (obj.has("start_time"))
                                             event.setDate(obj.getString("start_time"));

@@ -1,39 +1,33 @@
 package dat255.refugeeevent.util;
 
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import dat255.refugeeevent.model.Event;
 
 /** Class used for storing data locally on the phone**/
-public class Storage extends Service {
-    private static final String PREFS_NAME = "dat255.refugeeevent.Storage";
-    private static SharedPreferences settings;
+public class Storage {
+    private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
-    public static Storage instance = new Storage();
-    private static Gson gson;
+    private static Storage instance = new Storage();
+    private static Gson gson = new Gson();
 
-    private String settingsKey = "1";
-    private String eventsKey = "2";
+    private static String settingsKey = "1";
+    private static String eventsKey = "2";
+
+    //Empty objects
+    private static Object settings = new Object();
+    private static List<Event> events = new CopyOnWriteArrayList<>();
 
     private Storage() {
-        if(settings == null){
-            settings = Storage.this.getSharedPreferences(PREFS_NAME,
-                    Context.MODE_PRIVATE );
-            gson = new Gson();
-        }
-       /*
-        * Get a SharedPreferences editor instance.
-        * SharedPreferences ensures that updates are atomic
-        * and non-concurrent
-        */
-        editor = settings.edit();
+    }
+
+    public void setPreferences(SharedPreferences sp) {
+        preferences = sp;
+        editor = preferences.edit();
         editor.commit();
     }
 
@@ -48,8 +42,12 @@ public class Storage extends Service {
     }
 
     public Object getSettings() {
-        String events_json = settings.getString(settingsKey, "");
-        return gson.fromJson(events_json, new TypeToken<Object>(){}.getType());
+        String events_json = preferences.getString(settingsKey, "");
+        if (gson.fromJson(events_json, new TypeToken<Object>(){}.getType()) == null) {
+            return settings;
+        } else {
+            return gson.fromJson(events_json, new TypeToken<Object>(){}.getType());
+        }
     }
 
     public void storeEvents(List<Event> events) {
@@ -59,13 +57,11 @@ public class Storage extends Service {
     }
 
     public List<Event> getEvents() {
-        String events_json = settings.getString(eventsKey, "");
-        return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+        String events_json = preferences.getString(eventsKey, "");
+        if (gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType()) == null) {
+            return events;
+        } else {
+            return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
+        }
     }
 }

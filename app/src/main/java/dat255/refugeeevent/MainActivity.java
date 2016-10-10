@@ -1,6 +1,9 @@
 package dat255.refugeeevent;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //Start collecting events
+        Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
         startService(new Intent(MainActivity.this, EventHandler.class));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
