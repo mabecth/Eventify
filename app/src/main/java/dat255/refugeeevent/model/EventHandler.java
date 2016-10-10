@@ -57,9 +57,15 @@ public class EventHandler extends Service {
     }
 
     public void getEventsFromFacebook(final String id) {
+        //Get events from now to one month ahead
+        long now = System.currentTimeMillis() / 1000L;
+        long monthInSeconds = 2592000;
+        long monthForward = now + monthInSeconds;
+        int limit = 25;
+
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + id + "/events?fields=id,name,description,attending_count,cover,start_time,place",
+                "/" + id + "/events?fields=id,name,description,attending_count,cover,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
