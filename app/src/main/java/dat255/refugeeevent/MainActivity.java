@@ -24,6 +24,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnConnectionFailedListener {

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.helpers.SortByDate;
+import dat255.refugeeevent.util.Storage;
 
 public class EventHandler extends Service {
 
@@ -48,7 +49,7 @@ public class EventHandler extends Service {
 
     public void checkIfDone() {
         if (dataCollectCycles == nbrOfOrganisations) {
-            //Send events to view
+            Storage.getInstance().storeEvents(events);
             System.out.println("All done!");
         }
     }
