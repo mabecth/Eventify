@@ -67,9 +67,9 @@ public class MainListAdapter extends BaseAdapter{
 
         initializeView();
 
-        if (currEvent.getTitle().length() > 13)
+        if (currEvent.getTitle().length() > 18)
         {
-            nameTextView.setText(currEvent.getTitle().substring(0,12) + "...");
+            nameTextView.setText(currEvent.getTitle().substring(0,18) + "...");
         }
         else nameTextView.setText(currEvent.getTitle());
         dateTextView.setText(currEvent.getDate().substring(0,2));

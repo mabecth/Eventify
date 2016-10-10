@@ -15,12 +15,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.memetix.mst.language.Language;
+
+import dat255.refugeeevent.helpers.AsyncTranslate;
+import dat255.refugeeevent.helpers.TranslateRequest;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.model.EventHandler;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Event event;
+    private TextView desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView time = (TextView) findViewById(R.id.timeText);
         TextView place = (TextView) findViewById(R.id.placeText);
         TextView nbrAttending = (TextView) findViewById(R.id.attendingText);
-        TextView desc = (TextView) findViewById(R.id.descText);
+        desc = (TextView) findViewById(R.id.descText);
 
         title.setText(event.getTitle());
         date.setText(event.getDate());
@@ -97,7 +102,7 @@ public class DetailActivity extends AppCompatActivity {
     class TranslateBtnOnClick implements View.OnClickListener{
 
         List<String> languages;
-        final ListPopupWindow mPopupWindow = new ListPopupWindow(DetailActivity.this);
+        ListPopupWindow mPopupWindow;
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
@@ -107,15 +112,21 @@ public class DetailActivity extends AppCompatActivity {
             languages.add("Persian");
             languages.add("Somali");
 
-            mPopupWindow.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.popup_list, languages));
-            mPopupWindow.setWidth(200);
-            mPopupWindow.setHeight(400);
+            mPopupWindow = new ListPopupWindow(DetailActivity.this);
+            mPopupWindow.setAdapter(new ArrayAdapter<>(DetailActivity.this,R.layout.popup_list, languages));
+            mPopupWindow.setWidth(700);
+            mPopupWindow.setAnchorView(DetailActivity.this.findViewById(R.id.translateBtn));
+            mPopupWindow.setHeight(2500);
             mPopupWindow.setModal(true);
         }
 
         @Override
         public void onClick(View view) {
-            //mPopupWindow.show();
+            if (mPopupWindow != null){
+                mPopupWindow.show();
+                new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+            }
+
         }
     }
 }

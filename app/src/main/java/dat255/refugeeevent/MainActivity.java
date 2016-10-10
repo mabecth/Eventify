@@ -502,7 +502,9 @@ System.out.println("Start Service");
 
     public void onDestroy() {
         super.onDestroy();
-        profileTracker.stopTracking();
+        if (profileTracker != null){
+            profileTracker.stopTracking();
+        }
     }
 
     class AddressResultReceiver extends ResultReceiver {
