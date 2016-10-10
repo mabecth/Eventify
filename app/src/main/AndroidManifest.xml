@@ -45,9 +45,13 @@
             android:label=""
             android:theme="@style/AppTheme.ActionBar.Transparent">
         </activity>
+        <service
+            android:name=".FetchAddressIntentService"
+            android:exported="false"/>
         <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA"/>
+
     </application>
 
 </manifest>
