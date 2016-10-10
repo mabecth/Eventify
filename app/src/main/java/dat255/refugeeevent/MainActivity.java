@@ -98,14 +98,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        
-
-        //Longs skitkod rör ej
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new MainListAdapter();
-        listView.setAdapter(adapter);
-        listOfEvents = adapter.getListOfEvents();
-
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
         TextView fbName = (TextView) view.findViewById(R.id.nameTV);
@@ -355,6 +347,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        //Longs skitkod rör ej
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+        listView.setAdapter(adapter);
+        listOfEvents = adapter.getListOfEvents();
+
+    }
 
     public void onDestroy() {
         super.onDestroy();

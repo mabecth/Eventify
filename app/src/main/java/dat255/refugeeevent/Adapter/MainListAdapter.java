@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
-import java.util.HashMap;
+
 import java.util.List;
 
 import dat255.refugeeevent.DetailActivity;
-import dat255.refugeeevent.MainActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.model.EventHandler;
@@ -20,10 +19,12 @@ import dat255.refugeeevent.model.EventHandler;
 public class MainListAdapter extends BaseAdapter{
 
     private List<Event> listOfEvents;
-    private Event temp;
+    private Event currEvent;
+    private Event lastEvent;
     private ProfilePictureView eventProfilePictureView;
     private TextView nameTextView, dateTextView, timeTextView,
-            locationTextView, attendeesTextView, distanceTextView;
+            locationTextView, attendeesTextView, distanceTextView,
+            monthTextView;
     private View result;
 
     public MainListAdapter(){
@@ -54,7 +55,7 @@ public class MainListAdapter extends BaseAdapter{
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
 
-        temp = listOfEvents.get(position);
+        currEvent = listOfEvents.get(position);
 
         if (view == null)
         {
@@ -66,12 +67,28 @@ public class MainListAdapter extends BaseAdapter{
 
         initializeView();
 
-        nameTextView.setText(temp.getTitle());
-        dateTextView.setText(temp.getDate());
-        timeTextView.setText(temp.getTime());
-        locationTextView.setText(temp.getPlace());
-        attendeesTextView.setText(temp.getNbrAttending() + "");
-        distanceTextView.setText(temp.getDistance());
+        if (currEvent.getTitle().length() > 13)
+        {
+            nameTextView.setText(currEvent.getTitle().substring(0,12) + "...");
+        }
+        else nameTextView.setText(currEvent.getTitle());
+        dateTextView.setText(currEvent.getDate().substring(0,2));
+        monthTextView.setText(currEvent.getMonth());
+        timeTextView.setText(currEvent.getTime());
+        locationTextView.setText(currEvent.getPlace());
+        attendeesTextView.setText(currEvent.getNbrAttending() + "");
+        distanceTextView.setText(currEvent.getDistance());
+
+        if (position > 0)
+        {
+            lastEvent = listOfEvents.get(position-1);
+        }
+
+        if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate()))
+        {
+            dateTextView.setVisibility(View.INVISIBLE);
+            monthTextView.setVisibility(View.INVISIBLE);
+        }
 
         if (result!=null) {
             result.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +102,7 @@ public class MainListAdapter extends BaseAdapter{
             });
         }
 
-
+        lastEvent =null;
         return result;
     }
 
@@ -97,5 +114,6 @@ public class MainListAdapter extends BaseAdapter{
         locationTextView = (TextView) result.findViewById(R.id.locationTextView);
         attendeesTextView = (TextView) result.findViewById(R.id.attendeesTextView);
         distanceTextView = (TextView) result.findViewById(R.id.distanceTextView);
+        monthTextView = (TextView) result.findViewById(R.id.monthTextView);
     }
 }

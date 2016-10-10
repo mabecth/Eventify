@@ -39,6 +39,22 @@ public class Event {
         this.time = time;
     }
 
+    public String getMonth() {
+        String month;
+        switch (date.substring(3,5)) {
+            case "08":
+                month = "Aug";
+                break;
+            case "09":
+                month = "Sep";
+                break;
+            default:
+                month = "Shoot Long";
+                break;
+        }
+        return month;
+    }
+
     public int getNbrAttending() {
         return nbrAttending;
     }
