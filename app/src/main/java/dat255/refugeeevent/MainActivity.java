@@ -30,30 +30,9 @@ import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
 
 import android.os.ResultReceiver;
-import android.content.Intent;
-
-import android.location.Geocoder;
 
 import android.location.Location;
-
-import android.os.Bundle;
-
 import android.os.Handler;
-
-import android.os.ResultReceiver;
-
-import android.support.v7.app.ActionBarActivity;
-
-import android.util.Log;
-
-import android.view.View;
-
-import android.widget.Button;
-
-import android.widget.ProgressBar;
-
-import android.widget.TextView;
-
 import android.widget.Toast;
 
 
@@ -116,13 +95,11 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * The formatted location address.
-
      */
     protected String mAddressOutput;
 
     /**
      * Receiver registered with this activity to get the response from FetchAddressIntentService.
-
      */
     private AddressResultReceiver mResultReceiver;
 
@@ -158,8 +135,11 @@ public class MainActivity extends AppCompatActivity
         TextView fbName = (TextView) view.findViewById(R.id.nameTV);
         ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
 
+        // Set defaults, then update using values stored in the Bundle.
+        mAddressRequested = false;
+        mAddressOutput = "";
 
-        /* Check for latest version of Play services */
+          /* Check for latest version of Play services */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -174,10 +154,6 @@ public class MainActivity extends AppCompatActivity
         else {
             buildGoogleApiClient();
         }
-
-        // Set defaults, then update using values stored in the Bundle.
-        mAddressRequested = false;
-        mAddressOutput = "";
 
 
         //Retrieve public profile info
@@ -199,6 +175,8 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
+
+
 
 
 
@@ -232,7 +210,17 @@ public class MainActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
     }
+
+    @Override
+     public void onConnectionSuspended(int cause) {
+            // The connection to Google Play services was lost for some reason. We call connect() to
+             // attempt to re-establish the connection.
+           /*  Log.i(TAG, "Connection suspended");
+             mGoogleApiClient.connect();
+        */
+         }
 
     public void fetchAddressButtonHandler(View view) {
 
@@ -241,7 +229,6 @@ public class MainActivity extends AppCompatActivity
         if (mGoogleApiClient.isConnected() && mLastLocation != null) {
             startIntentService();
         }
-
         // If GoogleApiClient isn't connected, we process the user's request by setting
 
         // mAddressRequested to true. Later, when GoogleApiClient connects, we launch the service to
@@ -270,7 +257,6 @@ public class MainActivity extends AppCompatActivity
 
         // service kills itself automatically once all intents are processed.
         startService(intent);
-
     }
     public void displayAddressOutput() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -311,10 +297,6 @@ System.out.println("Start Service");
                 startIntentService();
 
             }
-
-    }
-    @Override
-    public void onConnectionSuspended(int i) {
 
     }
 
@@ -479,10 +461,10 @@ System.out.println("Start Service");
 
     }
 
+
     @Override
     public void onStart(){
         super.onStart();
-        mGoogleApiClient.connect();
         locationTextView = (TextView) findViewById(R.id.locationTV);
         //Longs skitkod rör ej
         listView = (ListView) findViewById(R.id.listView);
