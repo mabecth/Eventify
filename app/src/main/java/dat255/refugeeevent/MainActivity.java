@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDistance(int id, String result){
         adapter.getListOfEvents().get(id).setDistance(result);
-        listView.invalidateViews();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
