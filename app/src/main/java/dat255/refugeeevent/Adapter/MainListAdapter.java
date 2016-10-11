@@ -16,6 +16,7 @@ import dat255.refugeeevent.DetailActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class MainListAdapter extends BaseAdapter{
 
@@ -29,7 +30,7 @@ public class MainListAdapter extends BaseAdapter{
     private View result;
 
     public MainListAdapter(){
-        listOfEvents = new ArrayList<>();
+        listOfEvents = Storage.getInstance().getEvents();
     }
 
     @Override

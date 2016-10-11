@@ -13,7 +13,7 @@ public class Storage {
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
     private static Storage instance = new Storage();
-    private static Gson gson = new Gson();
+    private static Gson gson = new Gson();;
 
     private static String settingsKey = "1";
     private static String eventsKey = "2";
@@ -29,6 +29,9 @@ public class Storage {
         preferences = sp;
         editor = preferences.edit();
         editor.commit();
+
+        //Store empty lists
+        storeEvents(events);
     }
 
     public static Storage getInstance() {
