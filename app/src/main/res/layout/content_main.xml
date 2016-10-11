@@ -9,6 +9,7 @@
     tools:context="dat255.refugeeevent.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"

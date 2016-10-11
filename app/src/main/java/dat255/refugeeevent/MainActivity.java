@@ -3,6 +3,7 @@ package dat255.refugeeevent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -144,6 +146,40 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
+        //Longs skitkod rör ej
+
+        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+
+        swipRefresh.setRefreshing(true);
+        if(swipRefresh.isRefreshing())
+        {
+            new CountDownTimer(1000,1000) {
+                @Override
+                public void onTick(long l) {
+                    Log.e("Refresh","Time left" + l/1000);
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.e("Finish", "CountDownDONE");
+                    adapter.updateEventList();
+                    listView.setAdapter(adapter);
+                    swipRefresh.setRefreshing(false);
+                }
+            }.start();
+        }
+        listView.setAdapter(adapter);
+
+        swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.updateEventList();
+                swipRefresh.setRefreshing(false);
+            }
+        });
+
     }
 
     public void calculateDistance() {
@@ -388,19 +424,6 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         super.onStart();
         locationTextView = (TextView) findViewById(R.id.locationTV);
-        //Longs skitkod rör ej
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new MainListAdapter();
-        listView.setAdapter(adapter);
-        listOfEvents = adapter.getListOfEvents();
-        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-        swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.updateEventList();
-                swipRefresh.setRefreshing(false);
-            }
-        });
     }
     @Override
     protected void onStop() {
