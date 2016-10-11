@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     //EventList
     private ListView listView;
     private MainListAdapter adapter;
+    private SwipeRefreshLayout swipRefresh;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -391,7 +393,14 @@ public class MainActivity extends AppCompatActivity
         adapter = new MainListAdapter();
         listView.setAdapter(adapter);
         listOfEvents = adapter.getListOfEvents();
-
+        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.updateEventList();
+                swipRefresh.setRefreshing(false);
+            }
+        });
     }
     @Override
     protected void onStop() {
