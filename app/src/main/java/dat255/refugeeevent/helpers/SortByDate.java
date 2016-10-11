@@ -16,22 +16,22 @@ public class SortByDate {
 
         // Sorting
         for (int i = 0; i < eventList.size() - 1; i++) {
-            a = Integer.valueOf(eventList.get(i).getDate().split("/")[2]);
-            b = Integer.valueOf(eventList.get(i+1).getDate().split("/")[2]);
+            a = Integer.valueOf(eventList.get(i).getDate().split("-")[0]);
+            b = Integer.valueOf(eventList.get(i+1).getDate().split("-")[0]);
             // Sorting years
             if (a > b) {
                 Collections.swap(eventList, i, i+1);
                 sortDates(eventList);
             } else if (a == b) {
-                c = Integer.valueOf(eventList.get(i).getDate().split("/")[0]);
-                d = Integer.valueOf(eventList.get(i+1).getDate().split("/")[0]);
+                c = Integer.valueOf(eventList.get(i).getDate().split("-")[1]);
+                d = Integer.valueOf(eventList.get(i+1).getDate().split("-")[1]);
                 // Sorting months
                 if (c > d) {
                     Collections.swap(eventList, i, i+1);
                     sortDates(eventList);
                 } else if (c == d) {
-                    e = Integer.valueOf(eventList.get(i).getDate().split("/")[1]);
-                    f = Integer.valueOf(eventList.get(i+1).getDate().split("/")[1]);
+                    e = Integer.valueOf(eventList.get(i).getDate().split("-")[2]);
+                    f = Integer.valueOf(eventList.get(i+1).getDate().split("-")[2]);
                     // Sorting days
                     if (e > f) {
                         Collections.swap(eventList, i, i+1);

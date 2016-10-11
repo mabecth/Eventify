@@ -20,8 +20,8 @@ import java.util.List;
 import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
 
-import dat255.refugeeevent.helpers.AsyncTranslate;
-import dat255.refugeeevent.helpers.TranslateRequest;
+import dat255.refugeeevent.service.AsyncTranslate;
+import dat255.refugeeevent.model.TranslateRequest;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.util.Storage;
 
@@ -39,18 +39,24 @@ public class DetailActivity extends AppCompatActivity {
         int index = intent.getIntExtra("EventIndex", 0);
         event = Storage.getInstance().getEvent(index);
         initView();
+        initButtons();
 
-
-        ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new BackBtnOnClick());
-        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
-        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
-        ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
-        translateBtn.setOnClickListener(new TranslateBtnOnClick());
+        System.out.println("Datum formatering: " + event.getDate());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setStatusBarTranslucent(true);
         }
+    }
+
+    public void initButtons(){
+        ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new BackBtnOnClick());
+
+        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
+        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
+
+        ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
+        translateBtn.setOnClickListener(new TranslateBtnOnClick());
     }
 
     public void initView(){
