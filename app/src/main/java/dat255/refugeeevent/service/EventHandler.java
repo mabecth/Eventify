@@ -1,4 +1,4 @@
-package dat255.refugeeevent.model;
+package dat255.refugeeevent.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,9 +15,8 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import dat255.refugeeevent.MainActivity;
 import dat255.refugeeevent.R;
-import dat255.refugeeevent.helpers.SortByDate;
+import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.util.Storage;
 
 public class EventHandler extends Service {

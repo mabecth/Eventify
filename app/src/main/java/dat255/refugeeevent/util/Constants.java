@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.util;
 
 /**
  * Created by Oscar on 2016-10-10.
