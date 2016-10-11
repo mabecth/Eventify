@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListPopupWindow;
@@ -15,12 +16,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.memetix.mst.language.Language;
+
+import dat255.refugeeevent.helpers.AsyncTranslate;
+import dat255.refugeeevent.helpers.TranslateRequest;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.model.EventHandler;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Event event;
+    private TextView desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
-        event = EventHandler.getInstance().getEventAt(index);
+        event = new Event(); // ändra till storage
         initView();
 
 
@@ -51,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView time = (TextView) findViewById(R.id.timeText);
         TextView place = (TextView) findViewById(R.id.placeText);
         TextView nbrAttending = (TextView) findViewById(R.id.attendingText);
-        TextView desc = (TextView) findViewById(R.id.descText);
+        desc = (TextView) findViewById(R.id.descText);
 
         title.setText(event.getTitle());
         date.setText(event.getDate());
@@ -62,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
 
         /* UNCOMMENT NÄR MACKE HAR MERGE'AT FACEBOOK
         ImageView coverImg = (ImageView) findViewById(R.id.coverImage);
-        Glide.with(getApplicationContext())
+        Glide.with(DetailActivity.this)
                 .load(event.getCover())
                 .fitCenter()
                 .centerCrop()
@@ -97,25 +103,58 @@ public class DetailActivity extends AppCompatActivity {
     class TranslateBtnOnClick implements View.OnClickListener{
 
         List<String> languages;
-        final ListPopupWindow mPopupWindow = new ListPopupWindow(DetailActivity.this);
+        ListPopupWindow mPopupWindow;
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
-            languages.add("Arabic");
-            languages.add("Serbo-Croatian");
-            languages.add("Kurdish");
-            languages.add("Persian");
-            languages.add("Somali");
+            languages.add("ARABIC");
+            languages.add("SLOVAK");
+            languages.add("SLOVENIAN");
+            languages.add("ROMANIAN");
+            languages.add("PERSIAN");
+            languages.add("TURKISH");
 
-            mPopupWindow.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.popup_list, languages));
-            mPopupWindow.setWidth(200);
-            mPopupWindow.setHeight(400);
+            mPopupWindow = new ListPopupWindow(DetailActivity.this);
+            mPopupWindow.setAdapter(new ArrayAdapter<>(DetailActivity.this,R.layout.popup_list, languages));
+            mPopupWindow.setWidth(700);
+            mPopupWindow.setAnchorView(DetailActivity.this.findViewById(R.id.translateBtn));
+            mPopupWindow.setHeight(2500);
             mPopupWindow.setModal(true);
+
+            mPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (i){
+                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        default: break;
+                    }
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
-            //mPopupWindow.show();
+            if (mPopupWindow != null){
+                mPopupWindow.show();
+            }
+
         }
     }
 }

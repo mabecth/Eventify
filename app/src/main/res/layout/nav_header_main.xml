@@ -40,6 +40,7 @@
         android:layout_marginEnd="53dp"
         android:layout_below="@+id/nameTV"
         android:layout_alignParentLeft="true"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:text="HEj"/>
 
 </RelativeLayout>

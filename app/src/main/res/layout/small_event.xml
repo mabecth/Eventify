@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="46sp"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:textColor="#34495E" />
 
             <TextView
                 android:text="Sep"
@@ -32,15 +33,20 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:textSize="20sp"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#34495E" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:background="#FFFFFF">
+            android:background="#FFFFFF"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -72,7 +78,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/nameTextView"
                         android:layout_weight="1"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:padding="2dp"
                         android:maxWidth="150dp"
                         android:ellipsize="end"

@@ -7,6 +7,10 @@
     <string name="action_filtering">Filtering</string>
     <string name="login_continue_without">Continue without</string>
     <string name="guest">Guest</string>
+    <string name="log_out">Log out</string>
+    <string name="my_events">My Events</string>
+    <string name="translate">Translate</string>
+    <string name="settings">Settings</string>
 
     <!-- Facebook -->
     <string name="facebook_app_id">342377189428679</string>
@@ -14,6 +18,19 @@
 
     <!-- Google maps -->
     <string name="destination">Heden</string>
+    <string name="service_not_available">Service not available</string>
+    <string name="invalid_lat_long_used">Invalid lat long used</string>
+    <string name="no_address_found">No address found</string>
+    <string name="address_found">Address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+
+    <!-- Organisations -->
+    <string-array name="organisations">
+        <item>1561325850757258</item><!--Blå stället-->
+        <item>534633456670064</item><!-- Flyktingguide/Språkvän Göteborg  -->
+        <item>155193204865736</item><!-- Flyktingguide/Språkvän i Kungsbacka -->
+        <item>532748086901149</item><!-- Lundby församlings Flyktinghjälp -->
+    </string-array>
 
     //TEST STRINGS
     <string name="title_example">ArmIT\'s Football Night</string>

@@ -1,14 +1,127 @@
 package dat255.refugeeevent.model;
 
-import java.util.ArrayList;
-import dat255.refugeeevent.helpers.SortByDate;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventHandler {
+import dat255.refugeeevent.MainActivity;
+import dat255.refugeeevent.R;
+import dat255.refugeeevent.helpers.SortByDate;
+import dat255.refugeeevent.util.Storage;
+
+public class EventHandler extends Service {
+
     private static EventHandler ourInstance = new EventHandler();
 
-    private ArrayList<Event> events;
+    private List<Event> events;
+    private Event event;
+    private int nbrOfOrganisations;
+    private int dataCollectCycles;
 
-    private EventHandler() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        events = new CopyOnWriteArrayList<>();
+        String[] organisations = EventHandler.this.getResources().getStringArray(R.array.organisations);
+        nbrOfOrganisations = organisations.length;
+        dataCollectCycles = 0;
+
+        for(String s : organisations) {
+            getEventsFromFacebook(s);
+        }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    public void checkIfDone() {
+        if (dataCollectCycles == nbrOfOrganisations) {
+            Storage.getInstance().storeEvents(events);
+            System.out.println("All done!");
+        }
+    }
+
+    public void getEventsFromFacebook(final String id) {
+        //Get events from now to one month ahead
+        long now = System.currentTimeMillis() / 1000L;
+        long monthInSeconds = 2592000;
+        long monthForward = now + monthInSeconds;
+        int limit = 25;
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + id + "/events?fields=id,name,description,attending_count,cover,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        //Check if there are any upcoming events
+                        if (response.getJSONObject() != null) {
+                            try {
+                                JSONArray jsonArray = response.getJSONObject().getJSONArray("data");
+                                //Loop through events
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    event = new Event();
+                                    try {
+                                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                                        if (obj.has("id"))
+                                            event.setId(obj.getString("id"));
+
+                                        if (obj.has("name"))
+                                            event.setTitle(obj.getString("name"));
+
+                                        if (obj.has("description"))
+                                            event.setDesc(obj.getString("description"));
+
+                                        if (obj.has("attending_count"))
+                                            event.setNbrAttending(obj.getString("attending_count"));
+
+                                        if (obj.has("cover"))
+                                            event.setCover(obj.getJSONObject("cover").getString("source"));
+
+                                        if (obj.has("place"))
+                                            if (obj.getJSONObject("place").has("location"))
+                                                if (obj.getJSONObject("place").getJSONObject("location").has("street"))
+                                                    event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
+
+                                        if (obj.has("start_time"))
+                                            event.setDate(obj.getString("start_time"));
+
+                                        events.add(event);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        dataCollectCycles++;
+                        checkIfDone();
+                    }
+                }
+        ).executeAsync();
+    }
+
+
+    /*private EventHandler() {
         events = new ArrayList<>();
 
         //TEST ----------
@@ -17,9 +130,9 @@ public class EventHandler {
         testEvent.setPlace("Heden");
         testEvent.setTime("15:00");
         testEvent.setDate("17/08/2017");
-        testEvent.setDesc("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris justo ex, dictum non urna varius, faucibus aliquam nulla. Sed consequat molestie facilisis. Curabitur consequat odio quam, at semper dolor sagittis et. Donec facilisis diam ut purus pulvinar pretium. In aliquet dui mi, a maximus urna gravida nec. Ut tristique vel nisi ac consectetur. Ut in commodo orci. Sed rutrum in neque eget semper. Cras fringilla felis tortor, vitae tristique ex tincidunt a. Vestibulum tempor, diam eu rhoncus faucibus, urna leo euismod libero, vel rutrum sapien ligula at leo. Vestibulum volutpat molestie urna, in malesuada arcu porta a. Nulla tempor sodales ipsum. Nullam sed erat vel dolor porttitor semper. Nam ut ornare est, vitae interdum erat. Fusce nec malesuada leo.Sed tincidunt nulla quam, vel pharetra libero dictum vitae. Suspendisse vel maximus massa. Suspendisse sit amet est dolor. Proin commodo nibh in enim blandit, vel efficitur nibh porttitor. Etiam lorem augue, sodales nec lorem iaculis, porttitor scelerisque dui. Curabitur laoreet fermentum tortor non tempor. Quisque et congue lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus posuere ultricies metus, et condimentum nisi elementum a.\n" +
+        testEvent.setDesc("It was a crazy idea, really: one operating system that would run on a zillion different hardware combinations. Yet Windows turned out to be the foundation of Microsoft’s incredibly dominant empire.\n" +
                 "\n" +
-                "Donec ac felis blandit tortor vehicula laoreet nec ac nisi. Vestibulum id maximus lorem. Nulla semper lectus at mauris consectetur vestibulum. Aliquam tempor, urna faucibus iaculis gravida, erat ligula laoreet elit, sit amet posuere nulla quam sed est. Etiam quis neque non velit rhoncus sagittis. Sed posuere vitae purus at bibendum. Nam placerat posuere nulla, nec feugiat leo viverra ut. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas sed quam non odio commodo rhoncus. Mauris commodo odio non nulla pharetra, vitae faucibus risus vehicula. Aliquam rutrum vestibulum mauris interdum ultricies. Aliquam blandit, orci non luctus consequat, dolor ipsum commodo libero, sit amet tempor nisi turpis mattis ante. Nullam nulla elit, egestas in facilisis vitae, venenatis id ipsum.");
+                "But there were problems with Windows from the beginning. It was mainly the responsibility of the hardware vendor to build a system that was Windows-compatible, but then there were updates, drivers, service packs, new versions … and decades later we’re still dealing with the compatibility mess InfoWorld’s Woody Leonhard reports on day after day.");
         testEvent.setNbrAttending(203);
 
         Event test2 = new Event();
@@ -34,7 +147,7 @@ public class EventHandler {
         test3.setTitle("Game of thrones & chill");
         test3.setPlace("Lindome");
         test3.setTime("18:00");
-        test3.setDate("17/08/2017");
+        test3.setDate("18/08/2017");
         test3.setDesc("Hi everyone!");
         test3.setNbrAttending(1002);
 
@@ -45,17 +158,17 @@ public class EventHandler {
         //date must be formatted dd/mm/yyyy
         SortByDate.sortDates(events);
         // --------------
-    }
+    }*/
 
     public static EventHandler getInstance() {
         return ourInstance;
     }
 
-    public Event getEventAt(int index){
+    public Event getEventAt(int index) {
         return events.get(index);
     }
 
-    public ArrayList<Event> getEvents(){
+    public List<Event> getEvents(){
         return events;
     }
 }

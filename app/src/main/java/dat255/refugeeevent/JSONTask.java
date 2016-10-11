@@ -17,7 +17,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
     private int id;
 
 
-    public JSONTask(MainActivity activity, int id, Event even) {
+    public JSONTask(MainActivity activity, int id) {
         this.activity = activity;
         this.id = id;
 
