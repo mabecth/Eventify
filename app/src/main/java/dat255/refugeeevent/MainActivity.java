@@ -203,6 +203,12 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -424,6 +430,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
+        if(!mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
         locationTextView = (TextView) findViewById(R.id.locationTV);
     }
     @Override
