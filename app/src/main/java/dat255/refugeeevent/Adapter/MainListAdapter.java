@@ -103,7 +103,7 @@ public class MainListAdapter extends BaseAdapter{
     }
 
     public void updateEventList(){
-        listOfEvents = EventHandler.getInstance().getEvents();
+        listOfEvents = Storage.getInstance().getEvents();
         notifyDataSetChanged();
         Log.e("Click","Event List Updated");
     }

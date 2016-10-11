@@ -52,7 +52,6 @@ public class EventHandler extends Service {
     public void checkIfDone() {
         if (dataCollectCycles == nbrOfOrganisations) {
             Storage.getInstance().storeEvents(events);
-            System.out.println("All done!");
         }
     }
 
@@ -101,7 +100,8 @@ public class EventHandler extends Service {
                                                     event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
 
                                         if (obj.has("start_time"))
-                                            event.setDate(obj.getString("start_time"));
+                                            event.setDate(obj.getString("start_time").substring(0,10));
+                                            event.setTime(obj.getString("start_time").substring(11,16));
 
                                         events.add(event);
                                     } catch (JSONException e) {
@@ -162,13 +162,5 @@ public class EventHandler extends Service {
 
     public static EventHandler getInstance() {
         return ourInstance;
-    }
-
-    public Event getEventAt(int index) {
-        return events.get(index);
-    }
-
-    public List<Event> getEvents(){
-        return events;
     }
 }

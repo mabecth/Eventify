@@ -52,7 +52,9 @@ public class Event {
     }
 
     public String getDate() {
-        return date;
+        String temp;
+        temp = date.substring(0,2);
+        return temp;
     }
 
     public void setDate(String date) {
@@ -77,7 +79,7 @@ public class Event {
                 month = "Sep";
                 break;
             default:
-                month = "Shoot Long";
+                month = "Other";
                 break;
         }
         return month;
