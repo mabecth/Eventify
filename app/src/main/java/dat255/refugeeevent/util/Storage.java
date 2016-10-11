@@ -67,4 +67,8 @@ public class Storage {
             return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
         }
     }
+
+    public Event getEvent(int index) {
+        return getEvents().get(index);
+    }
 }

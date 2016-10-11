@@ -10,18 +10,21 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
 
 import dat255.refugeeevent.helpers.AsyncTranslate;
 import dat255.refugeeevent.helpers.TranslateRequest;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -35,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
-        event = new Event(); // ändra till storage
+        event = Storage.getInstance().getEvent(index);
         initView();
 
 
@@ -66,14 +69,12 @@ public class DetailActivity extends AppCompatActivity {
         nbrAttending.setText(String.valueOf(event.getNbrAttending()));
         desc.setText(event.getDesc());
 
-        /* UNCOMMENT NÄR MACKE HAR MERGE'AT FACEBOOK
         ImageView coverImg = (ImageView) findViewById(R.id.coverImage);
         Glide.with(DetailActivity.this)
                 .load(event.getCover())
                 .fitCenter()
                 .centerCrop()
                 .into(coverImg);
-         */
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
