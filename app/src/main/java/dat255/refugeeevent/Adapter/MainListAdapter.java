@@ -68,7 +68,7 @@ public class MainListAdapter extends BaseAdapter{
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         locationTextView.setText(currEvent.getPlace());
-        attendeesTextView.setText(currEvent.getNbrAttending());
+        attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
         distanceTextView.setText(currEvent.getDistance());
 
         if (position > 0)
