@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListPopupWindow;
@@ -67,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
 
         /* UNCOMMENT NÄR MACKE HAR MERGE'AT FACEBOOK
         ImageView coverImg = (ImageView) findViewById(R.id.coverImage);
-        Glide.with(getApplicationContext())
+        Glide.with(DetailActivity.this)
                 .load(event.getCover())
                 .fitCenter()
                 .centerCrop()
@@ -106,11 +107,12 @@ public class DetailActivity extends AppCompatActivity {
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
-            languages.add("Arabic");
-            languages.add("Serbo-Croatian");
-            languages.add("Kurdish");
-            languages.add("Persian");
-            languages.add("Somali");
+            languages.add("ARABIC");
+            languages.add("SLOVAK");
+            languages.add("SLOVENIAN");
+            languages.add("ROMANIAN");
+            languages.add("PERSIAN");
+            languages.add("TURKISH");
 
             mPopupWindow = new ListPopupWindow(DetailActivity.this);
             mPopupWindow.setAdapter(new ArrayAdapter<>(DetailActivity.this,R.layout.popup_list, languages));
@@ -118,13 +120,39 @@ public class DetailActivity extends AppCompatActivity {
             mPopupWindow.setAnchorView(DetailActivity.this.findViewById(R.id.translateBtn));
             mPopupWindow.setHeight(2500);
             mPopupWindow.setModal(true);
+
+            mPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (i){
+                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        default: break;
+                    }
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
             if (mPopupWindow != null){
                 mPopupWindow.show();
-                new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
             }
 
         }
