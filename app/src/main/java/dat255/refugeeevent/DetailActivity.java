@@ -35,7 +35,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
-        event = EventHandler.getInstance().getEventAt(index);
+        event = new Event(); // ändra till storage
         initView();
 
 

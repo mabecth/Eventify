@@ -1,8 +1,7 @@
 package dat255.refugeeevent;
 
+import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,16 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.drive.Drive;
 import android.view.View;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
@@ -28,43 +23,24 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
-
 import android.os.ResultReceiver;
-
 import android.location.Location;
 import android.os.Handler;
 import android.widget.Toast;
-
-
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
 import java.util.List;
+import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
@@ -73,11 +49,7 @@ public class MainActivity extends AppCompatActivity
         LocationListener{
 
     protected static final String TAG = "main-activity";
-
-
-
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
     private String origin = "";
@@ -92,18 +64,9 @@ public class MainActivity extends AppCompatActivity
     private TextView locationTextView;
 
     protected boolean mAddressRequested;
-
-    /**
-     * The formatted location address.
-     */
     protected String mAddressOutput;
-
-    /**
-     * Receiver registered with this activity to get the response from FetchAddressIntentService.
-     */
     private AddressResultReceiver mResultReceiver;
-
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     //EventList
     private ListView listView;
@@ -116,6 +79,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Start collecting events
+        Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
+        startService(new Intent(MainActivity.this, EventHandler.class));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -124,7 +92,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -175,11 +142,6 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
-
-
-
-
-
     }
 
     public void calculateDistance() {
@@ -193,11 +155,9 @@ public class MainActivity extends AppCompatActivity
         listView.invalidateViews();
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
-
         //stop location updates when Activity is no longer active
        if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -213,51 +173,31 @@ public class MainActivity extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
-    @Override
-     public void onConnectionSuspended(int cause) {
-            // The connection to Google Play services was lost for some reason. We call connect() to
-             // attempt to re-establish the connection.
-           /*  Log.i(TAG, "Connection suspended");
-             mGoogleApiClient.connect();
-        */
-         }
-
     public void fetchAddressButtonHandler(View view) {
-
         // We only start the service to fetch the address if GoogleApiClient is connected.
-
         if (mGoogleApiClient.isConnected() && mLastLocation != null) {
             startIntentService();
         }
         // If GoogleApiClient isn't connected, we process the user's request by setting
-
         // mAddressRequested to true. Later, when GoogleApiClient connects, we launch the service to
-
         // fetch the address. As far as the user is concerned, pressing the Fetch Address button
-
         // immediately kicks off the process of getting the address.
-
         mAddressRequested = true;
-
     }
 
     protected void startIntentService() {
-        System.out.println("Create intent");
-
         // Create an intent for passing to the intent service responsible for fetching the address.
-
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         // Pass the result receiver as an extra to the service.
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         // Pass the location data as an extra to the service.
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
         // Start the service. If the service isn't already running, it is instantiated and started
-
         // (creating a process for it if needed); if it is running then it remains running. The
-
         // service kills itself automatically once all intents are processed.
         startService(intent);
     }
+
     public void displayAddressOutput() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -283,58 +223,33 @@ public class MainActivity extends AppCompatActivity
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
-
             // It is possible that the user presses the button to get the address before the
-
             // GoogleApiClient object successfully connects. In such a case, mAddressRequested
-
             // is set to true, but no attempt is made to fetch the address (see
-
             // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
+            startIntentService();
 
+        }
+    }
 
-System.out.println("Start Service");
-                startIntentService();
-
-            }
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
         mLastLocation = location;
-
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
         //Calculates new distance to the events
         calculateDistance();
-
         //Set location in coordinates
-
-
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-
-
     }
-
-    /**
-
-     * Runs when a GoogleApiClient object successfully connects.
-
-     */
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-       // calculateDistance();
-    }
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     public boolean checkLocationPermission(){
         if (ContextCompat.checkSelfPermission(this,
@@ -413,6 +328,13 @@ System.out.println("Start Service");
     }
 
     @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.setGroupVisible(R.id.group2, false); //Not working wtf
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -450,7 +372,6 @@ System.out.println("Start Service");
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -460,7 +381,6 @@ System.out.println("Start Service");
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 
     @Override
     public void onStart(){
@@ -489,36 +409,27 @@ System.out.println("Start Service");
         }
     }
 
-    class AddressResultReceiver extends ResultReceiver {
-
-        public AddressResultReceiver(Handler handler) {
-
-            super(handler);
-
-        }
-
-        /**
-
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-
-         */
-
-        @Override
-
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            // Display the address string or an error message sent from the intent service.
-
-            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            displayAddressOutput();
-            // Show a toast message if an address was found.
-
-            // Reset. Enable the Fetch Address button and stop showing the progress bar.
-
-
-
-        }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
     }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            // Display the address string or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            mAddressOutput = mAddressOutput.replace("\n", " ");
+            String[] split = mAddressOutput.split("\\s+");
+            mAddressOutput = split[4]; // Only display city
+
+            displayAddressOutput();
+            // Show a toast message if an address was found.
+            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+        }
+    }
 }
-
-

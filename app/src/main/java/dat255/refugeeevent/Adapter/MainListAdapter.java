@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dat255.refugeeevent.DetailActivity;
@@ -28,7 +29,7 @@ public class MainListAdapter extends BaseAdapter{
     private View result;
 
     public MainListAdapter(){
-        listOfEvents = EventHandler.getInstance().getEvents();
+        listOfEvents = new ArrayList<>();
     }
 
     @Override
