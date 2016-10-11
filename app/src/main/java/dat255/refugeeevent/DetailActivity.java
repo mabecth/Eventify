@@ -23,7 +23,6 @@ import com.memetix.mst.language.Language;
 import dat255.refugeeevent.helpers.AsyncTranslate;
 import dat255.refugeeevent.helpers.TranslateRequest;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.model.EventHandler;
 import dat255.refugeeevent.util.Storage;
 
 public class DetailActivity extends AppCompatActivity {

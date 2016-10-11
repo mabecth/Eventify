@@ -50,7 +50,7 @@
             android:name=".FetchAddressIntentService"
             android:exported="false"/>
 
-        <service android:name=".model.EventHandler" android:enabled="true"/>
+        <service android:name=".service.EventHandler" android:enabled="true"/>
 
         <meta-data
         android:name="com.google.android.geo.API_KEY"
