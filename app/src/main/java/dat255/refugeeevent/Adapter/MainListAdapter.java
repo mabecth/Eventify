@@ -50,8 +50,6 @@ public class MainListAdapter extends BaseAdapter{
         return this.listOfEvents;
     }
 
-
-
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
 
@@ -67,11 +65,7 @@ public class MainListAdapter extends BaseAdapter{
 
         initializeView();
 
-        if (currEvent.getTitle().length() > 13)
-        {
-            nameTextView.setText(currEvent.getTitle().substring(0,12) + "...");
-        }
-        else nameTextView.setText(currEvent.getTitle());
+        nameTextView.setText(currEvent.getTitle());
         dateTextView.setText(currEvent.getDate().substring(0,2));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
@@ -105,6 +99,13 @@ public class MainListAdapter extends BaseAdapter{
         lastEvent =null;
         return result;
     }
+
+    public void updateEventList(){
+        listOfEvents = EventHandler.getInstance().getEvents();
+        notifyDataSetChanged();
+        Log.e("Click","Event List Updated");
+    }
+
 
     private void initializeView(){
         eventProfilePictureView = (ProfilePictureView) result.findViewById(R.id.eventProfilePictureView);
