@@ -42,7 +42,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
-import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.service.EventHandler;
+import dat255.refugeeevent.util.Constants;
 import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
@@ -457,7 +458,7 @@ public class MainActivity extends AppCompatActivity
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
             mAddressOutput = mAddressOutput.replace("\n", " ");
             String[] split = mAddressOutput.split("\\s+");
-            mAddressOutput = split[4]; // Only display city
+            mAddressOutput = split[split.length - 1]; // Only display city
 
             displayAddressOutput();
             // Show a toast message if an address was found.
