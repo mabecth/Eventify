@@ -110,7 +110,7 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     public void updateDistance(int id, String result) {
-        Storage.getInstance().getEvents().get(id).setDistance(result);
+        listOfEvents.get(id).setDistance(result);
         listView.invalidateViews();
     }
 
@@ -195,8 +195,10 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     public void calculateDistance() {
-        for (int i = 0; i < adapter.getCount(); i++) {
-            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+        if(latLng != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+            }
         }
     }
 
