@@ -184,8 +184,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_translate) {
-
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
