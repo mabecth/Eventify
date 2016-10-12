@@ -41,8 +41,6 @@ public class DetailActivity extends AppCompatActivity {
         initView();
         initButtons();
 
-        System.out.println("Datum formatering: " + event.getDate());
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setStatusBarTranslucent(true);
         }
