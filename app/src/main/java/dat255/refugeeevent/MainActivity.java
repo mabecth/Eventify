@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity
                     adapter.updateEventList();
                     listView.setAdapter(adapter);
                     swipRefresh.setRefreshing(false);
+                    listView.invalidateViews();
                 }
             }.start();
         }
