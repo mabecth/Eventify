@@ -191,7 +191,7 @@
     </LinearLayout>
 
         <ImageButton
-            android:src="@drawable/ic_place"
+            android:src="@drawable/ic_navigation"
             android:id="@+id/showMapsBtn"
             android:background="@drawable/round_btn"
             android:scaleType="centerInside"
