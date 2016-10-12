@@ -169,6 +169,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        adapter.updateEventList();
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
     }
