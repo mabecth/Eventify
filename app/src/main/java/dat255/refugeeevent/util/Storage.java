@@ -26,12 +26,14 @@ public class Storage {
     }
 
     public void setPreferences(SharedPreferences sp) {
-        preferences = sp;
-        editor = preferences.edit();
-        editor.commit();
+        if (preferences == null) {
+            preferences = sp;
+            editor = preferences.edit();
+            editor.commit();
 
-        //Store empty lists
-        storeEvents(events);
+            //Store empty lists
+            storeEvents(events);
+        }
     }
 
     public static Storage getInstance() {

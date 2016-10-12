@@ -49,10 +49,6 @@ public class MainListAdapter extends BaseAdapter{
         return i;
     }
 
-    public List<Event> getListOfEvents(){
-        return this.listOfEvents;
-    }
-
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
 

@@ -35,6 +35,7 @@ import java.util.List;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.util.Constants;
+import dat255.refugeeevent.util.Storage;
 
 
 /**
@@ -96,7 +97,7 @@ public class GoogleApi implements OnMapReadyCallback,
         listView = (ListView) mainActivity.findViewById(R.id.listView);
         adapter = new MainListAdapter();
         listView.setAdapter(adapter);
-        listOfEvents = adapter.getListOfEvents();
+        listOfEvents = Storage.getInstance().getEvents();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -108,12 +109,10 @@ public class GoogleApi implements OnMapReadyCallback,
         mGoogleApiClient.connect();
     }
 
-
     public void updateDistance(int id, String result) {
-        adapter.getListOfEvents().get(id).setDistance(result);
+        Storage.getInstance().getEvents().get(id).setDistance(result);
         listView.invalidateViews();
     }
-
 
     protected void showToast(String text) {
         Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
