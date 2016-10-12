@@ -21,9 +21,9 @@
                 android:layout_width="match_parent"
                 android:id="@+id/dateTextView"
                 android:layout_height="wrap_content"
-                android:textSize="46sp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:textSize="36sp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
                 android:textColor="#34495E" />
 
             <TextView
@@ -33,7 +33,7 @@
                 android:id="@+id/monthTextView"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textAlignment="center"
                 android:textColor="#34495E" />
         </LinearLayout>
@@ -87,8 +87,8 @@
                         android:id="@+id/eventProfilePictureView"
                         android:scaleType="fitXY"
                         app:srcCompat="@drawable/com_facebook_button_icon_blue"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp" />
+                        android:layout_height="match_parent"
+                        android:layout_width="80dp" />
                 </LinearLayout>
 
                 <LinearLayout
