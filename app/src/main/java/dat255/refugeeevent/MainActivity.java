@@ -430,9 +430,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
-        if(!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
-        }
         locationTextView = (TextView) findViewById(R.id.locationTV);
     }
     @Override
