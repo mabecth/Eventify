@@ -67,10 +67,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     protected static final String TAG = "main-activity";
 
@@ -93,6 +90,7 @@ public class MainActivity extends AppCompatActivity
 
     protected boolean mAddressRequested;
 
+    public static GoogleApi googleApi;
     /**
      * The formatted location address.
      */
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Receiver registered with this activity to get the response from FetchAddressIntentService.
      */
-    private AddressResultReceiver mResultReceiver;
+
 
 
 
@@ -125,7 +123,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mResultReceiver = new AddressResultReceiver(new Handler());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -138,23 +135,6 @@ public class MainActivity extends AppCompatActivity
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
         mAddressOutput = "";
-
-          /* Check for latest version of Play services */
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-            }
-        }
-        else {
-            buildGoogleApiClient();
-        }
-
 
         //Retrieve public profile info
         if(Profile.getCurrentProfile() == null) {
@@ -175,229 +155,14 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
-
-
-
-
-
     }
-
-    public void calculateDistance() {
-        for(int i = 0; i < adapter.getCount(); i++) {
-            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace() + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
-        }
-    }
-
-    public void updateDistance(int id, String result){
-        adapter.getListOfEvents().get(id).setDistance(result);
-        listView.invalidateViews();
-    }
-
 
     @Override
     public void onPause() {
         super.onPause();
-
         //stop location updates when Activity is no longer active
-       if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-
-    }
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-     public void onConnectionSuspended(int cause) {
-            // The connection to Google Play services was lost for some reason. We call connect() to
-             // attempt to re-establish the connection.
-           /*  Log.i(TAG, "Connection suspended");
-             mGoogleApiClient.connect();
-        */
-         }
-
-    public void fetchAddressButtonHandler(View view) {
-
-        // We only start the service to fetch the address if GoogleApiClient is connected.
-
-        if (mGoogleApiClient.isConnected() && mLastLocation != null) {
-            startIntentService();
-        }
-        // If GoogleApiClient isn't connected, we process the user's request by setting
-
-        // mAddressRequested to true. Later, when GoogleApiClient connects, we launch the service to
-
-        // fetch the address. As far as the user is concerned, pressing the Fetch Address button
-
-        // immediately kicks off the process of getting the address.
-
-        mAddressRequested = true;
-
-    }
-
-    protected void startIntentService() {
-        System.out.println("Create intent");
-
-        // Create an intent for passing to the intent service responsible for fetching the address.
-
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-        // Pass the result receiver as an extra to the service.
-        intent.putExtra(Constants.RECEIVER, mResultReceiver);
-        // Pass the location data as an extra to the service.
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-        // Start the service. If the service isn't already running, it is instantiated and started
-
-        // (creating a process for it if needed); if it is running then it remains running. The
-
-        // service kills itself automatically once all intents are processed.
-        startService(intent);
-    }
-    public void displayAddressOutput() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View view = navigationView.getHeaderView(0);
-        locationTextView = (TextView) view.findViewById(R.id.locationTV);
-        locationTextView.setText(mAddressOutput);
-    }
-
-    protected void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1);
-        mLocationRequest.setFastestInterval(1);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        if (mLastLocation != null) {
-
-            // It is possible that the user presses the button to get the address before the
-
-            // GoogleApiClient object successfully connects. In such a case, mAddressRequested
-
-            // is set to true, but no attempt is made to fetch the address (see
-
-            // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
-
-
-System.out.println("Start Service");
-                startIntentService();
-
-            }
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        mLastLocation = location;
-
-        //Get coordinates
-        latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        //Calculates new distance to the events
-        calculateDistance();
-
-        //Set location in coordinates
-
-
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-
-
-    }
-
-    /**
-
-     * Runs when a GoogleApiClient object successfully connects.
-
-     */
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-       // calculateDistance();
-    }
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
-    public boolean checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                //TODO:
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                //(just doing it here for now, note that with this code, no explanation is shown)
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-
-                    }
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
+        if (googleApi.getmGoogleApiClient() != null) {
+            googleApi.removeLocationUpdates();
         }
     }
 
@@ -456,15 +221,13 @@ System.out.println("Start Service");
         return true;
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
 
 
     @Override
     public void onStart(){
         super.onStart();
+        googleApi = new GoogleApi(this);
         locationTextView = (TextView) findViewById(R.id.locationTV);
         //Longs skitkod rör ej
         listView = (ListView) findViewById(R.id.listView);
@@ -476,9 +239,9 @@ System.out.println("Start Service");
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
+        /*if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
-        }
+        }*/
 
     }
 
@@ -489,36 +252,8 @@ System.out.println("Start Service");
         }
     }
 
-    class AddressResultReceiver extends ResultReceiver {
-
-        public AddressResultReceiver(Handler handler) {
-
-            super(handler);
-
-        }
-
-        /**
-
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-
-         */
-
-        @Override
-
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            // Display the address string or an error message sent from the intent service.
-
-            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            displayAddressOutput();
-            // Show a toast message if an address was found.
-
-            // Reset. Enable the Fetch Address button and stop showing the progress bar.
 
 
-
-        }
-
-    }
 }
 
 

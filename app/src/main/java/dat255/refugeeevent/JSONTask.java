@@ -13,12 +13,12 @@ import dat255.refugeeevent.model.Event;
 
 public class JSONTask extends AsyncTask<String, String, String> {
 
-    private MainActivity activity;
+    private GoogleApi googleApi;
     private int id;
 
 
-    public JSONTask(MainActivity activity, int id) {
-        this.activity = activity;
+    public JSONTask(GoogleApi googleApi, int id) {
+        this.googleApi = googleApi;
         this.id = id;
 
     }
@@ -77,7 +77,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
 @Override
 protected void onPostExecute(String result){
             super.onPostExecute(result);
-            activity.updateDistance(id, result);
+            googleApi.updateDistance(id, result);
 }
 
 
