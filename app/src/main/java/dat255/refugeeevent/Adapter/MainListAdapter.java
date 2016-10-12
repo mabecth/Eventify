@@ -89,6 +89,11 @@ public class MainListAdapter extends BaseAdapter{
             dateTextView.setVisibility(View.INVISIBLE);
             monthTextView.setVisibility(View.INVISIBLE);
         }
+        else
+        {
+            dateTextView.setVisibility(View.VISIBLE);
+            monthTextView.setVisibility(View.VISIBLE);
+        }
 
         if (result!=null) {
             result.setOnClickListener(new View.OnClickListener() {
