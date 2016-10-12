@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         //stop location updates when Activity is no longer active
 
-        if (googleApi.getmGoogleApiClient() != null) {
+        if (googleApi.getmGoogleApiClient() != null && googleApi.getmGoogleApiClient().isConnected()) {
             googleApi.removeLocationUpdates();
         }
     }
