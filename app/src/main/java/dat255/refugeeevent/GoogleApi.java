@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,6 +46,10 @@ public class GoogleApi implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    protected static final String TAG = "main-activity";
+    protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
+    protected static final String LOCATION_ADDRESS_KEY = "location-address";
+
     MainActivity mainActivity;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -54,19 +59,21 @@ public class GoogleApi implements OnMapReadyCallback,
     private List<Event> listOfEvents;
     private LocationRequest mLocationRequest;
     private TextView locationTextView;
+    private String previousDestination;
+
 
     protected boolean mAddressRequested;
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
 
 
-
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public GoogleApi(Context context){
+    public GoogleApi(Context context) {
         mResultReceiver = new AddressResultReceiver(new Handler());
         mainActivity = (MainActivity) context;
+
+        previousDestination = "";
 
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
@@ -82,8 +89,7 @@ public class GoogleApi implements OnMapReadyCallback,
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
         }
 
@@ -103,7 +109,7 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
 
-    public void updateDistance(int id, String result){
+    public void updateDistance(int id, String result) {
         adapter.getListOfEvents().get(id).setDistance(result);
         listView.invalidateViews();
     }
@@ -113,7 +119,7 @@ public class GoogleApi implements OnMapReadyCallback,
         Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
-    public boolean checkLocationPermission(){
+    public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(mainActivity,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -170,17 +176,17 @@ public class GoogleApi implements OnMapReadyCallback,
 
 
             System.out.println("Start Service");
-           startIntentService();
+            startIntentService();
 
         }
 
     }
 
-    public GoogleApiClient getmGoogleApiClient(){
+    public GoogleApiClient getmGoogleApiClient() {
         return mGoogleApiClient;
     }
 
-    public void removeLocationUpdates(){
+    public void removeLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
@@ -188,35 +194,36 @@ public class GoogleApi implements OnMapReadyCallback,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     public void calculateDistance() {
-        for(int i = 0; i < adapter.getCount(); i++) {
-            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ","") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+        for (int i = 0; i < adapter.getCount(); i++) {
+            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
         }
     }
 
-                 protected void startIntentService() {
-                // Create an intent for passing to the intent service responsible for fetching the address.
-                 Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
-                 // Pass the result receiver as an extra to the service.
-                     intent.putExtra(Constants.RECEIVER, mResultReceiver);
+    protected void startIntentService() {
+        // Create an intent for passing to the intent service responsible for fetching the address.
+        Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
+        // Pass the result receiver as an extra to the service.
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
 
-                // Pass the location data as an extra to the service.
-                 intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-                 // Start the service. If the service isn't already running, it is instantiated and started
-                 // (creating a process for it if needed); if it is running then it remains running. The
-                 // service kills itself automatically once all intents are processed.
-                 mainActivity.startService(intent);
-             }
+        // Pass the location data as an extra to the service.
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        // Start the service. If the service isn't already running, it is instantiated and started
+        // (creating a process for it if needed); if it is running then it remains running. The
+        // service kills itself automatically once all intents are processed.
+        mainActivity.startService(intent);
+    }
 
 
-               public void displayAddressOutput() {
-            NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-         navigationView.setNavigationItemSelectedListener(mainActivity);
-             View view = navigationView.getHeaderView(0);
-            locationTextView = (TextView) view.findViewById(R.id.locationTV);
-              locationTextView.setText(mAddressOutput);
-                    System.out.println(mAddressOutput);
-               }
+    public void displayAddressOutput() {
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(mainActivity);
+        View view = navigationView.getHeaderView(0);
+        locationTextView = (TextView) view.findViewById(R.id.locationTV);
+        locationTextView.setText(mAddressOutput);
+        System.out.println(mAddressOutput);
+    }
 
 
     @Override
@@ -233,7 +240,6 @@ public class GoogleApi implements OnMapReadyCallback,
         //Set location in coordinates
 
 
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -243,14 +249,12 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
 
-
     @Override
     public void onConnectionSuspended(int cause) {
         // The connection to Google Play services was lost for some reason. We call connect() to
         // attempt to re-establish the connection.
-           /*  Log.i(TAG, "Connection suspended");
+           Log.i(TAG, "Connection suspended");
              mGoogleApiClient.connect();
-        */
     }
 
     @Override
@@ -292,24 +296,24 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     class AddressResultReceiver extends ResultReceiver {
-                 public AddressResultReceiver(Handler handler) {
-                     super(handler);
-                 }
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
 
 
-                 @Override
-                 protected void onReceiveResult(int resultCode, Bundle resultData) {
-                     // Display the address string or an error message sent from the intent service.
-                     mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-                     mAddressOutput = mAddressOutput.replace("\n", " ");
-                     String[] split = mAddressOutput.split("\\s+");
-                    mAddressOutput = split[split.length - 1]; // Only display city
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            // Display the address string or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            mAddressOutput = mAddressOutput.replace("\n", " ");
+            String[] split = mAddressOutput.split("\\s+");
+            mAddressOutput = split[split.length - 1]; // Only display city
 
 
-                    displayAddressOutput();
-                   // Show a toast message if an address was found.
-                   // Reset. Enable the Fetch Address button and stop showing the progress bar.
-               }
-           }
+            displayAddressOutput();
+            // Show a toast message if an address was found.
+            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+        }
+    }
 
 }

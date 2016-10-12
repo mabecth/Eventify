@@ -1,6 +1,7 @@
 package dat255.refugeeevent.Adapter;
 
 import android.content.Intent;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 import dat255.refugeeevent.DetailActivity;
 import dat255.refugeeevent.R;
@@ -23,6 +27,7 @@ public class MainListAdapter extends BaseAdapter{
     private TextView nameTextView, dateTextView, timeTextView,
             locationTextView, attendeesTextView, distanceTextView,
             monthTextView;
+    private ImageView coverImg;
     private View result;
 
     public MainListAdapter(){
@@ -70,6 +75,13 @@ public class MainListAdapter extends BaseAdapter{
         locationTextView.setText(currEvent.getPlace());
         attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
         distanceTextView.setText(currEvent.getDistance());
+
+
+        Glide.with(viewGroup.getContext())
+                .load(currEvent.getCover())
+                .fitCenter()
+                .centerCrop()
+                .into(eventProfilePictureView);
 
         if (position > 0)
         {
