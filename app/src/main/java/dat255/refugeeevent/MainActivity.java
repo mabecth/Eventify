@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import android.view.View;
 import com.facebook.Profile;
@@ -26,24 +24,11 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
-import android.os.ResultReceiver;
 import android.location.Location;
-import android.os.Handler;
-import android.widget.Toast;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 import dat255.refugeeevent.service.EventHandler;
-import dat255.refugeeevent.util.Constants;
 import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
@@ -65,18 +50,7 @@ public class MainActivity extends AppCompatActivity
     private TextView locationTextView;
 
     public static GoogleApi googleApi;
-    /**
-     * The formatted location address.
-     */
     protected String mAddressOutput;
-
-    /**
-     * Receiver registered with this activity to get the response from FetchAddressIntentService.
-     */
-
-
-
-
 
     //EventList
     private ListView listView;
@@ -112,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         TextView fbName = (TextView) view.findViewById(R.id.nameTV);
         ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
 
-
         //Retrieve public profile info
         if(Profile.getCurrentProfile() == null) {
             profileTracker = new ProfileTracker() {
@@ -134,7 +107,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Longs skitkod rör ej
-
         swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         listView = (ListView) findViewById(R.id.listView);
         adapter = new MainListAdapter();
@@ -166,13 +138,7 @@ public class MainActivity extends AppCompatActivity
                 swipRefresh.setRefreshing(false);
             }
         });
-
     }
-
-
-
-
-
 
     @Override
     public void onPause() {
@@ -183,7 +149,6 @@ public class MainActivity extends AppCompatActivity
             googleApi.removeLocationUpdates();
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -245,8 +210,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
-
     @Override
     public void onStart(){
         super.onStart();
@@ -268,10 +231,4 @@ public class MainActivity extends AppCompatActivity
             profileTracker.stopTracking();
         }
     }
-
-
-
-
 }
-
-
