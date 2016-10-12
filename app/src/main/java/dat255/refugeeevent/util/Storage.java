@@ -36,8 +36,24 @@ public class Storage {
         }
     }
 
+    public String getSettingsKey() {
+        return settingsKey;
+    }
+
+    public String getEventsKey() {
+        return eventsKey;
+    }
+
     public static Storage getInstance() {
         return instance;
+    }
+
+    public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferences.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     public void storeSettings(Object settings) {

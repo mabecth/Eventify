@@ -3,7 +3,6 @@ package dat255.refugeeevent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,32 +10,24 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.android.gms.common.api.GoogleApiClient;
 import android.view.View;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
-import dat255.refugeeevent.model.Event;
-import android.location.Location;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.model.LatLng;
-import java.util.List;
 import dat255.refugeeevent.service.EventHandler;
 import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-
-
-    public static GoogleApi googleApi;
+    //Google
+    private GoogleApi googleApi;
 
     //EventList
     private ListView listView;
@@ -51,8 +42,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Start collecting events
         Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
+
+        googleApi = new GoogleApi(this);
+        adapter = new MainListAdapter();
+
+        //Start collecting events
         startService(new Intent(MainActivity.this, EventHandler.class));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,32 +87,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        //Longs skitkod rör ej
-        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MainListAdapter();
-
-        swipRefresh.setRefreshing(true);
-        if(swipRefresh.isRefreshing())
-        {
-            new CountDownTimer(1000,1000) {
-                @Override
-                public void onTick(long l) {
-                    Log.e("Refresh","Time left" + l/1000);
-                }
-
-                @Override
-                public void onFinish() {
-                    Log.e("Finish", "CountDownDONE");
-                    adapter.updateEventList();
-                    listView.setAdapter(adapter);
-                    swipRefresh.setRefreshing(false);
-                    listView.invalidateViews();
-                }
-            }.start();
-        }
         listView.setAdapter(adapter);
 
+        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -130,8 +103,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        //stop location updates when Activity is no longer active
 
+        //stop location updates when Activity is no longer active
         if (googleApi.getmGoogleApiClient() != null && googleApi.getmGoogleApiClient().isConnected()) {
             googleApi.removeLocationUpdates();
         }
@@ -198,22 +171,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
-        googleApi = new GoogleApi(this);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
-        /*if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }*/
-
     }
 
     public void onDestroy() {
         super.onDestroy();
+
         if (profileTracker != null){
             profileTracker.stopTracking();
         }
     }
-
 }
