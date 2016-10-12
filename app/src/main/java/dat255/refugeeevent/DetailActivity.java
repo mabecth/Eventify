@@ -62,6 +62,9 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
         translateBtn.setOnClickListener(new TranslateBtnOnClick());
+
+        ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
+        favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
     }
 
     public void initView(){
@@ -111,6 +114,13 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    class FavoriteBtnOnClick implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            //LONG
+        }
+    }
+
     class TranslateBtnOnClick implements View.OnClickListener{
 
         List<String> languages;
@@ -118,6 +128,7 @@ public class DetailActivity extends AppCompatActivity {
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
+            languages.add("ENGLISH");
             languages.add("ARABIC");
             languages.add("SLOVAK");
             languages.add("SLOVENIAN");
@@ -136,22 +147,25 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     switch (i){
-                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ENGLISH,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
+                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
+                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
+                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
+                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 6: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
                         default: break;

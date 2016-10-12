@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         //stop location updates when Activity is no longer active
-       if (mGoogleApiClient != null) {
+       if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
 
