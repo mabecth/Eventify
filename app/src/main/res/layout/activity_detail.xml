@@ -5,9 +5,7 @@
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="dat255.refugeeevent.DetailActivity">
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,7 +24,7 @@
         app:srcCompat="@color/colorAccent"
         android:id="@+id/coverImage"
         android:scaleType="centerCrop"
-        android:layout_height="160dp" />
+            android:layout_height="180dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -203,13 +201,14 @@
             android:layout_marginEnd="20dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="135dp" />
+            android:layout_marginTop="155dp" />
 
         <ImageButton
             android:src="@drawable/ic_star_border"
             android:background="#00000000"
+            android:fitsSystemWindows="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:id="@+id/favoriteBtn"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
@@ -224,10 +223,11 @@
 
     <ImageButton
         android:id="@+id/backBtn"
+        android:fitsSystemWindows="true"
         android:background="@android:color/transparent"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:src="@drawable/ic_keyboard_backspace"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
