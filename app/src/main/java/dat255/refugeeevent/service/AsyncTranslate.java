@@ -1,4 +1,4 @@
-package dat255.refugeeevent.helpers;
+package dat255.refugeeevent.service;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
@@ -6,6 +6,8 @@ import android.widget.TextView;
 import com.memetix.mst.translate.Translate;
 
 import java.lang.ref.WeakReference;
+
+import dat255.refugeeevent.model.TranslateRequest;
 
 /**
  * Created by Kristoffer on 2016-10-11.

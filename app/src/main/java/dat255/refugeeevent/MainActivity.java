@@ -1,26 +1,24 @@
 package dat255.refugeeevent;
 
+import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.drive.Drive;
 import android.view.View;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
@@ -28,53 +26,31 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
-
 import android.os.ResultReceiver;
-
 import android.location.Location;
 import android.os.Handler;
 import android.widget.Toast;
-
-
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
 import java.util.List;
+import dat255.refugeeevent.service.EventHandler;
+import dat255.refugeeevent.util.Constants;
+import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     protected static final String TAG = "main-activity";
-
-
-
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
     private String origin = "";
@@ -87,8 +63,6 @@ public class MainActivity extends AppCompatActivity
     private LatLng latLng;
     private List<Event> listOfEvents;
     private TextView locationTextView;
-
-    protected boolean mAddressRequested;
 
     public static GoogleApi googleApi;
     /**
@@ -103,9 +77,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
     //EventList
     private ListView listView;
     private MainListAdapter adapter;
+    private SwipeRefreshLayout swipRefresh;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -114,6 +90,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Start collecting events
+        Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
+        startService(new Intent(MainActivity.this, EventHandler.class));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -123,7 +104,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -132,9 +112,6 @@ public class MainActivity extends AppCompatActivity
         TextView fbName = (TextView) view.findViewById(R.id.nameTV);
         ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
 
-        // Set defaults, then update using values stored in the Bundle.
-        mAddressRequested = false;
-        mAddressOutput = "";
 
         //Retrieve public profile info
         if(Profile.getCurrentProfile() == null) {
@@ -155,12 +132,53 @@ public class MainActivity extends AppCompatActivity
                 fbPicture.setProfileId(Profile.getCurrentProfile().getId());
             }
         }
+
+        //Longs skitkod rör ej
+
+        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+
+        swipRefresh.setRefreshing(true);
+        if(swipRefresh.isRefreshing())
+        {
+            new CountDownTimer(1000,1000) {
+                @Override
+                public void onTick(long l) {
+                    Log.e("Refresh","Time left" + l/1000);
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.e("Finish", "CountDownDONE");
+                    adapter.updateEventList();
+                    listView.setAdapter(adapter);
+                    swipRefresh.setRefreshing(false);
+                }
+            }.start();
+        }
+        listView.setAdapter(adapter);
+
+        swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.updateEventList();
+                swipRefresh.setRefreshing(false);
+            }
+        });
+
     }
+
+
+
+
+
 
     @Override
     public void onPause() {
         super.onPause();
         //stop location updates when Activity is no longer active
+
         if (googleApi.getmGoogleApiClient() != null) {
             googleApi.removeLocationUpdates();
         }
@@ -175,6 +193,13 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.setGroupVisible(R.id.group2, false); //Not working wtf
+        return true;
     }
 
     @Override
@@ -215,12 +240,10 @@ public class MainActivity extends AppCompatActivity
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
 
@@ -229,12 +252,6 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         googleApi = new GoogleApi(this);
         locationTextView = (TextView) findViewById(R.id.locationTV);
-        //Longs skitkod rör ej
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new MainListAdapter();
-        listView.setAdapter(adapter);
-        listOfEvents = adapter.getListOfEvents();
-
     }
     @Override
     protected void onStop() {
@@ -251,6 +268,7 @@ public class MainActivity extends AppCompatActivity
             profileTracker.stopTracking();
         }
     }
+
 
 
 

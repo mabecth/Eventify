@@ -6,29 +6,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-import com.facebook.login.widget.ProfilePictureView;
-
 import java.util.List;
-
 import dat255.refugeeevent.DetailActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class MainListAdapter extends BaseAdapter{
 
     private List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
-    private ProfilePictureView eventProfilePictureView;
+    private ImageView eventProfilePictureView;
     private TextView nameTextView, dateTextView, timeTextView,
             locationTextView, attendeesTextView, distanceTextView,
             monthTextView;
     private View result;
 
     public MainListAdapter(){
-        listOfEvents = EventHandler.getInstance().getEvents();
+        listOfEvents = Storage.getInstance().getEvents();
     }
 
     @Override
@@ -50,8 +48,6 @@ public class MainListAdapter extends BaseAdapter{
         return this.listOfEvents;
     }
 
-
-
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
 
@@ -67,16 +63,12 @@ public class MainListAdapter extends BaseAdapter{
 
         initializeView();
 
-        if (currEvent.getTitle().length() > 18)
-        {
-            nameTextView.setText(currEvent.getTitle().substring(0,18) + "...");
-        }
-        else nameTextView.setText(currEvent.getTitle());
-        dateTextView.setText(currEvent.getDate().substring(0,2));
+        nameTextView.setText(currEvent.getTitle());
+        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,currEvent.getDate().length()));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         locationTextView.setText(currEvent.getPlace());
-        attendeesTextView.setText(currEvent.getNbrAttending() + "");
+        attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
         distanceTextView.setText(currEvent.getDistance());
 
         if (position > 0)
@@ -106,8 +98,15 @@ public class MainListAdapter extends BaseAdapter{
         return result;
     }
 
+    public void updateEventList(){
+        listOfEvents = Storage.getInstance().getEvents();
+        notifyDataSetChanged();
+        Log.e("Click","Event List Updated");
+    }
+
+
     private void initializeView(){
-        eventProfilePictureView = (ProfilePictureView) result.findViewById(R.id.eventProfilePictureView);
+        eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
         dateTextView = (TextView) result.findViewById(R.id.dateTextView);
         timeTextView = (TextView) result.findViewById(R.id.timeTextView);

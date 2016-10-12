@@ -10,18 +10,20 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
 
-import dat255.refugeeevent.helpers.AsyncTranslate;
-import dat255.refugeeevent.helpers.TranslateRequest;
+import dat255.refugeeevent.service.AsyncTranslate;
+import dat255.refugeeevent.model.TranslateRequest;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.model.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -35,20 +37,34 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
-        event = EventHandler.getInstance().getEventAt(index);
+        event = Storage.getInstance().getEvent(index);
         initView();
+        initButtons();
 
-
-        ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new BackBtnOnClick());
-        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
-        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
-        ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
-        translateBtn.setOnClickListener(new TranslateBtnOnClick());
+        System.out.println("Datum formatering: " + event.getDate());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setStatusBarTranslucent(true);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public void initButtons(){
+        ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new BackBtnOnClick());
+
+        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
+        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
+
+        ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
+        translateBtn.setOnClickListener(new TranslateBtnOnClick());
+
+        ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
+        favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
     }
 
     public void initView(){
@@ -66,14 +82,12 @@ public class DetailActivity extends AppCompatActivity {
         nbrAttending.setText(String.valueOf(event.getNbrAttending()));
         desc.setText(event.getDesc());
 
-        /* UNCOMMENT NÄR MACKE HAR MERGE'AT FACEBOOK
         ImageView coverImg = (ImageView) findViewById(R.id.coverImage);
         Glide.with(DetailActivity.this)
                 .load(event.getCover())
                 .fitCenter()
                 .centerCrop()
                 .into(coverImg);
-         */
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -100,6 +114,13 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    class FavoriteBtnOnClick implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            //LONG
+        }
+    }
+
     class TranslateBtnOnClick implements View.OnClickListener{
 
         List<String> languages;
@@ -107,6 +128,7 @@ public class DetailActivity extends AppCompatActivity {
 
         TranslateBtnOnClick(){
             languages = new ArrayList<>();
+            languages.add("ENGLISH");
             languages.add("ARABIC");
             languages.add("SLOVAK");
             languages.add("SLOVENIAN");
@@ -125,22 +147,25 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     switch (i){
-                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ENGLISH,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
+                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
+                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
+                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
+                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                            mPopupWindow.dismiss();
+                            break;
+                        case 6: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
                         default: break;

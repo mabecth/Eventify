@@ -33,7 +33,7 @@ import java.util.List;
 
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
-
+import dat255.refugeeevent.util.Constants;
 
 
 /**
@@ -67,6 +67,10 @@ public class GoogleApi implements OnMapReadyCallback,
     public GoogleApi(Context context){
         mResultReceiver = new AddressResultReceiver(new Handler());
         mainActivity = (MainActivity) context;
+
+        // Set defaults, then update using values stored in the Bundle.
+        mAddressRequested = false;
+        mAddressOutput = "";
            /* Check for latest version of Play services */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -102,6 +106,11 @@ public class GoogleApi implements OnMapReadyCallback,
     public void updateDistance(int id, String result){
         adapter.getListOfEvents().get(id).setDistance(result);
         listView.invalidateViews();
+    }
+
+
+    protected void showToast(String text) {
+        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
     public boolean checkLocationPermission(){
@@ -181,7 +190,7 @@ public class GoogleApi implements OnMapReadyCallback,
     }
     public void calculateDistance() {
         for(int i = 0; i < adapter.getCount(); i++) {
-            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace() + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+            new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ","") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
         }
     }
 
