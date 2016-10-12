@@ -34,23 +34,9 @@ import dat255.refugeeevent.util.Storage;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    protected static final String TAG = "main-activity";
-    protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-    protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
-    private String origin = "";
-    private String destination = "";
-    private LocationRequest mLocationRequest;
-    private TextView distanceTextView;
-    private TextView destinationTextView;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    private LatLng latLng;
-    private List<Event> listOfEvents;
-    private TextView locationTextView;
 
     public static GoogleApi googleApi;
-    protected String mAddressOutput;
 
     //EventList
     private ListView listView;
@@ -214,7 +200,6 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         super.onStart();
         googleApi = new GoogleApi(this);
-        locationTextView = (TextView) findViewById(R.id.locationTV);
     }
     @Override
     protected void onStop() {
@@ -231,4 +216,5 @@ public class MainActivity extends AppCompatActivity
             profileTracker.stopTracking();
         }
     }
+
 }

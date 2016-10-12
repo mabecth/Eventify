@@ -235,7 +235,6 @@ public class GoogleApi implements OnMapReadyCallback,
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         //Calculates new distance to the events
-        calculateDistance();
 
         //Set location in coordinates
 
@@ -308,6 +307,8 @@ public class GoogleApi implements OnMapReadyCallback,
             mAddressOutput = mAddressOutput.replace("\n", " ");
             String[] split = mAddressOutput.split("\\s+");
             mAddressOutput = split[split.length - 1]; // Only display city
+            calculateDistance();
+
 
 
             displayAddressOutput();
