@@ -2,7 +2,7 @@ package dat255.refugeeevent.model;
 
 public class Event {
 
-    private String id, title, place, date, time, desc, nbrAttending, cover, distance;
+    private String id, title, place, owner, date, time, desc, nbrAttending, cover, distance;
 
     public String getId() {
         return id;
@@ -26,6 +26,14 @@ public class Event {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getTitle() {

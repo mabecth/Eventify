@@ -65,7 +65,7 @@ public class EventHandler extends Service {
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + id + "/events?fields=id,name,description,attending_count,cover,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"",
+                "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -97,6 +97,9 @@ public class EventHandler extends Service {
                                         
                                         if (obj.getJSONObject("place").getJSONObject("location").has("street"))
                                             event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
+
+                                        if (obj.has("owner"))
+                                            event.setOwner(obj.getJSONObject("owner").getString("name"));
 
                                         if (obj.has("start_time"))
                                             event.setDate(obj.getString("start_time").substring(0,10));
