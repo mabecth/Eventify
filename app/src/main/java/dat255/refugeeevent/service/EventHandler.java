@@ -94,11 +94,9 @@ public class EventHandler extends Service {
 
                                         if (obj.has("cover"))
                                             event.setCover(obj.getJSONObject("cover").getString("source"));
-
-                                        if (obj.has("place"))
-                                            if (obj.getJSONObject("place").has("location"))
-                                                if (obj.getJSONObject("place").getJSONObject("location").has("street"))
-                                                    event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
+                                        
+                                        if (obj.getJSONObject("place").getJSONObject("location").has("street"))
+                                            event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
 
                                         if (obj.has("start_time"))
                                             event.setDate(obj.getString("start_time").substring(0,10));
