@@ -20,6 +20,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.service.EventHandler;
+import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Only display logout button when using app with Facebook
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(Storage.getInstance().getLoginType().equals("facebook"));
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
@@ -119,7 +123,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu (Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.setGroupVisible(R.id.group2, false); //Not working wtf
         return true;
     }
 
