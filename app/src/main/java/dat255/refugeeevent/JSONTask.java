@@ -35,7 +35,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
 
             InputStream stream = connection.getInputStream();
 
-            reader = new BufferedReader(new InputStreamReader(stream));
+            reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
             StringBuffer buffer = new StringBuffer();
 
