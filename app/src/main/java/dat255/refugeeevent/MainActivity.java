@@ -1,6 +1,5 @@
 package dat255.refugeeevent;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -21,7 +20,6 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.Adapter.MainListAdapter;
 import dat255.refugeeevent.service.EventHandler;
-import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -41,8 +39,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
 
         googleApi = new GoogleApi(this);
         adapter = new MainListAdapter();

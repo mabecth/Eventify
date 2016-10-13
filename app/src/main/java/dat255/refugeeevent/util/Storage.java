@@ -16,6 +16,11 @@ public class Storage {
 
     private static String settingsKey = "1";
     private static String eventsKey = "2";
+    private static String loginTypeKey = "3";
+
+    private static String loginType;
+    private static String facebook = "facebook";
+    private static String guest = "guest";
 
     //Empty objects
     private static Object settings = new Object();
@@ -33,6 +38,24 @@ public class Storage {
             //Store empty lists
             storeEvents(events);
         }
+    }
+
+    public boolean isLoginTypeSet() {
+        return preferences.getString(loginTypeKey, null) != null;
+    }
+
+    public String getLoginType() {
+        return preferences.getString(loginTypeKey, null);
+    }
+
+    public void setLoginTypeFacebook() {
+        editor.putString(loginTypeKey, facebook);
+        editor.commit();
+    }
+
+    public void setLoginTypeGuest() {
+        editor.putString(loginTypeKey, guest);
+        editor.commit();
     }
 
     public String getSettingsKey() {
