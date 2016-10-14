@@ -28,7 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
-import dat255.refugeeevent.Adapter.MainListAdapter;
+import dat255.refugeeevent.adapter.MainListAdapter;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.util.Constants;
 import dat255.refugeeevent.util.Storage;
@@ -271,11 +271,8 @@ public class GoogleApi implements OnMapReadyCallback,
                     // contacts-related task you need to do.
                     if (ContextCompat.checkSelfPermission(mainActivity,
                             Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
+                            == PackageManager.PERMISSION_GRANTED && mGoogleApiClient == null) {
                             buildGoogleApiClient();
-                        }
                     }
                 } else {
                     // permission denied, boo! Disable the

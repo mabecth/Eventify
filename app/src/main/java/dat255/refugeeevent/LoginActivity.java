@@ -19,7 +19,7 @@ import dat255.refugeeevent.util.Storage;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String TAG = "LoginActivity";
+    private final static String TAG = "LoginActivity";
     private CallbackManager callbackManager;
     private LoginButton loginButton;
 

@@ -1,6 +1,7 @@
 package dat255.refugeeevent;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,18 +10,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import dat255.refugeeevent.model.Event;
-
 public class JSONTask extends AsyncTask<String, String, String> {
 
     private GoogleApi googleApi;
     private int id;
 
-
     public JSONTask(GoogleApi googleApi, int id) {
         this.googleApi = googleApi;
         this.id = id;
-
     }
 
     @Override
@@ -49,14 +46,12 @@ public class JSONTask extends AsyncTask<String, String, String> {
                 }
             }
 
-
         return buffer.toString();
 
-
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.e("JSONTask","MalformedURLException", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("JSONTask","IOException", e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -66,19 +61,17 @@ public class JSONTask extends AsyncTask<String, String, String> {
                     reader.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("JSONTask","IOException", e);
             }
 
         }
         return null;
     }
 
-
-@Override
-protected void onPostExecute(String result){
-            super.onPostExecute(result);
-            googleApi.updateDistance(id, result);
-}
-
+    @Override
+    protected void onPostExecute(String result){
+        super.onPostExecute(result);
+        googleApi.updateDistance(id, result);
+    }
 
 }
