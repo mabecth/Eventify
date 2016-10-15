@@ -1,5 +1,6 @@
 package dat255.refugeeevent.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +10,7 @@ import dat255.refugeeevent.model.Event;
 
 /** Class used for storing data locally on the phone**/
 public class Storage {
+
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private static Storage instance = new Storage();
@@ -29,15 +31,19 @@ public class Storage {
     private Storage() {
     }
 
-    public void setPreferences(SharedPreferences sp) {
+    private void setPreferences(Context context) {
         if (preferences == null) {
-            preferences = sp;
+            preferences = context.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.commit();
 
             //Store empty lists
             storeEvents(events);
         }
+    }
+
+    public void setContext(Context context) {
+        setPreferences(context);
     }
 
     public boolean isLoginTypeSet() {

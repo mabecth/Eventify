@@ -1,6 +1,5 @@
 package dat255.refugeeevent;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,7 @@ import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import dat255.refugeeevent.util.Connection;
 import dat255.refugeeevent.util.Storage;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,7 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
 
-        Storage.getInstance().setPreferences(this.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE ));
+        Storage.getInstance().setContext(this);
+        Connection.getInstance().setContext(this);
 
         //Check if we have logged in before
         if (Storage.getInstance().isLoginTypeSet()) {
