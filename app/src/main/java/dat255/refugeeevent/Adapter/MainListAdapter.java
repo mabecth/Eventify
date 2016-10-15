@@ -35,7 +35,7 @@ public class MainListAdapter extends BaseAdapter{
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(Storage.getInstance().getEventsKey())) {
                     //Events changed
-                    Log.v("MainListAdapter", "Events updated!");
+                    Log.d("MainListAdapter", "Events updated!");
                     updateEventList();
                 }
             }
@@ -89,7 +89,7 @@ public class MainListAdapter extends BaseAdapter{
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Click", "You clicked item with position: " + position);
+                Log.d("MainListAdapter", "You clicked item with position: " + position);
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
                 intent.putExtra("EventIndex", position);
                 v.getContext().startActivity(intent);
@@ -103,7 +103,7 @@ public class MainListAdapter extends BaseAdapter{
     public void updateEventList() {
         listOfEvents = Storage.getInstance().getEvents();
         notifyDataSetChanged();
-        Log.v("Click","Event List Updated");
+        Log.d("MainListAdapter","Event List Updated");
     }
 
     private void initializeView() {

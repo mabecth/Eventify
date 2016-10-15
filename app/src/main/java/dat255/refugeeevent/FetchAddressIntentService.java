@@ -90,7 +90,6 @@ public class FetchAddressIntentService extends IntentService {
 
         String errorMessage = "";
 
-        System.out.println("Inside Fetchaddress");
 
         mReceiver = intent.getParcelableExtra("dat255.refugeeevent.RECEIVER");
 
