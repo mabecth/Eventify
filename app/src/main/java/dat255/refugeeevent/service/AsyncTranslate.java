@@ -1,17 +1,11 @@
 package dat255.refugeeevent.service;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
-
 import com.memetix.mst.translate.Translate;
-
 import java.lang.ref.WeakReference;
-
 import dat255.refugeeevent.model.TranslateRequest;
-
-/**
- * Created by Kristoffer on 2016-10-11.
- */
 
 public class AsyncTranslate extends AsyncTask<TranslateRequest, Void, String> {
 
@@ -31,7 +25,7 @@ public class AsyncTranslate extends AsyncTask<TranslateRequest, Void, String> {
         try {
             translatedText = Translate.execute(req.getText(), req.getLanguage());
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("AsyncTranslate", "Exception", e);
         }
         return translatedText;
     }

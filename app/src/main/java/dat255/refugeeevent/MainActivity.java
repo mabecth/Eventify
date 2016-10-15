@@ -18,7 +18,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
-import dat255.refugeeevent.Adapter.MainListAdapter;
+import dat255.refugeeevent.adapter.MainListAdapter;
 import dat255.refugeeevent.service.EventHandler;
 import dat255.refugeeevent.util.Storage;
 

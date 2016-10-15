@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -14,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.helpers.SortByDate;
 import dat255.refugeeevent.model.Event;
@@ -23,7 +23,6 @@ import dat255.refugeeevent.util.Storage;
 public class EventHandler extends Service {
 
     private static EventHandler ourInstance = new EventHandler();
-
     private List<Event> events;
     private Event event;
     private int nbrOfOrganisations;
@@ -80,39 +79,39 @@ public class EventHandler extends Service {
                                     try {
                                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                                        if (obj.has("id"))
+                                        if (obj.has("id")) {
                                             event.setId(obj.getString("id"));
-
-                                        if (obj.has("name"))
+                                        }
+                                        if (obj.has("name")) {
                                             event.setTitle(obj.getString("name"));
-
-                                        if (obj.has("description"))
+                                        }
+                                        if (obj.has("description")) {
                                             event.setDesc(obj.getString("description"));
-
-                                        if (obj.has("attending_count"))
+                                        }
+                                        if (obj.has("attending_count")) {
                                             event.setNbrAttending(obj.getString("attending_count"));
-
-                                        if (obj.has("cover"))
+                                        }
+                                        if (obj.has("cover")) {
                                             event.setCover(obj.getJSONObject("cover").getString("source"));
-                                        
-                                        if (obj.getJSONObject("place").getJSONObject("location").has("street"))
+                                        }
+                                        if (obj.getJSONObject("place").getJSONObject("location").has("street")) {
                                             event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
-
-                                        if (obj.has("owner"))
+                                        }
+                                        if (obj.has("owner")) {
                                             event.setOwner(obj.getJSONObject("owner").getString("name"));
-
-                                        if (obj.has("start_time"))
-                                            event.setDate(obj.getString("start_time").substring(0,10));
-                                            event.setTime(obj.getString("start_time").substring(11,16));
-
+                                        }
+                                        if (obj.has("start_time")) {
+                                            event.setDate(obj.getString("start_time").substring(0, 10));
+                                            event.setTime(obj.getString("start_time").substring(11, 16));
+                                        }
                                         events.add(event);
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.e("EventHandler","JSONException", e);
                                     }
 
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                Log.e("EventHandler","JSONException", e);
                             }
                         }
                         dataCollectCycles++;
@@ -121,7 +120,6 @@ public class EventHandler extends Service {
                 }
         ).executeAsync();
     }
-
 
     /*private EventHandler() {
         events = new ArrayList<>();

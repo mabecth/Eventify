@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -144,11 +145,13 @@ public class DetailActivity extends AppCompatActivity {
             mPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    desc.setGravity(Gravity.LEFT);
                     switch (i){
                         case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ENGLISH,event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
                         case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                            desc.setGravity(Gravity.RIGHT);
                             mPopupWindow.dismiss();
                             break;
                         case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));

@@ -1,4 +1,4 @@
-package dat255.refugeeevent.Adapter;
+package dat255.refugeeevent.adapter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
