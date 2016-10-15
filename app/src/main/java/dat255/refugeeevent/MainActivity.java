@@ -20,6 +20,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import dat255.refugeeevent.adapter.MainListAdapter;
 import dat255.refugeeevent.service.EventHandler;
+import dat255.refugeeevent.util.Connection;
 import dat255.refugeeevent.util.Storage;
 
 public class MainActivity extends AppCompatActivity
@@ -44,8 +45,10 @@ public class MainActivity extends AppCompatActivity
         googleApi = new GoogleApi(this);
         adapter = new MainListAdapter();
 
-        //Start collecting events
-        startService(new Intent(MainActivity.this, EventHandler.class));
+        //Start collecting events if we have access to the internet
+        if (Connection.getInstance().isConnected()) {
+            startService(new Intent(MainActivity.this, EventHandler.class));
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,7 +97,12 @@ public class MainActivity extends AppCompatActivity
         swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                adapter.updateEventList();
+                //Start collecting events if we have access to the internet
+                if (Connection.getInstance().isConnected()) {
+                    startService(new Intent(MainActivity.this, EventHandler.class));
+                } else {
+                    adapter.updateEventList();
+                }
                 swipRefresh.setRefreshing(false);
             }
         });
