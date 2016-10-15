@@ -41,8 +41,8 @@ public class EventHandler extends Service {
         }
     }
 
-    private EventHandler() {
-
+    public EventHandler() {
+        super();
     }
 
     @Nullable
@@ -56,6 +56,7 @@ public class EventHandler extends Service {
             SortByDate.sortDates(events);
             Storage.getInstance().storeEvents(events);
             Log.d("EventHandler", "Service done");
+            stopSelf();
         }
     }
 
@@ -112,7 +113,6 @@ public class EventHandler extends Service {
                                     } catch (JSONException e) {
                                         Log.e("EventHandler","JSONException", e);
                                     }
-
                                 }
                             } catch (JSONException e) {
                                 Log.e("EventHandler","JSONException", e);
