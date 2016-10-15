@@ -25,7 +25,6 @@ public class MainListAdapter extends BaseAdapter{
     private TextView nameTextView, dateTextView, timeTextView,
             locationTextView, attendeesTextView, distanceTextView,
             monthTextView;
-    private ImageView coverImg;
     private View result;
 
     public MainListAdapter(){
@@ -65,70 +64,49 @@ public class MainListAdapter extends BaseAdapter{
 
         currEvent = listOfEvents.get(position);
 
-        if (view == null)
-        {
+        if (view == null) {
             result = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.small_event, viewGroup, false);
-        }
-        else {
+        } else {
             result = view;
         }
 
         initializeView();
+        setViewData(viewGroup);
 
-        nameTextView.setText(currEvent.getTitle());
-        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,currEvent.getDate().length()));
-        monthTextView.setText(currEvent.getMonth());
-        timeTextView.setText(currEvent.getTime());
-        locationTextView.setText(currEvent.getPlace());
-        attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
-        distanceTextView.setText(currEvent.getDistance());
-
-
-        Glide.with(viewGroup.getContext())
-                .load(currEvent.getCover())
-                .fitCenter()
-                .centerCrop()
-                .into(eventProfilePictureView);
-
-        if (position > 0)
-        {
-            lastEvent = listOfEvents.get(position-1);
+        if (position > 0) {
+            lastEvent = listOfEvents.get(position - 1);
         }
 
-        if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate()))
-        {
+        //Only display date once if two or more events have the same date
+        if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate())) {
             dateTextView.setVisibility(View.INVISIBLE);
             monthTextView.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
+        } else {
             dateTextView.setVisibility(View.VISIBLE);
             monthTextView.setVisibility(View.VISIBLE);
         }
 
-        if (result!=null) {
-            result.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v("Click", "You clicked item with position: " + position);
-                    Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                    intent.putExtra("EventIndex", position);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
+        result.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Click", "You clicked item with position: " + position);
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("EventIndex", position);
+                v.getContext().startActivity(intent);
+            }
+        });
 
-        lastEvent =null;
+        lastEvent = null;
         return result;
     }
 
-    public void updateEventList(){
+    public void updateEventList() {
         listOfEvents = Storage.getInstance().getEvents();
         notifyDataSetChanged();
         Log.v("Click","Event List Updated");
     }
 
-    private void initializeView(){
+    private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
         dateTextView = (TextView) result.findViewById(R.id.dateTextView);
@@ -137,5 +115,22 @@ public class MainListAdapter extends BaseAdapter{
         attendeesTextView = (TextView) result.findViewById(R.id.attendeesTextView);
         distanceTextView = (TextView) result.findViewById(R.id.distanceTextView);
         monthTextView = (TextView) result.findViewById(R.id.monthTextView);
+    }
+
+    private void setViewData(final ViewGroup viewGroup) {
+        nameTextView.setText(currEvent.getTitle());
+        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,currEvent.getDate().length()));
+        monthTextView.setText(currEvent.getMonth());
+        timeTextView.setText(currEvent.getTime());
+        locationTextView.setText(currEvent.getPlace());
+        attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
+        distanceTextView.setText(currEvent.getDistance());
+
+        //Display image
+        Glide.with(viewGroup.getContext())
+                .load(currEvent.getCover())
+                .fitCenter()
+                .centerCrop()
+                .into(eventProfilePictureView);
     }
 }

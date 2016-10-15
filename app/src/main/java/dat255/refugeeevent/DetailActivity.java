@@ -14,13 +14,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
-
 import dat255.refugeeevent.service.AsyncTranslate;
 import dat255.refugeeevent.model.TranslateRequest;
 import dat255.refugeeevent.model.Event;
