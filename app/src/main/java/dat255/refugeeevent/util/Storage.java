@@ -5,18 +5,22 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import dat255.refugeeevent.model.Event;
 
 /** Class used for storing data locally on the phone**/
 public class Storage {
-    private static SharedPreferences preferences;
-    private static SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     private static Storage instance = new Storage();
-    private static Gson gson = new Gson();;
+    private static Gson gson = new Gson();
 
     private static String settingsKey = "1";
     private static String eventsKey = "2";
+    private static String loginTypeKey = "3";
+
+    private static String loginType;
+    private static String facebook = "facebook";
+    private static String guest = "guest";
 
     //Empty objects
     private static Object settings = new Object();
@@ -36,8 +40,42 @@ public class Storage {
         }
     }
 
+    public boolean isLoginTypeSet() {
+        return preferences.getString(loginTypeKey, null) != null;
+    }
+
+    public String getLoginType() {
+        return preferences.getString(loginTypeKey, null);
+    }
+
+    public void setLoginTypeFacebook() {
+        editor.putString(loginTypeKey, facebook);
+        editor.commit();
+    }
+
+    public void setLoginTypeGuest() {
+        editor.putString(loginTypeKey, guest);
+        editor.commit();
+    }
+
+    public String getSettingsKey() {
+        return settingsKey;
+    }
+
+    public String getEventsKey() {
+        return eventsKey;
+    }
+
     public static Storage getInstance() {
         return instance;
+    }
+
+    public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferences.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     public void storeSettings(Object settings) {

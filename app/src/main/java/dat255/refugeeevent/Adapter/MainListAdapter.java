@@ -1,7 +1,7 @@
-package dat255.refugeeevent.Adapter;
+package dat255.refugeeevent.adapter;
 
 import android.content.Intent;
-import android.media.Image;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import java.util.List;
 import dat255.refugeeevent.DetailActivity;
 import dat255.refugeeevent.R;
@@ -32,6 +30,19 @@ public class MainListAdapter extends BaseAdapter{
 
     public MainListAdapter(){
         listOfEvents = Storage.getInstance().getEvents();
+
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(Storage.getInstance().getEventsKey())) {
+                    //Events changed
+                    Log.v("MainListAdapter", "Events updated!");
+                    updateEventList();
+                }
+            }
+        };
+
+        Storage.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -89,12 +100,17 @@ public class MainListAdapter extends BaseAdapter{
             dateTextView.setVisibility(View.INVISIBLE);
             monthTextView.setVisibility(View.INVISIBLE);
         }
+        else
+        {
+            dateTextView.setVisibility(View.VISIBLE);
+            monthTextView.setVisibility(View.VISIBLE);
+        }
 
         if (result!=null) {
             result.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("Click", "You clicked item with position: " + position);
+                    Log.v("Click", "You clicked item with position: " + position);
                     Intent intent = new Intent(v.getContext(), DetailActivity.class);
                     intent.putExtra("EventIndex", position);
                     v.getContext().startActivity(intent);
@@ -109,9 +125,8 @@ public class MainListAdapter extends BaseAdapter{
     public void updateEventList(){
         listOfEvents = Storage.getInstance().getEvents();
         notifyDataSetChanged();
-        Log.e("Click","Event List Updated");
+        Log.v("Click","Event List Updated");
     }
-
 
     private void initializeView(){
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);

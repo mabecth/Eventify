@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: "https://raw.githubusercontent.com/chrisdoyle/gradle-fury/master/gradle/quality.gradle"
 
 android {
     compileSdkVersion 24

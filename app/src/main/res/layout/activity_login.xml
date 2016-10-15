@@ -18,7 +18,7 @@
         facebook:com_facebook_login_text="@string/facebook_login_button_text"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="25dp"
-        android:layout_above="@+id/login_continue_without"
+        android:layout_above="@+id/login_continue_as_guest"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -31,13 +31,13 @@
         android:layout_marginBottom="30dp"/>
 
     <ImageView
-        android:id="@+id/login_continue_without"
+        android:id="@+id/login_continue_as_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="92dp"
         android:src="@drawable/ic_forward"
         android:text="@string/login_continue_without"
-        android:onClick="continueWithout"
+        android:onClick="continueAsGuest"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
