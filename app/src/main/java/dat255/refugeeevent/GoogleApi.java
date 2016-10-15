@@ -111,6 +111,7 @@ public class GoogleApi implements OnMapReadyCallback,
 
     public void updateDistance(int id, String result) {
         listOfEvents.get(id).setDistance(result);
+        adapter.notifyDataSetChanged();
         listView.invalidateViews();
     }
 
