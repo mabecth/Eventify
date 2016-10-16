@@ -41,7 +41,7 @@ public class MainListAdapter extends BaseAdapter{
                 }
             }
         };
-
+        notifyDataSetChanged();
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 

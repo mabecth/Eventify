@@ -2,6 +2,7 @@ package dat255.refugeeevent.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +15,11 @@ import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.manager.ConnectionManager;
 import dat255.refugeeevent.manager.StorageManager;
@@ -22,6 +27,12 @@ import dat255.refugeeevent.manager.StorageManager;
 public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
+
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    //Facebook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
 
@@ -30,6 +41,24 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    if (!StorageManager.getInstance().isLoginTypeSet()) {
+                        StorageManager.getInstance().setLoginTypeGuest();
+                    }
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                } else {
+                    // User is signed out
+                }
+            }
+        };
 
         // Facebook Analytics
         AppEventsLogger.activateApp(this);
@@ -92,15 +121,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     public void continueAsGuest(View view) {
-        if (!StorageManager.getInstance().isLoginTypeSet()) {
-            StorageManager.getInstance().setLoginTypeGuest();
-        }
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInAnonymously", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

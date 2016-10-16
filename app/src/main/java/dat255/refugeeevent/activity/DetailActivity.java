@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
-
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
 import dat255.refugeeevent.util.TranslateAsyncTask;

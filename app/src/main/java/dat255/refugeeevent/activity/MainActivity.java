@@ -184,8 +184,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onRestart() {
+        super.onRestart();
+        adapter.updateEventList();
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
+        adapter.updateEventList();
     }
 
     @Override

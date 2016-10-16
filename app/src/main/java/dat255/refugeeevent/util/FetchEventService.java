@@ -10,6 +10,11 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,18 +32,40 @@ public class FetchEventService extends Service {
     private int nbrOfOrganisations;
     private int dataCollectCycles;
 
+    //Firebase
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("userToken");
+
     @Override
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
         events = new CopyOnWriteArrayList<>();
-        String[] organisations = FetchEventService.this.getResources().getStringArray(R.array.organisations);
+        final String[] organisations = FetchEventService.this.getResources().getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
         dataCollectCycles = 0;
         Log.d(TAG, "Service started");
 
-        for(String s : organisations) {
-            getEventsFromFacebook(s);
+        if (StorageManager.getInstance().getLoginType().equals("facebook")) {
+            for(String s : organisations) {
+                getEventsFromFacebook(s, "facebook", null);
+            }
+        } else {
+            //Read Facebook userToken from Firebase
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(String s : organisations) {
+                        getEventsFromFacebook(s, "guest", dataSnapshot.getValue(String.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
         }
     }
 
@@ -61,16 +88,27 @@ public class FetchEventService extends Service {
         }
     }
 
-    private void getEventsFromFacebook(final String id) {
+    private void getEventsFromFacebook(final String id, String loginType, String userToken) {
         //Get events from now to one month ahead
         long now = System.currentTimeMillis() / 1000L;
         long monthInSeconds = 2592000;
         long monthForward = now + monthInSeconds;
         int limit = 25;
+        AccessToken accessToken;
+        String graphPath;
+
+        if (loginType.equals("facebook")) {
+            accessToken = AccessToken.getCurrentAccessToken();
+            graphPath = "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"";
+
+        } else {
+            accessToken = null;
+            graphPath = "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"&access_token="+userToken+"";
+        }
 
         new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"",
+                accessToken,
+                graphPath,
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
