@@ -8,15 +8,12 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListPopupWindow;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
 import com.bumptech.glide.Glide;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.memetix.mst.language.Language;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
@@ -28,6 +25,14 @@ public class DetailActivity extends AppCompatActivity {
 
     private Event event;
     private TextView desc;
+
+    FloatingActionButton fab1;
+    FloatingActionButton fab2;
+    FloatingActionButton fab3;
+    FloatingActionButton fab4;
+    FloatingActionButton fab5;
+    FloatingActionButton fab6;
+    FloatingActionMenu transMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +62,24 @@ public class DetailActivity extends AppCompatActivity {
         ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
         showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
-        ImageButton translateBtn = (ImageButton) findViewById(R.id.translateBtn);
-        translateBtn.setOnClickListener(new TranslateBtnOnClick());
-
         ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
+
+        transMenu = (FloatingActionMenu) findViewById(R.id.menu_translate);
+
+        TranslateBtnOnClick transOnClick = new TranslateBtnOnClick();
+        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab4 = (FloatingActionButton) findViewById(R.id.fab4);
+        fab5 = (FloatingActionButton) findViewById(R.id.fab5);
+        fab6 = (FloatingActionButton) findViewById(R.id.fab6);
+        fab1.setOnClickListener(transOnClick);
+        fab2.setOnClickListener(transOnClick);
+        fab3.setOnClickListener(transOnClick);
+        fab4.setOnClickListener(transOnClick);
+        fab5.setOnClickListener(transOnClick);
+        fab6.setOnClickListener(transOnClick);
     }
 
     public void initView(){
@@ -120,63 +138,33 @@ public class DetailActivity extends AppCompatActivity {
 
     class TranslateBtnOnClick implements View.OnClickListener{
 
-        List<String> languages;
-        ListPopupWindow mPopupWindow;
-
         TranslateBtnOnClick(){
-            languages = new ArrayList<>();
-            languages.add("ENGLISH");
-            languages.add("ARABIC");
-            languages.add("SLOVAK");
-            languages.add("SLOVENIAN");
-            languages.add("ROMANIAN");
-            languages.add("PERSIAN");
-            languages.add("TURKISH");
-
-            mPopupWindow = new ListPopupWindow(DetailActivity.this);
-            mPopupWindow.setAdapter(new ArrayAdapter<>(DetailActivity.this,R.layout.popup_list, languages));
-            mPopupWindow.setWidth(700);
-            mPopupWindow.setAnchorView(DetailActivity.this.findViewById(R.id.translateBtn));
-            mPopupWindow.setHeight(2500);
-            mPopupWindow.setModal(true);
-
-            mPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    desc.setGravity(Gravity.LEFT);
-                    switch (i){
-                        case 0: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        case 1: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
-                            desc.setGravity(Gravity.RIGHT);
-                            mPopupWindow.dismiss();
-                            break;
-                        case 2: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        case 3: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVENIAN, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        case 4: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        case 5: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        case 6: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
-                            mPopupWindow.dismiss();
-                            break;
-                        default: break;
-                    }
-                }
-            });
         }
 
         @Override
         public void onClick(View view) {
-            if (mPopupWindow != null){
-                mPopupWindow.show();
+            desc.setGravity(Gravity.LEFT);
+            switch (view.getId()){
+                case R.id.fab1: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
+                    transMenu.close(true);
+                    break;
+                case R.id.fab2: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
+                    desc.setGravity(Gravity.RIGHT);
+                    transMenu.close(true);
+                    break;
+                case R.id.fab3: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
+                    transMenu.close(true);
+                    break;
+                case R.id.fab4: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
+                    transMenu.close(true);
+                    break;
+                case R.id.fab5: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
+                    transMenu.close(true);
+                    break;
+                case R.id.fab6: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
+                    transMenu.close(true);
+                    break;
+                default: break;
             }
 
         }

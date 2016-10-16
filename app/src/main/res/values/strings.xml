@@ -12,6 +12,14 @@
     <string name="translate">Translate</string>
     <string name="settings">Settings</string>
 
+    <!-- Languages -->
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="slovak">Slovak</string>
+    <string name="romanian">Romanian</string>
+    <string name="persian">Persian</string>
+    <string name="turkish">Turksih</string>
+
     <!-- Facebook -->
     <string name="facebook_app_id">342377189428679</string>
     <string name="facebook_login_button_text">Log in with Facebook</string>
