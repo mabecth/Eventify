@@ -1,11 +1,11 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 import com.memetix.mst.translate.Translate;
 import java.lang.ref.WeakReference;
-import dat255.refugeeevent.model.TranslateRequest;
+import dat255.eventify.model.TranslateRequest;
 
 public class TranslateAsyncTask extends AsyncTask<TranslateRequest, Void, String> {
 

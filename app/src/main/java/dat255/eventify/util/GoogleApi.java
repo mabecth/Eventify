@@ -1,4 +1,4 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 import android.Manifest;
 import android.content.Context;
@@ -28,11 +28,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
-import dat255.refugeeevent.manager.StorageManager;
-import dat255.refugeeevent.activity.MainActivity;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.view.adapter.MainListAdapter;
+import dat255.eventify.manager.StorageManager;
+import dat255.eventify.activity.MainActivity;
+import dat255.eventify.R;
+import dat255.eventify.model.Event;
+import dat255.eventify.view.adapter.MainListAdapter;
 
 public class GoogleApi implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,

@@ -1,9 +1,9 @@
-package dat255.refugeeevent;
+package dat255.eventify;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import dat255.refugeeevent.model.Event;
+import dat255.eventify.model.Event;
 
 public class EventTest {
     @Test

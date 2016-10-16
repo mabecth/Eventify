@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.eventify;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

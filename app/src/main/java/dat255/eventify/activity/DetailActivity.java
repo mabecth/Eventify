@@ -1,4 +1,4 @@
-package dat255.refugeeevent.activity;
+package dat255.eventify.activity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.TranslateAsyncTask;
-import dat255.refugeeevent.model.TranslateRequest;
-import dat255.refugeeevent.manager.StorageManager;
+import dat255.eventify.R;
+import dat255.eventify.model.Event;
+import dat255.eventify.util.TranslateAsyncTask;
+import dat255.eventify.model.TranslateRequest;
+import dat255.eventify.manager.StorageManager;
 
 public class DetailActivity extends AppCompatActivity {
 

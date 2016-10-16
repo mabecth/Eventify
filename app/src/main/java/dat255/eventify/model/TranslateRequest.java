@@ -1,4 +1,4 @@
-package dat255.refugeeevent.model;
+package dat255.eventify.model;
 
 import com.memetix.mst.language.Language;
 

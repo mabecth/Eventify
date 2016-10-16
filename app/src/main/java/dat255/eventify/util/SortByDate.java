@@ -1,9 +1,9 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 import java.util.Collections;
 import java.util.List;
 
-import dat255.refugeeevent.model.Event;
+import dat255.eventify.model.Event;
 
 /**
  * Requirements:

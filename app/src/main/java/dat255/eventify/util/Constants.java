@@ -1,4 +1,4 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 public final class Constants {
     public static final int SUCCESS_RESULT = 0;

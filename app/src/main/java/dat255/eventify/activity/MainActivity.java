@@ -1,4 +1,4 @@
-package dat255.refugeeevent.activity;
+package dat255.eventify.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,12 +18,12 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.util.FetchEventService;
-import dat255.refugeeevent.view.adapter.MainListAdapter;
-import dat255.refugeeevent.manager.ConnectionManager;
-import dat255.refugeeevent.util.GoogleApi;
-import dat255.refugeeevent.manager.StorageManager;
+import dat255.eventify.R;
+import dat255.eventify.util.FetchEventService;
+import dat255.eventify.view.adapter.MainListAdapter;
+import dat255.eventify.manager.ConnectionManager;
+import dat255.eventify.util.GoogleApi;
+import dat255.eventify.manager.StorageManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
