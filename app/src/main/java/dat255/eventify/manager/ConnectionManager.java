@@ -1,4 +1,4 @@
-package dat255.refugeeevent.manager;
+package dat255.eventify.manager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

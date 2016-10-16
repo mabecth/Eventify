@@ -5,7 +5,7 @@
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dat255.refugeeevent.activity.DetailActivity">
+    tools:context="dat255.eventify.activity.DetailActivity">
 
 
     <ScrollView

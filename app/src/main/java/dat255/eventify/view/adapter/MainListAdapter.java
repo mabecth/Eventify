@@ -1,4 +1,4 @@
-package dat255.refugeeevent.view.adapter;
+package dat255.eventify.view.adapter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-import dat255.refugeeevent.activity.DetailActivity;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.manager.StorageManager;
+import dat255.eventify.activity.DetailActivity;
+import dat255.eventify.R;
+import dat255.eventify.model.Event;
+import dat255.eventify.manager.StorageManager;
 
 public class MainListAdapter extends BaseAdapter{
 

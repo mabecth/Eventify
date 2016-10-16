@@ -1,4 +1,4 @@
-package dat255.refugeeevent.model;
+package dat255.eventify.model;
 
 public class Event {
 

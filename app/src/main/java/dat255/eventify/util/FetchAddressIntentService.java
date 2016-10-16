@@ -1,4 +1,4 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import dat255.refugeeevent.R;
+import dat255.eventify.R;
 
 /**
 

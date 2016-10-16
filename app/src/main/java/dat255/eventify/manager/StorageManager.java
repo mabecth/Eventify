@@ -1,4 +1,4 @@
-package dat255.refugeeevent.manager;
+package dat255.eventify.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.Constants;
+import dat255.eventify.model.Event;
+import dat255.eventify.util.Constants;
 
 /** Class used for storing data locally on the phone**/
 public class StorageManager {

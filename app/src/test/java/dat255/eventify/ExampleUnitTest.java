@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.eventify;
 
 import org.junit.Test;
 

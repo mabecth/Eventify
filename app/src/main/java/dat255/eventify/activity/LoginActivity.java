@@ -1,4 +1,4 @@
-package dat255.refugeeevent.activity;
+package dat255.eventify.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.manager.ConnectionManager;
-import dat255.refugeeevent.manager.StorageManager;
+import dat255.eventify.R;
+import dat255.eventify.manager.ConnectionManager;
+import dat255.eventify.manager.StorageManager;
 
 public class LoginActivity extends AppCompatActivity {
 

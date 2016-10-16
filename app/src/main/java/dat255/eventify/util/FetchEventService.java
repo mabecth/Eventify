@@ -1,4 +1,4 @@
-package dat255.refugeeevent.util;
+package dat255.eventify.util;
 
 import android.app.Service;
 import android.content.Intent;
@@ -20,9 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import dat255.refugeeevent.R;
-import dat255.refugeeevent.manager.StorageManager;
-import dat255.refugeeevent.model.Event;
+import dat255.eventify.R;
+import dat255.eventify.manager.StorageManager;
+import dat255.eventify.model.Event;
 
 public class FetchEventService extends Service {
 
