@@ -1,4 +1,4 @@
-package dat255.refugeeevent.util;
+package dat255.refugeeevent.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,33 +7,30 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import dat255.refugeeevent.model.Event;
+import dat255.refugeeevent.util.Constants;
 
 /** Class used for storing data locally on the phone**/
-public class Storage {
+public class StorageManager {
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private static Storage instance = new Storage();
+    private static StorageManager instance = new StorageManager();
     private static Gson gson = new Gson();
 
     private static String settingsKey = "1";
     private static String eventsKey = "2";
     private static String loginTypeKey = "3";
 
-    private static String loginType;
-    private static String facebook = "facebook";
-    private static String guest = "guest";
-
     //Empty objects
     private static Object settings = new Object();
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
-    private Storage() {
+    private StorageManager() {
     }
 
     private void setPreferences(Context context) {
         if (preferences == null) {
-            preferences = context.getSharedPreferences("dat255.refugeeevent", Context.MODE_PRIVATE);
+            preferences = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.commit();
 
@@ -55,12 +52,12 @@ public class Storage {
     }
 
     public void setLoginTypeFacebook() {
-        editor.putString(loginTypeKey, facebook);
+        editor.putString(loginTypeKey, "facebook");
         editor.commit();
     }
 
     public void setLoginTypeGuest() {
-        editor.putString(loginTypeKey, guest);
+        editor.putString(loginTypeKey, "guest");
         editor.commit();
     }
 
@@ -72,7 +69,7 @@ public class Storage {
         return eventsKey;
     }
 
-    public static Storage getInstance() {
+    public static StorageManager getInstance() {
         return instance;
     }
 

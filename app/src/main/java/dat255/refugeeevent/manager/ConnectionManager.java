@@ -1,17 +1,17 @@
-package dat255.refugeeevent.util;
+package dat255.refugeeevent.manager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /** Class used for analysing the internet connection on the users phone**/
-public class Connection {
+public class ConnectionManager {
 
     private static ConnectivityManager connectivityManager;
     private static NetworkInfo activeNetwork;
-    private static Connection instance = new Connection();
+    private static ConnectionManager instance = new ConnectionManager();
 
-    private Connection() {
+    private ConnectionManager() {
     }
 
     private void setConnectivityManager(Context context) {
@@ -21,7 +21,7 @@ public class Connection {
         }
     }
 
-    public static Connection getInstance() {
+    public static ConnectionManager getInstance() {
         return instance;
     }
 

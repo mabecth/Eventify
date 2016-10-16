@@ -1,7 +1,8 @@
-package dat255.refugeeevent.helpers;
+package dat255.refugeeevent.util;
 
 import java.util.Collections;
 import java.util.List;
+
 import dat255.refugeeevent.model.Event;
 
 /**

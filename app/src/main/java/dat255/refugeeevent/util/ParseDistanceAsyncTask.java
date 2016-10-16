@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.util;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,12 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class JSONTask extends AsyncTask<String, String, String> {
+public class ParseDistanceAsyncTask extends AsyncTask<String, String, String> {
 
+    private static final String TAG = "ParseDistanceAsyncTask";
     private GoogleApi googleApi;
     private int id;
 
-    public JSONTask(GoogleApi googleApi, int id) {
+    public ParseDistanceAsyncTask(GoogleApi googleApi, int id) {
         this.googleApi = googleApi;
         this.id = id;
     }
@@ -49,9 +50,9 @@ public class JSONTask extends AsyncTask<String, String, String> {
         return buffer.toString();
 
         } catch (MalformedURLException e) {
-            Log.e("JSONTask","MalformedURLException", e);
+            Log.e(TAG,"MalformedURLException", e);
         } catch (IOException e) {
-            Log.e("JSONTask","IOException", e);
+            Log.e(TAG,"IOException", e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -61,7 +62,7 @@ public class JSONTask extends AsyncTask<String, String, String> {
                     reader.close();
                 }
             } catch (IOException e) {
-                Log.e("JSONTask","IOException", e);
+                Log.e(TAG,"IOException", e);
             }
 
         }

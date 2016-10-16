@@ -2,6 +2,7 @@ package dat255.refugeeevent;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+
 import dat255.refugeeevent.model.Event;
 
 public class EventTest {

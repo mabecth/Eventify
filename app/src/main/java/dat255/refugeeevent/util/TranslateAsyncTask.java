@@ -1,4 +1,4 @@
-package dat255.refugeeevent.service;
+package dat255.refugeeevent.util;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -7,11 +7,12 @@ import com.memetix.mst.translate.Translate;
 import java.lang.ref.WeakReference;
 import dat255.refugeeevent.model.TranslateRequest;
 
-public class AsyncTranslate extends AsyncTask<TranslateRequest, Void, String> {
+public class TranslateAsyncTask extends AsyncTask<TranslateRequest, Void, String> {
 
+    private static final String TAG = "TranslateAsyncTask";
     private WeakReference<TextView> translatedView;
 
-    public AsyncTranslate(TextView translatedView) {
+    public TranslateAsyncTask(TextView translatedView) {
         this.translatedView = new WeakReference<TextView>(translatedView);
 
         Translate.setClientId("dat255_rolf");
@@ -25,7 +26,7 @@ public class AsyncTranslate extends AsyncTask<TranslateRequest, Void, String> {
         try {
             translatedText = Translate.execute(req.getText(), req.getLanguage());
         } catch (Exception e) {
-            Log.e("AsyncTranslate", "Exception", e);
+            Log.e(TAG, "Exception", e);
         }
         return translatedText;
     }

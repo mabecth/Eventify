@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.activity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import com.bumptech.glide.Glide;
 import com.memetix.mst.language.Language;
-import dat255.refugeeevent.service.AsyncTranslate;
-import dat255.refugeeevent.model.TranslateRequest;
+
+import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.Storage;
+import dat255.refugeeevent.util.TranslateAsyncTask;
+import dat255.refugeeevent.model.TranslateRequest;
+import dat255.refugeeevent.manager.StorageManager;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
-        event = Storage.getInstance().getEvent(index);
+        event = StorageManager.getInstance().getEvent(index);
         initView();
         initButtons();
 
@@ -144,26 +146,26 @@ public class DetailActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     desc.setGravity(Gravity.LEFT);
                     switch (i){
-                        case 0: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ENGLISH,event.getDesc()));
+                        case 0: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 1: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ARABIC,event.getDesc()));
+                        case 1: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
                             desc.setGravity(Gravity.RIGHT);
                             mPopupWindow.dismiss();
                             break;
-                        case 2: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVAK,event.getDesc()));
+                        case 2: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 3: new AsyncTranslate(desc).execute(new TranslateRequest(Language.SLOVENIAN,event.getDesc()));
+                        case 3: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVENIAN, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 4: new AsyncTranslate(desc).execute(new TranslateRequest(Language.ROMANIAN,event.getDesc()));
+                        case 4: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 5: new AsyncTranslate(desc).execute(new TranslateRequest(Language.PERSIAN,event.getDesc()));
+                        case 5: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
-                        case 6: new AsyncTranslate(desc).execute(new TranslateRequest(Language.TURKISH,event.getDesc()));
+                        case 6: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
                             mPopupWindow.dismiss();
                             break;
                         default: break;

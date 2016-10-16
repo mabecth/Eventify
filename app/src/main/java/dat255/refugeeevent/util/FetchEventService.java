@@ -1,4 +1,4 @@
-package dat255.refugeeevent.service;
+package dat255.refugeeevent.util;
 
 import android.app.Service;
 import android.content.Intent;
@@ -16,12 +16,12 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import dat255.refugeeevent.R;
-import dat255.refugeeevent.helpers.SortByDate;
+import dat255.refugeeevent.manager.StorageManager;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.Storage;
 
-public class EventHandler extends Service {
+public class FetchEventService extends Service {
 
+    private static final String TAG = "FetchEventService";
     private List<Event> events;
     private Event event;
     private int nbrOfOrganisations;
@@ -32,16 +32,17 @@ public class EventHandler extends Service {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
         events = new CopyOnWriteArrayList<>();
-        String[] organisations = EventHandler.this.getResources().getStringArray(R.array.organisations);
+        String[] organisations = FetchEventService.this.getResources().getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
         dataCollectCycles = 0;
+        Log.d(TAG, "Service started");
 
         for(String s : organisations) {
             getEventsFromFacebook(s);
         }
     }
 
-    public EventHandler() {
+    public FetchEventService() {
         super();
     }
 
@@ -54,8 +55,8 @@ public class EventHandler extends Service {
     private void checkIfDone() {
         if (dataCollectCycles == nbrOfOrganisations) {
             SortByDate.sortDates(events);
-            Storage.getInstance().storeEvents(events);
-            Log.d("EventHandler", "Service done");
+            StorageManager.getInstance().storeEvents(events);
+            Log.d(TAG, "Service done");
             stopSelf();
         }
     }
@@ -111,11 +112,11 @@ public class EventHandler extends Service {
                                         }
                                         events.add(event);
                                     } catch (JSONException e) {
-                                        Log.e("EventHandler","JSONException", e);
+                                        Log.e(TAG,"JSONException", e);
                                     }
                                 }
                             } catch (JSONException e) {
-                                Log.e("EventHandler","JSONException", e);
+                                Log.e(TAG,"JSONException", e);
                             }
                         }
                         dataCollectCycles++;

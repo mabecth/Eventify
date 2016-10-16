@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.util;
 
 import android.Manifest;
 import android.content.Context;
@@ -28,17 +28,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
-import dat255.refugeeevent.adapter.MainListAdapter;
+import dat255.refugeeevent.manager.StorageManager;
+import dat255.refugeeevent.activity.MainActivity;
+import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.Constants;
-import dat255.refugeeevent.util.Storage;
+import dat255.refugeeevent.view.adapter.MainListAdapter;
 
 public class GoogleApi implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    protected static final String TAG = "main-activity";
+    protected static final String TAG = "GoogleApi";
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
@@ -66,15 +67,15 @@ public class GoogleApi implements OnMapReadyCallback,
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(Storage.getInstance().getEventsKey())) {
+                if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
-                    Log.v("GoogleAPI", "Events updated!");
+                    Log.d(TAG, "Events in storage changed!");
                     calculateDistance();
                 }
             }
         };
 
-        Storage.getInstance().registerOnSharedPreferenceChangeListener(listener);
+        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
 
         previousDestination = "";
 
@@ -99,7 +100,7 @@ public class GoogleApi implements OnMapReadyCallback,
         listView = (ListView) mainActivity.findViewById(R.id.listView);
         adapter = new MainListAdapter();
         listView.setAdapter(adapter);
-        listOfEvents = Storage.getInstance().getEvents();
+        listOfEvents = StorageManager.getInstance().getEvents();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -176,12 +177,9 @@ public class GoogleApi implements OnMapReadyCallback,
 
             // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
 
-
-            System.out.println("Start Service");
+            Log.d(TAG, "Service started");
             startIntentService();
-
         }
-
     }
 
     public GoogleApiClient getmGoogleApiClient() {
@@ -198,9 +196,9 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     public void calculateDistance() {
-        if(latLng != null) {
+        if (latLng != null && adapter.getCount() > 0) {
             for (int i = 0; i < adapter.getCount(); i++) {
-                new JSONTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+                new ParseDistanceAsyncTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
             }
         }
     }
@@ -225,12 +223,11 @@ public class GoogleApi implements OnMapReadyCallback,
         View view = navigationView.getHeaderView(0);
         locationTextView = (TextView) view.findViewById(R.id.locationTV);
         locationTextView.setText(mAddressOutput);
-        System.out.println(mAddressOutput);
+        Log.d(TAG, mAddressOutput);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
         mLastLocation = location;
 
         //Get coordinates
@@ -239,7 +236,6 @@ public class GoogleApi implements OnMapReadyCallback,
         //Calculates new distance to the events
 
         //Set location in coordinates
-
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -251,13 +247,13 @@ public class GoogleApi implements OnMapReadyCallback,
     public void onConnectionSuspended(int cause) {
         // The connection to Google Play services was lost for some reason. We call connect() to
         // attempt to re-establish the connection.
-           Log.i(TAG, "Connection suspended");
+           Log.e(TAG, "ConnectionManager suspended");
              mGoogleApiClient.connect();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // calculateDistance();
+        calculateDistance();
     }
 
     public void onRequestPermissionsResult(int requestCode,

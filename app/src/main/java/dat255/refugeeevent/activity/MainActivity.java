@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +18,13 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
-import dat255.refugeeevent.adapter.MainListAdapter;
-import dat255.refugeeevent.service.EventHandler;
-import dat255.refugeeevent.util.Connection;
-import dat255.refugeeevent.util.Storage;
+
+import dat255.refugeeevent.R;
+import dat255.refugeeevent.util.FetchEventService;
+import dat255.refugeeevent.view.adapter.MainListAdapter;
+import dat255.refugeeevent.manager.ConnectionManager;
+import dat255.refugeeevent.util.GoogleApi;
+import dat255.refugeeevent.manager.StorageManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -46,8 +49,8 @@ public class MainActivity extends AppCompatActivity
         adapter = new MainListAdapter();
 
         //Start collecting events if we have access to the internet
-        if (Connection.getInstance().isConnected()) {
-            startService(new Intent(MainActivity.this, EventHandler.class));
+        if (ConnectionManager.getInstance().isConnected()) {
+            startService(new Intent(MainActivity.this, FetchEventService.class));
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Only display logout button when using app with Facebook
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(Storage.getInstance().getLoginType().equals("facebook"));
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
@@ -98,8 +101,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onRefresh() {
                 //Start collecting events if we have access to the internet
-                if (Connection.getInstance().isConnected()) {
-                    startService(new Intent(MainActivity.this, EventHandler.class));
+                if (ConnectionManager.getInstance().isConnected()) {
+                    startService(new Intent(MainActivity.this, FetchEventService.class));
                 } else {
                     adapter.updateEventList();
                 }

@@ -1,9 +1,5 @@
 package dat255.refugeeevent.util;
 
-/**
- * Created by Oscar on 2016-10-10.
- */
-
 public final class Constants {
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;

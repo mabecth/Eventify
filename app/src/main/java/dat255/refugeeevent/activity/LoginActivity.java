@@ -1,4 +1,4 @@
-package dat255.refugeeevent;
+package dat255.refugeeevent.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,10 @@ import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import dat255.refugeeevent.util.Connection;
-import dat255.refugeeevent.util.Storage;
+
+import dat255.refugeeevent.R;
+import dat255.refugeeevent.manager.ConnectionManager;
+import dat255.refugeeevent.manager.StorageManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,13 +37,13 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
 
-        Storage.getInstance().setContext(this);
-        Connection.getInstance().setContext(this);
+        StorageManager.getInstance().setContext(this);
+        ConnectionManager.getInstance().setContext(this);
 
         //Check if we have logged in before
-        if (Storage.getInstance().isLoginTypeSet()) {
+        if (StorageManager.getInstance().isLoginTypeSet()) {
 
-            if (Storage.getInstance().getLoginType().equals("guest")) {
+            if (StorageManager.getInstance().getLoginType().equals("guest")) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             } else {
                 if (Profile.getCurrentProfile() == null) {
@@ -63,11 +65,11 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                Log.d(TAG, "facebook:onSuccess:");
                     Toast.makeText(LoginActivity.this, "Authentication successful",
                             Toast.LENGTH_SHORT).show();
-                    if (!Storage.getInstance().isLoginTypeSet()) {
-                        Storage.getInstance().setLoginTypeFacebook();
+                    if (!StorageManager.getInstance().isLoginTypeSet()) {
+                        StorageManager.getInstance().setLoginTypeFacebook();
                     }
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
@@ -96,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void continueAsGuest(View view) {
-        if (!Storage.getInstance().isLoginTypeSet()) {
-            Storage.getInstance().setLoginTypeGuest();
+        if (!StorageManager.getInstance().isLoginTypeSet()) {
+            StorageManager.getInstance().setLoginTypeGuest();
         }
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }

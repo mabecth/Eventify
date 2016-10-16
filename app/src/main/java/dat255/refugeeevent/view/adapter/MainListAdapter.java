@@ -1,4 +1,4 @@
-package dat255.refugeeevent.adapter;
+package dat255.refugeeevent.view.adapter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,13 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-import dat255.refugeeevent.DetailActivity;
+import dat255.refugeeevent.activity.DetailActivity;
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.model.Event;
-import dat255.refugeeevent.util.Storage;
+import dat255.refugeeevent.manager.StorageManager;
 
 public class MainListAdapter extends BaseAdapter{
 
+    private static final String TAG = "MainListAdapter";
     private List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
@@ -28,20 +29,20 @@ public class MainListAdapter extends BaseAdapter{
     private View result;
 
     public MainListAdapter(){
-        listOfEvents = Storage.getInstance().getEvents();
+        listOfEvents = StorageManager.getInstance().getEvents();
 
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(Storage.getInstance().getEventsKey())) {
+                if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
-                    Log.d("MainListAdapter", "Events updated!");
+                    Log.d(TAG, "Events in storage changed!");
                     updateEventList();
                 }
             }
         };
 
-        Storage.getInstance().registerOnSharedPreferenceChangeListener(listener);
+        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class MainListAdapter extends BaseAdapter{
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MainListAdapter", "You clicked item with position: " + position);
+                Log.d(TAG, "You clicked item with position: " + position);
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
                 intent.putExtra("EventIndex", position);
                 v.getContext().startActivity(intent);
@@ -101,9 +102,9 @@ public class MainListAdapter extends BaseAdapter{
     }
 
     public void updateEventList() {
-        listOfEvents = Storage.getInstance().getEvents();
+        listOfEvents = StorageManager.getInstance().getEvents();
         notifyDataSetChanged();
-        Log.d("MainListAdapter","Event List Updated");
+        Log.d(TAG,"Event List Updated");
     }
 
     private void initializeView() {
@@ -119,7 +120,7 @@ public class MainListAdapter extends BaseAdapter{
 
     private void setViewData(final ViewGroup viewGroup) {
         nameTextView.setText(currEvent.getTitle());
-        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,currEvent.getDate().length()));
+        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2, currEvent.getDate().length()));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         locationTextView.setText(currEvent.getPlace());
