@@ -65,7 +65,7 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar"
+                    android:src="@drawable/ic_calendar_dropdown"
                     android:background="@android:color/transparent"
                     android:id="@+id/calBtn"
                     android:layout_gravity="end"

@@ -6,4 +6,5 @@
     <color name="colorClouds">#ECF0F1</color>
     <color name="colorTextDark">#2a2b2b</color>
     <color name="colorTextLight">#ffffff</color>
+    <color name="colorSeparator">#e2e1e1</color>
 </resources>
