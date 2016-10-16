@@ -18,7 +18,6 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
-
 import dat255.refugeeevent.R;
 import dat255.refugeeevent.util.FetchEventService;
 import dat255.refugeeevent.view.adapter.MainListAdapter;
@@ -32,10 +31,10 @@ public class MainActivity extends AppCompatActivity
     //Google
     private GoogleApi googleApi;
 
-    //EventList
+    //Event list
     private ListView listView;
     private MainListAdapter adapter;
-    private SwipeRefreshLayout swipRefresh;
+    private SwipeRefreshLayout swipeRefresh;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -96,8 +95,8 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
-        swipRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-        swipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //Start collecting events if we have access to the internet
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     adapter.updateEventList();
                 }
-                swipRefresh.setRefreshing(false);
+                swipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
 
-        //stop location updates when Activity is no longer active
+        //Stop location updates when Activity is no longer active
         if (googleApi.getmGoogleApiClient() != null && googleApi.getmGoogleApiClient().isConnected()) {
             googleApi.removeLocationUpdates();
         }
