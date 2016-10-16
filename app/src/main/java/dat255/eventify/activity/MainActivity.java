@@ -2,8 +2,11 @@ package dat255.eventify.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.View;
@@ -18,6 +23,13 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import dat255.eventify.R;
 import dat255.eventify.util.FetchEventService;
 import dat255.eventify.view.adapter.MainListAdapter;
@@ -35,6 +47,9 @@ public class MainActivity extends AppCompatActivity
     private ListView listView;
     private MainListAdapter adapter;
     private SwipeRefreshLayout swipeRefresh;
+    private CompactCalendarView mCompactCalendarView;
+    private AppBarLayout mAppBarLayout;
+    private boolean isCalendarExpanded = false;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -58,11 +73,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        initCalendarDropDown();
 
         //Only display logout button when using app with Facebook
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
@@ -110,13 +127,69 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void initCalendarDropDown(){
+        //No title
+        CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
+        mCollapsingToolbar.setTitle(" ");
+
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        mAppBarLayout.setExpanded(false);
+
+        final ImageView arrow = (ImageView) findViewById(R.id.arrow);
+
+        // Set up the CompactCalendarView
+        mCompactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        mCompactCalendarView.setLocale(TimeZone.getDefault(), Locale.ENGLISH);
+        mCompactCalendarView.setShouldDrawDaysHeader(true);
+        mCompactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                ViewCompat.animate(arrow).rotation(0).start();
+                mAppBarLayout.setExpanded(false);
+                isCalendarExpanded = false;
+                //TODO: Scroll to the picked date
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                setMonthText(firstDayOfNewMonth);
+            }
+        });
+        setMonthText(mCompactCalendarView.getFirstDayOfCurrentMonth());
+
+        ImageButton calendarBtn = (ImageButton) findViewById(R.id.calBtn);
+
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isCalendarExpanded) {
+                    ViewCompat.animate(arrow).rotation(0).start();
+                    mAppBarLayout.setExpanded(false, true);
+                    isCalendarExpanded = false;
+                } else {
+                    ViewCompat.animate(arrow).rotation(180).start();
+                    mAppBarLayout.setExpanded(true, true);
+                    isCalendarExpanded = true;
+                }
+            }
+        });
+    }
+
+    public void setMonthText(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+        TextView monthView = (TextView) findViewById(R.id.monthTextView);
+        monthView.setText(dateFormat.format(date));
+    }
+
     @Override
     public void onPause() {
         super.onPause();
 
         //Stop location updates when Activity is no longer active
-        if (googleApi.getmGoogleApiClient() != null && googleApi.getmGoogleApiClient().isConnected()) {
-            googleApi.removeLocationUpdates();
+        if (googleApi.getmGoogleApiClient() != null) {
+            if (googleApi.getmGoogleApiClient().isConnected()) {
+                googleApi.removeLocationUpdates();
+            }
         }
     }
 
