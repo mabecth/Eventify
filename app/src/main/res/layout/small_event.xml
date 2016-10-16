@@ -14,7 +14,11 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_height="match_parent"
-            android:layout_width="wrap_content">
+            android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp">
 
             <TextView
                 android:text="23"
@@ -22,8 +26,7 @@
                 android:id="@+id/dateTextView"
                 android:layout_height="wrap_content"
                 android:textSize="36sp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
+                android:textAlignment="center"
                 android:textColor="@color/colorTextDark"/>
 
             <TextView
@@ -31,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/monthTextView"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginTop="-5dp"
                 android:textSize="18sp"
                 android:textAlignment="center"
                 android:textColor="@color/colorTextDark" />
@@ -48,9 +50,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp">
 
             <LinearLayout
