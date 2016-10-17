@@ -79,6 +79,8 @@ public class GoogleApi implements OnMapReadyCallback,
         } else {
             buildGoogleApiClient();
         }
+        mGoogleApiClient.connect();
+
         listView = (ListView) mainActivity.findViewById(R.id.listView);
         adapter = new MainListAdapter();
         listView.setAdapter(adapter);
@@ -97,8 +99,8 @@ public class GoogleApi implements OnMapReadyCallback,
                 }
             }
         };
-        if (listOfEvents.size() > 0 ) {
-            calculateDistance();
+        if (listOfEvents.size() > 0 && latLng !=null) {
+
         }
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
 
@@ -119,7 +121,6 @@ public class GoogleApi implements OnMapReadyCallback,
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        mGoogleApiClient.connect();
     }
 
 
@@ -209,25 +210,24 @@ public class GoogleApi implements OnMapReadyCallback,
         System.out.println("Calculate distance");
         System.out.println("Adapter count: " + adapter.getCount());
         System.out.println("Storage list: " + listOfEvents.size());
-        System.out.println("Latlng: "+ latLng);
+        System.out.println("Latlng: " + latLng);
         updatedList = StorageManager.getInstance().getEvents();
         if (latLng != null && listOfEvents.size() > 0) {
             System.out.println("Adapter count if: " + adapter.getCount());
             for (int index = 0; index < listOfEvents.size(); index++) {
                 System.out.println("Adapter in loop: " + adapter.getCount());
-                System.out.println("int i:" +index);
-                new ParseDistanceAsyncTask(this,index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+                System.out.println("int i:" + index);
+                new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
             }
-            StorageManager.getInstance().storeEvents(updatedList);
-            listView.invalidateViews();
             //adapter.updateEventList();
         }
-
 
     }
 
     public void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
+        StorageManager.getInstance().storeEvents(updatedList);
+        listView.invalidateViews();
     }
 
 
@@ -319,7 +319,7 @@ public class GoogleApi implements OnMapReadyCallback,
             mAddressOutput = mAddressOutput.replace("\n", " ");
             String[] split = mAddressOutput.split("\\s+");
             mAddressOutput = split[split.length - 1]; // Only display city
-
+            calculateDistance();
             displayAddressOutput();
             // Show a toast message if an address was found.
             // Reset. Enable the Fetch Address button and stop showing the progress bar.
