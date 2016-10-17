@@ -65,6 +65,23 @@ public class GoogleApi implements OnMapReadyCallback,
     public GoogleApi(Context context) {
         mResultReceiver = new AddressResultReceiver(new Handler());
         mainActivity = (MainActivity) context;
+        listOfEvents = StorageManager.getInstance().getEvents();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
+        //Initialize Google Play Services
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(mainActivity,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+            }
+        } else {
+            buildGoogleApiClient();
+        }
+        listView = (ListView) mainActivity.findViewById(R.id.listView);
+        adapter = new MainListAdapter();
+        listView.setAdapter(adapter);
 
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -73,28 +90,16 @@ public class GoogleApi implements OnMapReadyCallback,
                     //Events changed
                     System.out.println("Google api");
                     Log.d(TAG, "Events in storage changed!");
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        checkLocationPermission();
-                    }
-                    //Initialize Google Play Services
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ContextCompat.checkSelfPermission(mainActivity,
-                                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            buildGoogleApiClient();
-                        }
-                    } else {
-                        buildGoogleApiClient();
-                    }
-                    listView = (ListView) mainActivity.findViewById(R.id.listView);
-                    adapter = new MainListAdapter();
-                    listView.setAdapter(adapter);
+
                     listOfEvents = StorageManager.getInstance().getEvents();
+                    calculateDistance();
 
                 }
             }
         };
-
+        if (listOfEvents.size() > 0 ) {
+            calculateDistance();
+        }
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
 
         previousDestination = "";
@@ -206,7 +211,7 @@ public class GoogleApi implements OnMapReadyCallback,
         System.out.println("Storage list: " + listOfEvents.size());
         System.out.println("Latlng: "+ latLng);
         updatedList = StorageManager.getInstance().getEvents();
-        if (latLng != null && adapter.getCount() > 0) {
+        if (latLng != null && listOfEvents.size() > 0) {
             System.out.println("Adapter count if: " + adapter.getCount());
             for (int index = 0; index < listOfEvents.size(); index++) {
                 System.out.println("Adapter in loop: " + adapter.getCount());
@@ -256,7 +261,6 @@ public class GoogleApi implements OnMapReadyCallback,
 
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        calculateDistance();
 
         //Set location in coordinates
 
@@ -315,7 +319,6 @@ public class GoogleApi implements OnMapReadyCallback,
             mAddressOutput = mAddressOutput.replace("\n", " ");
             String[] split = mAddressOutput.split("\\s+");
             mAddressOutput = split[split.length - 1]; // Only display city
-            calculateDistance();
 
             displayAddressOutput();
             // Show a toast message if an address was found.
