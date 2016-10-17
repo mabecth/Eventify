@@ -74,9 +74,7 @@ public class ParseDistanceAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result){
         super.onPostExecute(result);
-        googleApi.updateDistance(id,result);
-        //StorageManager.getInstance().getEvents().get(id).setDistance(result);
-        //googleApi.updateDistance(id, result);
+        googleApi.updateDistance(id, result);
     }
 
 }
