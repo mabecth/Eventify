@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import dat255.eventify.manager.StorageManager;
+
 public class ParseDistanceAsyncTask extends AsyncTask<String, String, String> {
 
     private static final String TAG = "ParseDistanceAsyncTask";
@@ -72,7 +74,9 @@ public class ParseDistanceAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result){
         super.onPostExecute(result);
-        googleApi.updateDistance(id, result);
+        googleApi.updateDistance(id,result);
+        //StorageManager.getInstance().getEvents().get(id).setDistance(result);
+        //googleApi.updateDistance(id, result);
     }
 
 }
