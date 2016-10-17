@@ -1,6 +1,9 @@
 package dat255.eventify.activity;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +67,9 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
+
+        ImageButton facebook = (ImageButton) findViewById(R.id.facebookBtn);
+        facebook.setOnClickListener(new FacebookBtnOnClick());
 
         transMenu = (FloatingActionMenu) findViewById(R.id.menu_translate);
 
@@ -135,6 +141,19 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //LONG
+        }
+    }
+
+    class FacebookBtnOnClick implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            //Facebook intent
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://event/"+event.getId()));
+                startActivity(intent);
+            } catch(Exception e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/events/"+event.getId())));
+            }
         }
     }
 

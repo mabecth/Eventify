@@ -250,10 +250,20 @@
                 android:textColor="@color/colorTextDark"
                 android:textSize="16sp"
                 android:paddingBottom="50dp" />
+
+                <ImageButton
+                    android:src="@drawable/facebook"
+                    android:cropToPadding="false"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/facebookBtn" />
             </LinearLayout>
 
         </RelativeLayout>
     </ScrollView>
+
     <ImageButton
         android:src="@drawable/ic_star_border"
         android:background="#00000000"
