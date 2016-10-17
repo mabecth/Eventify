@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        googleApi = new GoogleApi(this);
+
         adapter = new MainListAdapter();
 
         //Start collecting events if we have access to the internet
@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity
                 swipeRefresh.setRefreshing(false);
             }
         });
+        System.out.println("list of events main: "+ StorageManager.getInstance().getEvents().size());
+        adapter.updateEventList();
+       googleApi = new GoogleApi(this);
     }
 
     public void initCalendarDropDown(){
@@ -253,6 +256,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        googleApi.checkForUpdate();
         adapter.updateEventList();
     }
 

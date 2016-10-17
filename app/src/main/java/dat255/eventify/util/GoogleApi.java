@@ -27,6 +27,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 import java.util.List;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.activity.MainActivity;
@@ -53,7 +55,7 @@ public class GoogleApi implements OnMapReadyCallback,
     private LocationRequest mLocationRequest;
     private TextView locationTextView;
     private String previousDestination;
-
+    private  List<Event> updatedList;
     protected boolean mAddressRequested;
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
@@ -69,8 +71,26 @@ public class GoogleApi implements OnMapReadyCallback,
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
+                    System.out.println("Google api");
                     Log.d(TAG, "Events in storage changed!");
-                    calculateDistance();
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        checkLocationPermission();
+                    }
+                    //Initialize Google Play Services
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(mainActivity,
+                                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            buildGoogleApiClient();
+                        }
+                    } else {
+                        buildGoogleApiClient();
+                    }
+                    listView = (ListView) mainActivity.findViewById(R.id.listView);
+                    adapter = new MainListAdapter();
+                    listView.setAdapter(adapter);
+                    listOfEvents = StorageManager.getInstance().getEvents();
+
                 }
             }
         };
@@ -83,24 +103,9 @@ public class GoogleApi implements OnMapReadyCallback,
         mAddressRequested = false;
         mAddressOutput = "";
            /* Check for latest version of Play services */
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(mainActivity,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-            }
-        } else {
-            buildGoogleApiClient();
-        }
 
-        listView = (ListView) mainActivity.findViewById(R.id.listView);
-        adapter = new MainListAdapter();
-        listView.setAdapter(adapter);
-        listOfEvents = StorageManager.getInstance().getEvents();
+
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -112,11 +117,7 @@ public class GoogleApi implements OnMapReadyCallback,
         mGoogleApiClient.connect();
     }
 
-    public void updateDistance(int id, String result) {
-        listOfEvents.get(id).setDistance(result);
-        adapter.notifyDataSetChanged();
-        listView.invalidateViews();
-    }
+
 
     protected void showToast(String text) {
         Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
@@ -182,6 +183,10 @@ public class GoogleApi implements OnMapReadyCallback,
         }
     }
 
+    public void checkForUpdate(){
+
+    }
+
     public GoogleApiClient getmGoogleApiClient() {
         return mGoogleApiClient;
     }
@@ -196,11 +201,38 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     public void calculateDistance() {
+        System.out.println("Calculate distance");
+        System.out.println("Adapter count: " + adapter.getCount());
+        System.out.println("Storage list: " + listOfEvents.size());
+        System.out.println("Latlng: "+ latLng);
+        updatedList = StorageManager.getInstance().getEvents();
         if (latLng != null && adapter.getCount() > 0) {
-            for (int i = 0; i < listOfEvents.size(); i++) {
-                new ParseDistanceAsyncTask(this, i).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(i).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
+            System.out.println("Adapter count if: " + adapter.getCount());
+            for (int index = 0; index < listOfEvents.size(); index++) {
+                System.out.println("Adapter in loop: " + adapter.getCount());
+                System.out.println("int i:" +index);
+                new ParseDistanceAsyncTask(this,index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
             }
+            StorageManager.getInstance().storeEvents(updatedList);
+            listView.invalidateViews();
+            //adapter.updateEventList();
         }
+
+
+    }
+
+    public void updateDistance(int id, String result) {
+        updatedList.get(id).setDistance(result);
+    }
+
+
+    public void displayAddressOutput() {
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(mainActivity);
+        View view = navigationView.getHeaderView(0);
+        locationTextView = (TextView) view.findViewById(R.id.locationTV);
+        locationTextView.setText(mAddressOutput);
+        Log.d(TAG, mAddressOutput);
     }
 
     protected void startIntentService() {
@@ -217,14 +249,6 @@ public class GoogleApi implements OnMapReadyCallback,
         mainActivity.startService(intent);
     }
 
-    public void displayAddressOutput() {
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(mainActivity);
-        View view = navigationView.getHeaderView(0);
-        locationTextView = (TextView) view.findViewById(R.id.locationTV);
-        locationTextView.setText(mAddressOutput);
-        Log.d(TAG, mAddressOutput);
-    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -232,15 +256,15 @@ public class GoogleApi implements OnMapReadyCallback,
 
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        //Calculates new distance to the events
+        calculateDistance();
 
         //Set location in coordinates
 
         //stop location updates
-        if (mGoogleApiClient != null) {
+        /*if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+        */
     }
 
     @Override
@@ -253,7 +277,6 @@ public class GoogleApi implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        calculateDistance();
     }
 
     public void onRequestPermissionsResult(int requestCode,
