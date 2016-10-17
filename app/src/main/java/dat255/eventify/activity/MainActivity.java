@@ -150,7 +150,9 @@ public class MainActivity extends AppCompatActivity
                 ViewCompat.animate(arrow).rotation(0).start();
                 mAppBarLayout.setExpanded(false);
                 isCalendarExpanded = false;
-                //TODO: Scroll to the picked date
+
+                int index = StorageManager.getInstance().getIndexForDate(dateClicked);
+                listView.setSelection(index);
             }
 
             @Override
