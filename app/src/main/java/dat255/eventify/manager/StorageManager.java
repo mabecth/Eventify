@@ -33,9 +33,6 @@ public class StorageManager {
             preferences = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.commit();
-
-            //Store empty lists
-            storeEvents(events);
         }
     }
 
