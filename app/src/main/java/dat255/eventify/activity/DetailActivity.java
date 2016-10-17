@@ -1,18 +1,21 @@
 package dat255.eventify.activity;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
@@ -45,6 +48,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
         event = StorageManager.getInstance().getEvent(index);
+
         initView();
         initButtons();
 
@@ -58,11 +62,26 @@ public class DetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void initButtons(){
+    public void initButtons() {
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_appbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+
+        appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                    // Collapse
+                    collapsingToolbarLayout.setTitle(event.getTitle());
+                } else {
+                    collapsingToolbarLayout.setTitle(" ");
+                }
+            }
+        });
+
         ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new BackBtnOnClick());
 
-        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
+        android.support.design.widget.FloatingActionButton showMapsBtn = (android.support.design.widget.FloatingActionButton) findViewById(R.id.showMapsBtn);
         showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
