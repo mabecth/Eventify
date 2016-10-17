@@ -5,7 +5,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
     defaultConfig {
-        applicationId "dat255.refugeeevent"
+        applicationId "dat255.eventify"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
