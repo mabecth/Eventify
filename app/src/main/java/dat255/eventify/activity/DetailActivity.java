@@ -88,6 +88,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView time = (TextView) findViewById(R.id.timeText);
         TextView place = (TextView) findViewById(R.id.placeText);
         TextView nbrAttending = (TextView) findViewById(R.id.attendingText);
+        TextView organization = (TextView) findViewById(R.id.orgText);
         desc = (TextView) findViewById(R.id.descText);
 
         title.setText(event.getTitle());
@@ -95,6 +96,7 @@ public class DetailActivity extends AppCompatActivity {
         time.setText(event.getTime());
         place.setText(event.getPlace());
         nbrAttending.setText(String.valueOf(event.getNbrAttending()));
+        organization.setText(event.getOwner());
         desc.setText(event.getDesc());
 
         ImageView coverImg = (ImageView) findViewById(R.id.coverImage);

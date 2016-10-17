@@ -132,10 +132,10 @@
                         android:textColor="@color/colorTextDark"
                         android:textSize="16sp"
                         android:layout_centerInParent="true"
-                        android:layout_width="50dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_toRightOf="@+id/attendingImg"
-                            android:layout_toEndOf="@+id/attendingImg"/>
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toRightOf="@+id/attendingImg"
+                        android:layout_toEndOf="@+id/attendingImg"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -167,7 +167,8 @@
 
                     <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp">
 
                         <ImageView
                             android:id="@+id/timeImg"
@@ -177,7 +178,6 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_width="25dp" />
->>>>>>> cb2028b3927004b2477ce7f10104ed8807cd563e
 
                         <TextView
                             android:text="18:00"
@@ -189,9 +189,37 @@
                             android:layout_centerInParent="true"
                             android:layout_toRightOf="@+id/timeImg"
                             android:layout_toEndOf="@+id/timeImg"
-                            android:layout_width="50dp" />
+                            android:layout_width="wrap_content" />
 
                     </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/orgImg"
+                        android:src="@drawable/ic_business"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="25dp" />
+
+                    <TextView
+                        android:text="organization"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/orgText"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_centerInParent="true"
+                        android:layout_toRightOf="@+id/orgImg"
+                        android:layout_toEndOf="@+id/orgImg"
+                        android:layout_width="wrap_content" />
+
+                </RelativeLayout>
+
                 </LinearLayout>
                 <View
                     android:id="@+id/separator"
@@ -203,7 +231,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/separator"
                 android:layout_gravity="bottom"
                 android:paddingLeft="20dp"
