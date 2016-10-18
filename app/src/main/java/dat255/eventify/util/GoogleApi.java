@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +117,29 @@ public class GoogleApi implements
 
     }
 
-
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+        return Radius * c;
+    }
 
     public synchronized void build(){
         mGoogleApiClient = new GoogleApiClient.Builder(mainActivity)
@@ -172,7 +195,6 @@ public class GoogleApi implements
     }
 
     public void calculateDistance() {
-
         System.out.println("Calculate distance");
         System.out.println("Adapter count: " + adapter.getCount());
         System.out.println("Storage list: " + listOfEvents.size());
@@ -180,7 +202,6 @@ public class GoogleApi implements
         String parsedLatLng = latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "");
         if (latLng != null && listOfEvents.size() > 0) {
             System.out.println("Adapter count if: " + adapter.getCount());
-
             for (int index = 0; index < listOfEvents.size(); index++) {
                 String parsedEventPlace = listOfEvents.get(index).getPlace().replaceAll(" ", "");
                 System.out.println("Adapter in loop: " + listOfEvents.size());
@@ -197,12 +218,14 @@ public class GoogleApi implements
     }
 
     public void displayAddressOutput() {
+
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(mainActivity);
         View view = navigationView.getHeaderView(0);
         locationTextView = (TextView) view.findViewById(R.id.locationTV);
         locationTextView.setText(mAddressOutput);
         Log.d(TAG, mAddressOutput);
+
     }
 
     protected void startIntentService() {
@@ -227,8 +250,13 @@ public class GoogleApi implements
 
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        for (int index = 0; index < listOfEvents.size(); index++) {
+            Double dbl = CalculationByDistance(latLng, latLng);
+            System.out.println("Distance: "+ dbl);
+        }
+
         updatedList = StorageManager.getInstance().getEvents();
-        calculateDistance();
+       // calculateDistance();
         //Set location in coordinates
 
         //stop location updates
