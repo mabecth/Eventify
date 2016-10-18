@@ -2,6 +2,7 @@ package dat255.eventify.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
         }else {
             checkLocationPermission();
         }
-        System.out.println("oncreate");
         adapter = new MainListAdapter();
 
         //Start collecting events if we have access to the internet
@@ -240,18 +240,28 @@ public class MainActivity extends AppCompatActivity
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mAppBarLayout.setExpanded(false);
 
-        final ImageView arrow = (ImageView) findViewById(R.id.arrow);
-
         // Set up the CompactCalendarView
         mCompactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         mCompactCalendarView.setLocale(TimeZone.getDefault(), Locale.ENGLISH);
         mCompactCalendarView.setShouldDrawDaysHeader(true);
+
+        //if saved vaule == 2 show monday as first
+        boolean showMondayFirst = StorageManager.getInstance().getSettings().get("firstDayOfWeek")==2;
+        mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
+
+        //If user change first day of week in settings, then update this calendar to the correct values
+        setUpOnSettingsChangedListener();
+
+        //Show the events in the calendar view
         List<Event> eventToShowInCal = new ArrayList<>();
         for (dat255.eventify.model.Event e : StorageManager.getInstance().getEvents()) {
             System.out.println(e.getEventTimeInMillis());
             eventToShowInCal.add(new Event(Color.parseColor("#039BE5"), e.getEventTimeInMillis()));
         }
         mCompactCalendarView.addEvents(eventToShowInCal);
+
+        //Arrow to rotate when user click on calendar icon
+        final ImageView arrow = (ImageView) findViewById(R.id.arrow);
         mCompactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
@@ -382,6 +392,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setUpOnSettingsChangedListener(){
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(StorageManager.getInstance().getSettingsKey())) {
+                    //Storage has changed
+
+                    //if firstDayOfWeek == 2 show monday as first
+                    boolean showMondayFirst = StorageManager.getInstance().getSettings().get("firstDayOfWeek")==2;
+                    mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
+                }
+            }
+        };
+        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
