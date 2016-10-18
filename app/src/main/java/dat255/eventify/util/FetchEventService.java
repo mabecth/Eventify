@@ -142,6 +142,12 @@ public class FetchEventService extends Service {
                                         if (obj.getJSONObject("place").getJSONObject("location").has("street")) {
                                             event.setPlace(obj.getJSONObject("place").getJSONObject("location").getString("street"));
                                         }
+                                        if (obj.getJSONObject("place").getJSONObject("location").has("latitude")) {
+                                            event.setLatitude(obj.getJSONObject("place").getJSONObject("location").getString("latitude"));
+                                        }
+                                        if (obj.getJSONObject("place").getJSONObject("location").has("longitude")) {
+                                            event.setLongitude(obj.getJSONObject("place").getJSONObject("location").getString("longitude"));
+                                        }
                                         if (obj.has("owner")) {
                                             event.setOwner(obj.getJSONObject("owner").getString("name"));
                                         }

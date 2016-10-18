@@ -3,7 +3,6 @@ package dat255.eventify.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -36,7 +35,6 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -62,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isCalendarExpanded = false;
     private boolean onlyFavorites = false;
 
+    private TextView toolbarTitle;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     //Facebook
@@ -87,7 +86,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setText(R.string.app_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         initCalendarDropDown();
 
         //Only display logout button when using app with Facebook
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
+        navigationView.getMenu().findItem(R.id.nav_my_events).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
@@ -334,19 +336,27 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile)
-        {
-            onlyFavorites = !onlyFavorites;
+        if (id == R.id.nav_home) {
+            toolbarTitle.setText(R.string.app_name);
+            onlyFavorites = false;
+            adapter.setOnlyFavorite(onlyFavorites);
+            adapter.updateEventList();
+
+        } else if (id == R.id.nav_my_events) {
+            toolbarTitle.setText(R.string.my_events);
+            onlyFavorites = true;
             adapter.setOnlyFavorite(onlyFavorites);
             adapter.updateEventList();
             Log.e("shiet","Button pressed");
-        }
-        else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_settings) {
+            toolbarTitle.setText(R.string.settings);
 
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -356,6 +366,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         adapter.updateEventList();
+        toolbarTitle.setText(R.string.app_name);
     }
 
     @Override
