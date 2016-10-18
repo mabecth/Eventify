@@ -3,9 +3,12 @@ package dat255.eventify.manager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +32,51 @@ public class StorageManager {
     //Empty objects
     private static Object settings = new Object();
     private static List<Event> events = new CopyOnWriteArrayList<>();
+
+    //Favorite stuff
+    private static List<Event> favorites = new ArrayList<>();
+    private static Event chosenEvent = new Event();
+
+    public void setChosenEvent(Event e){
+        chosenEvent = e;
+        System.out.println("Chosen Event is " + chosenEvent.getTitle());
+    }
+
+    public Event getChosenEvent()
+    {
+        return chosenEvent;
+    }
+
+    public void addToFavorite()
+    {
+
+        if (isFavorite() == true)
+        {
+            for (int i = 0; i < favorites.size() ; i++)
+            {
+                if (favorites.get(i).getId() == chosenEvent.getId())
+                    favorites.remove(i);
+            }
+        }
+        else favorites.add(chosenEvent);
+    }
+
+    public boolean isFavorite()
+    {
+        boolean isFavorite = false;
+
+        for (int i = 0; i < favorites.size() ; i++)
+        {
+            if (favorites.get(i).getId() == chosenEvent.getId())
+                isFavorite = true;
+        }
+        return isFavorite;
+    }
+
+    public List<Event> getFavorites()
+    {
+        return favorites;
+    }
 
     private StorageManager() {
     }

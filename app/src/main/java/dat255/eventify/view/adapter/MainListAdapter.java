@@ -11,15 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
+import java.util.Random;
+
 import dat255.eventify.activity.DetailActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.manager.StorageManager;
+import dat255.eventify.util.SortByDate;
 
 public class MainListAdapter extends BaseAdapter{
 
     private static final String TAG = "MainListAdapter";
-    private List<Event> listOfEvents;
+    private static List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
     private ImageView eventProfilePictureView;
@@ -27,6 +30,7 @@ public class MainListAdapter extends BaseAdapter{
             locationTextView, attendeesTextView, distanceTextView,
             monthTextView;
     private View result;
+    private static boolean onlyFavorite = false;
 
     public MainListAdapter(){
         listOfEvents = StorageManager.getInstance().getEvents();
@@ -41,7 +45,7 @@ public class MainListAdapter extends BaseAdapter{
                 }
             }
         };
-        notifyDataSetChanged();
+
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
@@ -77,36 +81,43 @@ public class MainListAdapter extends BaseAdapter{
         if (position > 0) {
             lastEvent = listOfEvents.get(position - 1);
         }
+        else lastEvent = null;
 
         //Only display date once if two or more events have the same date
         if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate())) {
             dateTextView.setVisibility(View.INVISIBLE);
             monthTextView.setVisibility(View.INVISIBLE);
-        } else {
+        }
+        else {
             dateTextView.setVisibility(View.VISIBLE);
             monthTextView.setVisibility(View.VISIBLE);
         }
 
-        result.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "You clicked item with position: " + position);
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("EventIndex", position);
-                v.getContext().startActivity(intent);
-            }
-        });
-
-        lastEvent = null;
         return result;
     }
 
+    public void setChosenEvent(int position)
+    {
+        StorageManager.getInstance().setChosenEvent(listOfEvents.get(position));
+    }
+
     public void updateEventList() {
-        listOfEvents = StorageManager.getInstance().getEvents();
+
+        if (onlyFavorite == true)
+        {
+            listOfEvents = StorageManager.getInstance().getFavorites();
+        }
+        else listOfEvents = StorageManager.getInstance().getEvents();
+
+        SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();
         Log.d(TAG,"Event List Updated");
     }
 
+    public void setOnlyFavorite(boolean onlyFavorite)
+    {
+        this.onlyFavorite = onlyFavorite;
+    }
     private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
@@ -116,6 +127,8 @@ public class MainListAdapter extends BaseAdapter{
         attendeesTextView = (TextView) result.findViewById(R.id.attendeesTextView);
         distanceTextView = (TextView) result.findViewById(R.id.distanceTextView);
         monthTextView = (TextView) result.findViewById(R.id.monthTextView);
+        dateTextView.setVisibility(View.VISIBLE);
+        monthTextView.setVisibility(View.VISIBLE);
     }
 
     private void setViewData(final ViewGroup viewGroup) {
