@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -183,11 +185,12 @@ public class DetailActivity extends AppCompatActivity {
     class FavoriteBtnOnClick implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            //LONG
             StorageManager.getInstance().addToFavorite();
-            if (StorageManager.getInstance().isFavorite())
-            {
+
+            if (StorageManager.getInstance().isFavorite()) {
                 favoriteBtn.setBackgroundResource(R.drawable.ic_star);
+                Toast.makeText(DetailActivity.this, "Event added to my events",
+                        Toast.LENGTH_SHORT).show();
             }
             else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
         }

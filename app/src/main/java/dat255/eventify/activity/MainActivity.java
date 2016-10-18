@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
         toolbarTitle.setText(R.string.app_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -379,6 +380,11 @@ public class MainActivity extends AppCompatActivity
         if (Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        }
+        if (!onlyFavorites) {
+            toolbarTitle.setText(R.string.app_name);
+        } else {
+            toolbarTitle.setText(R.string.my_events);
         }
     }
 
