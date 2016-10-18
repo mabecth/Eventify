@@ -40,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     FloatingActionButton fab5;
     FloatingActionButton fab6;
     FloatingActionMenu transMenu;
+    ImageButton favoriteBtn;
 
     TextView title;
 
@@ -93,7 +94,11 @@ public class DetailActivity extends AppCompatActivity {
         ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new BackBtnOnClick());
 
-        ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
+        favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
+        if (StorageManager.getInstance().isFavorite())
+        {
+            favoriteBtn.setBackgroundResource(R.drawable.ic_star);
+        }
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
 
         ImageButton facebook = (ImageButton) findViewById(R.id.facebookBtn);
@@ -180,6 +185,11 @@ public class DetailActivity extends AppCompatActivity {
         public void onClick(View view) {
             //LONG
             StorageManager.getInstance().addToFavorite();
+            if (StorageManager.getInstance().isFavorite())
+            {
+                favoriteBtn.setBackgroundResource(R.drawable.ic_star);
+            }
+            else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
         }
     }
 

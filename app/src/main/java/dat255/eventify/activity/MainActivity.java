@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-                    adapter.updateEventList(onlyFavorites);
+                    adapter.updateEventList();
                 } else {
-                    adapter.updateEventList(onlyFavorites);
+                    adapter.updateEventList();
                 }
                 swipeRefresh.setRefreshing(false);
             }
@@ -337,7 +337,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_profile)
         {
             onlyFavorites = !onlyFavorites;
-            adapter.updateEventList(onlyFavorites);
+            adapter.setOnlyFavorite(onlyFavorites);
+            adapter.updateEventList();
             Log.e("shiet","Button pressed");
         }
         else if (id == R.id.nav_settings) {
@@ -354,7 +355,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        adapter.updateEventList(onlyFavorites);
+        adapter.updateEventList();
     }
 
     @Override
@@ -364,7 +365,7 @@ public class MainActivity extends AppCompatActivity
         if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
             GoogleApi.getLocationManager(this).calculateDistance();
         }
-        adapter.updateEventList(onlyFavorites);
+        adapter.updateEventList();
     }
 
     @Override
@@ -389,7 +390,7 @@ public class MainActivity extends AppCompatActivity
         /*if(StorageManager.getInstance().getEvents().size() > 0){
             googleApi.calculateDistance();
         }*/
-        adapter.updateEventList(onlyFavorites);
+        adapter.updateEventList();
     }
 
     @Override

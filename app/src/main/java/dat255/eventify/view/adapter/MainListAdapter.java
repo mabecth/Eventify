@@ -17,11 +17,12 @@ import dat255.eventify.activity.DetailActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.manager.StorageManager;
+import dat255.eventify.util.SortByDate;
 
 public class MainListAdapter extends BaseAdapter{
 
     private static final String TAG = "MainListAdapter";
-    private List<Event> listOfEvents;
+    private static List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
     private ImageView eventProfilePictureView;
@@ -40,7 +41,7 @@ public class MainListAdapter extends BaseAdapter{
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
                     Log.d(TAG, "Events in storage changed!");
-                    updateEventList(onlyFavorite);
+                    updateEventList();
                 }
             }
         };
@@ -100,8 +101,7 @@ public class MainListAdapter extends BaseAdapter{
         StorageManager.getInstance().setChosenEvent(listOfEvents.get(position));
     }
 
-    public void updateEventList(boolean onlyFavorite) {
-        this.onlyFavorite = onlyFavorite;
+    public void updateEventList() {
 
         if (onlyFavorite == true)
         {
@@ -109,10 +109,15 @@ public class MainListAdapter extends BaseAdapter{
         }
         else listOfEvents = StorageManager.getInstance().getEvents();
 
+        SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();
         Log.d(TAG,"Event List Updated");
     }
 
+    public void setOnlyFavorite(boolean onlyFavorite)
+    {
+        this.onlyFavorite = onlyFavorite;
+    }
     private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
