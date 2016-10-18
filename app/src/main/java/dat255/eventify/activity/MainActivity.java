@@ -355,6 +355,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -372,15 +373,23 @@ public class MainActivity extends AppCompatActivity
         }
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
+
+        if (Profile.getCurrentProfile() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
     }
 
     @Override
     public void onRestart() {
         super.onRestart();
         System.out.println("onrestart");
-       /* if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
-            GoogleApi.getLocationManager(this).calculateDistance();
-        }*/
+
+        if (Profile.getCurrentProfile() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+
         adapter.updateEventList();
     }
 
@@ -393,6 +402,22 @@ public class MainActivity extends AppCompatActivity
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
+
+        if (Profile.getCurrentProfile() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+       /*if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            System.out.println("permission granted");
+            GoogleApi.getLocationManager(this).build();
+        }*/
+
+        /*if(StorageManager.getInstance().getEvents().size() > 0){
+            googleApi.calculateDistance();
+        }*/
+
         adapter.updateEventList();
     }
 

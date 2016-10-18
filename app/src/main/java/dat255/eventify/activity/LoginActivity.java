@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                         StorageManager.getInstance().setLoginTypeGuest();
                     }
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 } else {
                     // User is signed out
                 }
@@ -74,11 +75,13 @@ public class LoginActivity extends AppCompatActivity {
 
             if (StorageManager.getInstance().getLoginType().equals("guest")) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             } else {
                 if (Profile.getCurrentProfile() == null) {
                     initFacebookLogin();
                 } else {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
             }
         } else {
@@ -101,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                         StorageManager.getInstance().setLoginTypeFacebook();
                     }
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
             }
 
             @Override

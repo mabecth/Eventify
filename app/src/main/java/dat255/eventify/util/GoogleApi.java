@@ -81,7 +81,7 @@ public class GoogleApi implements
         mAddressOutput = "";
         listOfEvents = StorageManager.getInstance().getEvents();
 
-        
+
 
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
