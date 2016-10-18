@@ -4,8 +4,8 @@
     package="dat255.eventify">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,16 +13,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/LoginTheme"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait"
+            android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,35 +31,36 @@
         <!-- Facebook API -->
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            tools:replace="android:theme"/>
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:theme" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity android:name=".activity.DetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.DetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent"></activity>
 
         <service
             android:name=".util.FetchAddressIntentService"
-            android:exported="false"/>
-
-        <service android:name=".util.FetchEventService" android:enabled="true"/>
+            android:exported="false" />
+        <service
+            android:name=".util.FetchEventService"
+            android:enabled="true" />
 
         <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA" />
 
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

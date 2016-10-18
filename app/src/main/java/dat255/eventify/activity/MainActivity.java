@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_settings) {
-
+            startActivity(new Intent(this,SettingsActivity.class));
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
