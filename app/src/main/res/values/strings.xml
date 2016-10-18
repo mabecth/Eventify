@@ -9,6 +9,7 @@
     <string name="login_continue_without">Continue without</string>
     <string name="guest">Guest</string>
     <string name="log_out">Log out</string>
+    <string name="login">Log in</string>
     <string name="home">Home</string>
     <string name="my_events">My Events</string>
     <string name="translate">Translate</string>
