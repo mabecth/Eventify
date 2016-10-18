@@ -32,6 +32,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         initCalendarDropDown();
 
         //Only display logout button when using app with Facebook
-        if (StorageManager.getInstance().getLoginType().equals("facebook")) {
+        if (StorageManager.getInstance().getLoginType().equals("guest")) {
             navigationView.getMenu().findItem(R.id.nav_logout).setTitle(R.string.login);
         }
 
@@ -364,6 +365,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             } else {
+                FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
@@ -382,9 +384,10 @@ public class MainActivity extends AppCompatActivity
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
+        adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
-        if (Profile.getCurrentProfile() == null) {
+        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -399,8 +402,8 @@ public class MainActivity extends AppCompatActivity
     public void onRestart() {
         super.onRestart();
         System.out.println("onrestart");
-
-        if (Profile.getCurrentProfile() == null) {
+        //adapter.updateEventList();
+        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -410,13 +413,14 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         System.out.println("OnStart");
         super.onStart();
+        adapter.updateEventList();
         if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
 
-        if (Profile.getCurrentProfile() == null) {
+        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }

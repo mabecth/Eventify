@@ -61,22 +61,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        // Facebook Analytics
-        AppEventsLogger.activateApp(this);
-
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-
-        StorageManager.getInstance().setContext(this);
-        ConnectionManager.getInstance().setContext(this);
-
         //Check if we have logged in before
         if (StorageManager.getInstance().isLoginTypeSet()) {
 
-            if (StorageManager.getInstance().getLoginType().equals("guest")) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            } else {
+            if (StorageManager.getInstance().getLoginType().equals("facebook")) {
                 if (Profile.getCurrentProfile() == null) {
                     initFacebookLogin();
                 } else {
@@ -89,6 +77,16 @@ public class LoginActivity extends AppCompatActivity {
                 initFacebookLogin();
             }
         }
+
+
+        // Facebook Analytics
+        AppEventsLogger.activateApp(this);
+
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+
+        StorageManager.getInstance().setContext(this);
+        ConnectionManager.getInstance().setContext(this);
     }
 
     private void initFacebookLogin() {
