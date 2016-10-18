@@ -76,18 +76,18 @@ public class DetailActivity extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        final android.support.design.widget.FloatingActionButton showMapsBtn = (android.support.design.widget.FloatingActionButton) findViewById(R.id.showMapsBtn);
+        final FloatingActionButton showMapsBtn = (FloatingActionButton) findViewById(R.id.showMapsBtn);
         showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (Math.abs(verticalOffset) > Math.round(appBarLayout.getTotalScrollRange() / 3)) {
-                    showMapsBtn.hide();
+                    showMapsBtn.hide(true);
                 } else if (Math.abs(verticalOffset) > appBarLayout.getTotalScrollRange() - toolbar.getHeight()) {
                     hideTitle();
                 } else {
-                    showMapsBtn.show();
+                    showMapsBtn.show(true);
                     showTitle();
                 }
             }

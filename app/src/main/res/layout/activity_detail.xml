@@ -64,7 +64,8 @@
                     android:maxLines="4"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:layout_marginEnd="40dp" />
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"/>
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
@@ -107,11 +108,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/showMapsBtn"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:backgroundTint="@color/colorTextLight"
+        app:fab_colorNormal="@color/colorTextLight"
         android:scaleType="centerInside"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_navigation"
@@ -131,37 +132,8 @@
 
 
             <LinearLayout
-                android:id="@+id/title_layout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:orientation="vertical"
-                android:background="@color/colorAccent"
-                android:paddingLeft="20dp"
-                android:paddingEnd="20dp"
-                android:paddingRight="20dp"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:text="@string/title_example"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/titleText3"
-                    android:maxLength="100"
-                    android:ellipsize="none"
-                    android:scrollHorizontally="false"
-                    tools:textColor="@color/colorTextLight"
-                    android:textSize="22sp"
-                    android:textColor="#ffffff"
-                    android:layout_width="305dp" />
-            </LinearLayout>
-
-            <LinearLayout
                     android:id="@+id/info_layout"
                     android:orientation="vertical"
-                    android:layout_below="@+id/title_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -311,7 +283,7 @@
 
                 </LinearLayout>
                 <View
-                    android:id="@+id/separator"
+                    android:id="@+id/separator1"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/info_layout"
@@ -321,7 +293,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator"
+                android:layout_below="@+id/separator1"
                 android:layout_gravity="bottom"
                 android:paddingLeft="20dp"
                 android:paddingEnd="20dp"
@@ -340,7 +312,7 @@
                 android:textSize="16sp"
                     android:paddingBottom="10dp" />
                 <View
-                    android:id="@+id/separator"
+                    android:id="@+id/separator2"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/info_layout"
