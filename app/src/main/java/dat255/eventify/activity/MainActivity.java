@@ -12,8 +12,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +29,7 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private CompactCalendarView mCompactCalendarView;
     private AppBarLayout mAppBarLayout;
     private boolean isCalendarExpanded = false;
+    private boolean onlyFavorites = false;
 
     //Facebook
     private ProfileTracker profileTracker;
@@ -119,10 +123,21 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
+                    adapter.updateEventList(onlyFavorites);
                 } else {
-                    adapter.updateEventList();
+                    adapter.updateEventList(onlyFavorites);
                 }
                 swipeRefresh.setRefreshing(false);
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("HELLOOOOO");
+                adapter.setChosenEvent(i);
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -237,9 +252,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_settings) {
+        if (id == R.id.nav_profile)
+        {
+            onlyFavorites = !onlyFavorites;
+            adapter.updateEventList(onlyFavorites);
+            Log.e("shiet","Button pressed");
+        }
+        else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
@@ -253,19 +272,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        adapter.updateEventList();
+        adapter.updateEventList(onlyFavorites);
     }
 
     @Override
     public void onRestart() {
         super.onRestart();
-        adapter.updateEventList();
+        adapter.updateEventList(onlyFavorites);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        adapter.updateEventList();
+        adapter.updateEventList(onlyFavorites);
     }
 
     @Override

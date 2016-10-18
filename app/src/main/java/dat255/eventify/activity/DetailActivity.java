@@ -39,9 +39,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Intent intent = getIntent();
-        int index = intent.getIntExtra("EventIndex", 0);
-        event = StorageManager.getInstance().getEvent(index);
+        event = StorageManager.getInstance().getChosenEvent();
         initView();
         initButtons();
 
@@ -133,6 +131,7 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //LONG
+            StorageManager.getInstance().addToFavorite();
         }
     }
 
