@@ -99,14 +99,11 @@ public class GoogleApi implements
                     Log.d(TAG, "Events in storage changed!");
                     listOfEvents = StorageManager.getInstance().getEvents();
                     updatedList = StorageManager.getInstance().getEvents();
-
                 }
             }
         };
 
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
-
-
 
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
@@ -143,13 +140,13 @@ public class GoogleApi implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
-            Log.d(TAG, "Service started");
             if(ConnectionManager.getInstance().isConnected()) {
+                Log.d(TAG, "Service started");
                 startIntentService();
                 //calculateDistance();
             }
             else{
-                mAddressOutput = "Ej tillgänlig";
+                mAddressOutput = "Recent: " + StorageManager.getInstance().getAdress();
                 displayAddressOutput();
             }
         }
@@ -209,16 +206,18 @@ public class GoogleApi implements
 
     protected void startIntentService() {
         // Create an intent for passing to the intent service responsible for fetching the address.
-        Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
-        // Pass the result receiver as an extra to the service.
-        intent.putExtra(Constants.RECEIVER, mResultReceiver);
 
-        // Pass the location data as an extra to the service.
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-        // Start the service. If the service isn't already running, it is instantiated and started
-        // (creating a process for it if needed); if it is running then it remains running. The
-        // service kills itself automatically once all intents are processed.
-        mainActivity.startService(intent);
+           Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
+           // Pass the result receiver as an extra to the service.
+           intent.putExtra(Constants.RECEIVER, mResultReceiver);
+
+           // Pass the location data as an extra to the service.
+           intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+           // Start the service. If the service isn't already running, it is instantiated and started
+           // (creating a process for it if needed); if it is running then it remains running. The
+           // service kills itself automatically once all intents are processed.
+           mainActivity.startService(intent);
+
     }
 
 
@@ -229,7 +228,7 @@ public class GoogleApi implements
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
         updatedList = StorageManager.getInstance().getEvents();
-        //calculateDistance();
+        calculateDistance();
         //Set location in coordinates
 
         //stop location updates
@@ -260,10 +259,12 @@ public class GoogleApi implements
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            mAddressOutput = mAddressOutput.replace("\n", " ");
+           /* mAddressOutput = mAddressOutput.replace("\n", " ");
             String[] split = mAddressOutput.split("\\s+");
             mAddressOutput = split[split.length - 1]; // Only display city
-            calculateDistance();
+            */
+            StorageManager.getInstance().storeAdress(mAddressOutput);
+            //calculateDistance();
             displayAddressOutput();
             // Show a toast message if an address was found.
             // Reset. Enable the Fetch Address button and stop showing the progress bar.

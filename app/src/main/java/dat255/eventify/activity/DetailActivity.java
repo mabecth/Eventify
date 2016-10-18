@@ -133,7 +133,9 @@ public class DetailActivity extends AppCompatActivity {
     class MapsBtnOnClick implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            //Öppna google maps! Ruben får pilla med detta
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?daddr="+event.getPlace()));
+            startActivity(intent);
         }
     }
 

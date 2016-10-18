@@ -3,6 +3,7 @@ package dat255.eventify.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -66,9 +67,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            GoogleApi.getLocationManager(this).build();
+        }else {
             checkLocationPermission();
         }
         System.out.println("oncreate");
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean checkLocationPermission() {
+        System.out.println("Checking persmission");
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -189,7 +193,8 @@ public class MainActivity extends AppCompatActivity
                     // contacts-related task you need to do.
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED && GoogleApi.getLocationManager(this).getmGoogleApiClient() == null) {
+                            == PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("permission granted");
                         GoogleApi.getLocationManager(this).build();
                     }
 
@@ -263,11 +268,11 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
 
         //Stop location updates when Activity is no longer active
-        /*if (googleApi.getmGoogleApiClient() != null) {
-            if (googleApi.getmGoogleApiClient().isConnected()) {
-                googleApi.removeLocationUpdates();
+        if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
+            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
+                GoogleApi.getLocationManager(this).removeLocationUpdates();
             }
-        }*/
+        }
     }
 
     @Override
@@ -337,6 +342,9 @@ public class MainActivity extends AppCompatActivity
     public void onRestart() {
         super.onRestart();
         System.out.println("onrestart");
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
+            GoogleApi.getLocationManager(this).calculateDistance();
+        }
         adapter.updateEventList();
     }
 
@@ -344,12 +352,18 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         System.out.println("OnStart");
         super.onStart();
-
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
-            GoogleApi.getLocationManager(this).build();
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
+            GoogleApi.getLocationManager(this).calculateDistance();
         }
+       /*if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            System.out.println("permission granted");
+            GoogleApi.getLocationManager(this).build();
+        }*/
+
+
+
 
         /*if(StorageManager.getInstance().getEvents().size() > 0){
             googleApi.calculateDistance();
@@ -360,6 +374,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+
         System.out.println("onstop");
        /* if(googleApi.getmGoogleApiClient() != null){
             if(googleApi.getmGoogleApiClient().isConnected()){
@@ -371,6 +386,9 @@ public class MainActivity extends AppCompatActivity
 
     public void onDestroy() {
         super.onDestroy();
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+            GoogleApi.getLocationManager(this).getmGoogleApiClient().disconnect();
+        }
         System.out.println("ondestroy");
         if (profileTracker != null){
             profileTracker.stopTracking();

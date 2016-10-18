@@ -104,6 +104,16 @@ public class StorageManager {
         editor.commit();
     }
 
+    public void storeAdress(String adress){
+        editor.putString("adress",adress);
+        editor.commit();
+    }
+
+    public String getAdress(){
+        String adress = preferences.getString("adress","");
+        return adress;
+    }
+
     public List<Event> getEvents() {
         String events_json = preferences.getString(eventsKey, "");
         if (gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType()) == null) {

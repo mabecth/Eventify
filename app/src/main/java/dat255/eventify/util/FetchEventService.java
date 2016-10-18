@@ -149,15 +149,14 @@ public class FetchEventService extends Service {
                                             event.setDate(obj.getString("start_time").substring(0, 10));
                                             event.setTime(obj.getString("start_time").substring(11, 16));
                                         }
-                                        /*if(StorageManager.getInstance() != null) {
-                                            if(StorageManager.getInstance().getEvents() != null) {
+                                           /* if(StorageManager.getInstance().getEvents() != null || StorageManager.getInstance().getEvents().size() != 0) {
                                                 if(StorageManager.getInstance().getEvent(i) != null) {
                                                     if (StorageManager.getInstance().getEvent(i).getDistance() != null) {
                                                         event.setDistance(StorageManager.getInstance().getEvent(i).getDistance());
                                                     }
                                                 }
-                                            }
-                                        }*/
+*/
+
                                         events.add(event);
                                     } catch (JSONException e) {
                                         Log.e(TAG,"JSONException", e);
