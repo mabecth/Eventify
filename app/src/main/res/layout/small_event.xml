@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/dateTextView"
                 android:layout_height="wrap_content"
-                android:textSize="36sp"
+                android:textSize="32sp"
                 android:textAlignment="center"
                 android:textColor="@color/colorTextDark"/>
 
@@ -115,7 +115,6 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/locationTextView"
                                 android:textColor="@color/colorTextDark"
-                                android:layout_weight="1"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
                         <LinearLayout
@@ -135,7 +134,9 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/timeTextView"
                                 android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical" />
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp" />
                         </LinearLayout>
                         <LinearLayout
                             android:orientation="horizontal"
@@ -154,7 +155,30 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/attendeesTextView"
                                 android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical" />
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/orgImg"
+                                android:src="@drawable/ic_business"
+                                android:layout_height="20dp"
+                                android:layout_width="20dp" />
+
+                            <TextView
+                                android:text="Blå hoppet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/orgTextView"
+                                android:textColor="@color/colorTextDark"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -171,8 +195,8 @@
                             android:id="@+id/distanceTextView"
                             android:textAlignment="textEnd"
                             android:layout_width="match_parent"
-                            android:textColor="@color/colorTextDark"
-                            android:layout_gravity="center_vertical|end" />
+                            android:layout_gravity="center_vertical|end"
+                            android:textColor="#3b5998" />
                     </LinearLayout>
                 </LinearLayout>
 
