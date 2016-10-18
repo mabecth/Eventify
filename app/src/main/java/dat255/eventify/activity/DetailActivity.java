@@ -176,9 +176,13 @@ public class DetailActivity extends AppCompatActivity {
     class MapsBtnOnClick implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
-            startActivity(intent);
+            if(event.getPlace() == null) {
+                Toast.makeText(DetailActivity.this, "No address found", Toast.LENGTH_SHORT).show();
+            }else{
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
+                startActivity(intent);
+            }
         }
     }
 

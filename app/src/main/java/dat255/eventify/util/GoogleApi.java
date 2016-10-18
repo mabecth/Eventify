@@ -81,8 +81,6 @@ public class GoogleApi implements
         mAddressOutput = "";
         listOfEvents = StorageManager.getInstance().getEvents();
 
-
-
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -111,10 +109,7 @@ public class GoogleApi implements
         };
 
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
-
         // Set defaults, then update using values stored in the Bundle.
-
-
     }
 
     public static double round(double value, int places) {
@@ -127,12 +122,15 @@ public class GoogleApi implements
 
     public void loopCoordinates(){
         System.out.println("listofevents size "+ listOfEvents.size());
-        if (listOfEvents.size() > 0) {
-            for (int index = 0; index < listOfEvents.size(); index++) {
-                LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(),StorageManager.getInstance().getEvents().get(index).getLongitude());
-                Double dbl = CalculationByDistance(latLng, endLatLng);
-                System.out.println("Distance: "+ dbl);
-                updateDistance(index, round(dbl,1) + " km");
+        if(latLng ==null){
+        }else{
+            if (listOfEvents.size() > 0) {
+                for (int index = 0; index < listOfEvents.size(); index++) {
+                    LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(),StorageManager.getInstance().getEvents().get(index).getLongitude());
+                    Double dbl = CalculationByDistance(latLng, endLatLng);
+                    System.out.println("Distance: "+ dbl);
+                    updateDistance(index, round(dbl,1) + " km");
+                }
             }
         }
     }
