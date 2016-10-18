@@ -67,16 +67,16 @@ public class GoogleApi implements
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public static GoogleApi getLocationManager(Context context)     {
+    public static GoogleApi getLocationManager(MainActivity activity)     {
         if (instance == null) {
-            instance = new GoogleApi(context);
+            instance = new GoogleApi(activity);
         }
         return instance;
     }
 
-    private GoogleApi(Context context) {
+    private GoogleApi(MainActivity activity) {
         mResultReceiver = new AddressResultReceiver(new Handler());
-        mainActivity = (MainActivity) context;
+        mainActivity = activity;
         mAddressRequested = false;
         mAddressOutput = "";
         listOfEvents = StorageManager.getInstance().getEvents();
@@ -88,9 +88,7 @@ public class GoogleApi implements
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
-                    listView = (ListView) mainActivity.findViewById(R.id.listView);
-                    adapter = new MainListAdapter();
-                    listView.setAdapter(adapter);
+                    mainActivity.updateAdapter();
                     System.out.println("Google api");
                     Log.d(TAG, "Events in storage changed!");
                     listOfEvents = StorageManager.getInstance().getEvents();
@@ -210,7 +208,7 @@ public class GoogleApi implements
     public void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
         StorageManager.getInstance().storeEvents(updatedList);
-        listView.invalidateViews();
+        mainActivity.updateAdapter();
     }
     public void displayAddressOutput() {
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

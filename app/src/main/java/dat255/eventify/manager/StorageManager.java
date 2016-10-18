@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,7 +31,7 @@ public class StorageManager {
     private static String loginTypeKey = "3";
 
     //Empty objects
-    private static Object settings = new Object();
+    private static HashMap<String, Integer> settings = new HashMap<>();
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
     //Favorite stuff
@@ -131,18 +132,23 @@ public class StorageManager {
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-    public void storeSettings(Object settings) {
+    public void storeSettings(HashMap<String, Integer> settings) {
         String settings_json = gson.toJson(settings);
         editor.putString(settingsKey, settings_json);
         editor.commit();
     }
 
-    public Object getSettings() {
+    public HashMap<String, Integer> getSettings() {
         String events_json = preferences.getString(settingsKey, "");
-        if (gson.fromJson(events_json, new TypeToken<Object>(){}.getType()) == null) {
+        if (gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType()) == null) {
+            settings.put("notification", 1);
+            settings.put("distance", 0);
+            settings.put("notifyDay", 0);
+            settings.put("notifyHour", 0);
+            settings.put("firstDayOfWeek", 2);
             return settings;
         } else {
-            return gson.fromJson(events_json, new TypeToken<Object>(){}.getType());
+            return gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType());
         }
     }
 
@@ -192,4 +198,6 @@ public class StorageManager {
     public Event getEvent(int index) {
         return getEvents().get(index);
     }
+
+
 }

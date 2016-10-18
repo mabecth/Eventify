@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Eventify</string>
+    <string name="settings_name">Settings</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -45,5 +46,6 @@
     //TEST STRINGS
     <string name="title_example">ArmIT\'s Football Night</string>
     <string name="description_example">Hi everyone!\n\nWe invite all newly arrived to a evening at Heden.\n\nBest Regards,\nArmIT</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>

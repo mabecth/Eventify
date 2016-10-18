@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="dat255.eventify.activity.SettingsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:src="@drawable/ic_keyboard_backspace"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/backBtn" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/settings_name"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:layout_weight="1">
+
+            </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <Switch
+                android:text="Notifications: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/notiSwitch"
+                android:textSize="20sp"
+                android:checked="true"
+                android:paddingBottom="10dp" />
+
+            <TextView
+                android:text="How many days ahead?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/daysText"
+                android:textColor="#212121" />
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerDays"
+                android:layout_width="150dp" />
+            <TextView
+                android:text="At which time?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/hoursText"
+                android:textColor="#212121" />
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerHours"
+                android:layout_width="150dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:background="#BCBCBC"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"></LinearLayout>
+
+            <TextView
+                android:text="First day of the week?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/firstDayText"
+                android:textColor="#212121"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerFirstDay"
+                android:layout_width="150dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:background="#BCBCBC"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"></LinearLayout>
+            <Switch
+                android:text="Show distance only:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/distanceSwitch"
+                android:textSize="20sp"
+                android:checked="true" />
+            <TextView
+                android:text="In events, replace location with distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Text"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:background="#BCBCBC"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"></LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

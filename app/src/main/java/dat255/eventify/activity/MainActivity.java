@@ -281,6 +281,10 @@ public class MainActivity extends AppCompatActivity
         monthView.setText(dateFormat.format(date));
     }
 
+    public void updateAdapter(){
+        adapter.updateEventList();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -350,8 +354,7 @@ public class MainActivity extends AppCompatActivity
             Log.e("shiet","Button pressed");
 
         } else if (id == R.id.nav_settings) {
-            toolbarTitle.setText(R.string.settings);
-
+            startActivity(new Intent(this,SettingsActivity.class));
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
@@ -371,7 +374,6 @@ public class MainActivity extends AppCompatActivity
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
-        adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
         if (Profile.getCurrentProfile() == null) {
@@ -389,8 +391,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-
-        adapter.updateEventList();
     }
 
     @Override
@@ -407,28 +407,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-       /*if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            System.out.println("permission granted");
-            GoogleApi.getLocationManager(this).build();
-        }*/
-
-        /*if(StorageManager.getInstance().getEvents().size() > 0){
-            googleApi.calculateDistance();
-        }*/
-
-        adapter.updateEventList();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        System.out.println("onstop");
-
-
-    }
-
     public void onDestroy() {
         super.onDestroy();
         if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
