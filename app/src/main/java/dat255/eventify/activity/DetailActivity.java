@@ -1,6 +1,7 @@
 package dat255.eventify.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -40,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
     FloatingActionButton fab6;
     FloatingActionMenu transMenu;
 
+    TextView title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,24 +68,33 @@ public class DetailActivity extends AppCompatActivity {
     public void initButtons() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_appbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+        collapsingToolbarLayout.setTitle(event.getTitle());
+
+        //Set font and size
+        //collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+
+        final android.support.design.widget.FloatingActionButton showMapsBtn = (android.support.design.widget.FloatingActionButton) findViewById(R.id.showMapsBtn);
+        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
-                    // Collapse
-                    collapsingToolbarLayout.setTitle(event.getTitle());
+                if (Math.abs(verticalOffset) > Math.round(appBarLayout.getTotalScrollRange() / 3)) {
+                    showMapsBtn.hide();
+                } else if (Math.abs(verticalOffset) > appBarLayout.getTotalScrollRange() - (Math.round(appBarLayout.getTotalScrollRange() / 5))) {
+                    hideTitle();
                 } else {
-                    collapsingToolbarLayout.setTitle(" ");
+                    showMapsBtn.show();
+                    showTitle();
                 }
             }
         });
 
         ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new BackBtnOnClick());
-
-        android.support.design.widget.FloatingActionButton showMapsBtn = (android.support.design.widget.FloatingActionButton) findViewById(R.id.showMapsBtn);
-        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
@@ -108,7 +120,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void initView(){
-        TextView title = (TextView) findViewById(R.id.titleText);
+        title = (TextView) findViewById(R.id.titleText);
         TextView date = (TextView) findViewById(R.id.dateText);
         TextView time = (TextView) findViewById(R.id.timeText);
         TextView place = (TextView) findViewById(R.id.placeText);
@@ -130,6 +142,14 @@ public class DetailActivity extends AppCompatActivity {
                 .fitCenter()
                 .centerCrop()
                 .into(coverImg);
+    }
+
+    public void hideTitle() {
+        title.setVisibility(View.INVISIBLE);
+    }
+
+    public void showTitle() {
+        title.setVisibility(View.VISIBLE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
