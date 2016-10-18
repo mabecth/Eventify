@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity
         //Only display logout button when using app with Facebook
         if (StorageManager.getInstance().getLoginType().equals("guest")) {
             navigationView.getMenu().findItem(R.id.nav_logout).setTitle(R.string.login);
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_logout).setTitle(R.string.log_out);
         }
 
         //Reach views from nav_header_main.xml

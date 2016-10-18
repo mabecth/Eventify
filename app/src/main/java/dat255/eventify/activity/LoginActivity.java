@@ -42,6 +42,15 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
+        StorageManager.getInstance().setContext(this);
+        ConnectionManager.getInstance().setContext(this);
+
+        // Facebook Analytics
+        AppEventsLogger.activateApp(this);
+
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -50,43 +59,32 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    if (!StorageManager.getInstance().isLoginTypeSet()) {
-                        StorageManager.getInstance().setLoginTypeGuest();
-                    }
+                    StorageManager.getInstance().setLoginTypeGuest();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {
                     // User is signed out
+
                 }
             }
         };
 
+        initFacebookLogin();
+
         //Check if we have logged in before
         if (StorageManager.getInstance().isLoginTypeSet()) {
-
             if (StorageManager.getInstance().getLoginType().equals("facebook")) {
-                if (Profile.getCurrentProfile() == null) {
-                    initFacebookLogin();
-                } else {
+                if (Profile.getCurrentProfile() != null) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                }
+            } else {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }
             }
-        } else {
-            if (Profile.getCurrentProfile() == null) {
-                initFacebookLogin();
-            }
         }
-
-
-        // Facebook Analytics
-        AppEventsLogger.activateApp(this);
-
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-
-        StorageManager.getInstance().setContext(this);
-        ConnectionManager.getInstance().setContext(this);
     }
 
     private void initFacebookLogin() {
@@ -98,9 +96,8 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "facebook:onSuccess:");
                     Toast.makeText(LoginActivity.this, "Authentication successful",
                             Toast.LENGTH_SHORT).show();
-                    if (!StorageManager.getInstance().isLoginTypeSet()) {
-                        StorageManager.getInstance().setLoginTypeFacebook();
-                    }
+
+                    StorageManager.getInstance().setLoginTypeFacebook();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
             }

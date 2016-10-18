@@ -10,6 +10,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,21 +53,23 @@ public class FetchEventService extends Service {
                 getEventsFromFacebook(s, "facebook", null);
             }
         } else {
-            //Read Facebook userToken from Firebase
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(String s : organisations) {
-                        getEventsFromFacebook(s, "guest", dataSnapshot.getValue(String.class));
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                //Read Facebook userToken from Firebase
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (String s : organisations) {
+                            getEventsFromFacebook(s, "guest", dataSnapshot.getValue(String.class));
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+            }
         }
     }
 
