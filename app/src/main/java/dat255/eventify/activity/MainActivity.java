@@ -336,21 +336,27 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_my_events)
-        {
+        if (id == R.id.nav_home) {
+            toolbarTitle.setText(R.string.app_name);
+            onlyFavorites = false;
+            adapter.setOnlyFavorite(onlyFavorites);
+            adapter.updateEventList();
+
+        } else if (id == R.id.nav_my_events) {
             toolbarTitle.setText(R.string.my_events);
-            onlyFavorites = !onlyFavorites;
+            onlyFavorites = true;
             adapter.setOnlyFavorite(onlyFavorites);
             adapter.updateEventList();
             Log.e("shiet","Button pressed");
-        }
-        else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_settings) {
             toolbarTitle.setText(R.string.settings);
 
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(this, LoginActivity.class));
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
