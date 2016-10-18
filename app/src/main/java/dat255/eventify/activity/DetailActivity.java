@@ -174,7 +174,7 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("http://maps.google.com/maps?daddr="+event.getPlace()));
+                    Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
             startActivity(intent);
         }
     }

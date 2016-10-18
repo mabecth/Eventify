@@ -352,8 +352,10 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         System.out.println("OnStart");
         super.onStart();
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
-            GoogleApi.getLocationManager(this).calculateDistance();
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
+                GoogleApi.getLocationManager(this).calculateDistance();
+            }
         }
        /*if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
