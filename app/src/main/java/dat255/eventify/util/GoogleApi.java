@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ResultReceiver;
@@ -30,13 +31,15 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.activity.MainActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.view.adapter.MainListAdapter;
 
-public class GoogleApi implements OnMapReadyCallback,
+public class GoogleApi implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -45,7 +48,10 @@ public class GoogleApi implements OnMapReadyCallback,
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
-    MainActivity mainActivity;
+
+    private static GoogleApi instance = null;
+
+    private MainActivity mainActivity;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
@@ -54,32 +60,31 @@ public class GoogleApi implements OnMapReadyCallback,
     private List<Event> listOfEvents;
     private LocationRequest mLocationRequest;
     private TextView locationTextView;
-    private String previousDestination;
-    private  List<Event> updatedList;
+    private static List<Event> updatedList;
     protected boolean mAddressRequested;
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
 
+
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public GoogleApi(Context context) {
+    public List<Event> getUpdatedList(){
+        return updatedList;
+    }
+
+    public static GoogleApi getLocationManager(Context context)     {
+        if (instance == null) {
+            instance = new GoogleApi(context);
+        }
+        return instance;
+    }
+
+    private GoogleApi(Context context) {
         mResultReceiver = new AddressResultReceiver(new Handler());
         mainActivity = (MainActivity) context;
         listOfEvents = StorageManager.getInstance().getEvents();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(mainActivity,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-            }
-        } else {
-            buildGoogleApiClient();
-        }
-        mGoogleApiClient.connect();
+        System.out.println("google api");
 
         listView = (ListView) mainActivity.findViewById(R.id.listView);
         adapter = new MainListAdapter();
@@ -92,74 +97,37 @@ public class GoogleApi implements OnMapReadyCallback,
                     //Events changed
                     System.out.println("Google api");
                     Log.d(TAG, "Events in storage changed!");
-
                     listOfEvents = StorageManager.getInstance().getEvents();
-                    calculateDistance();
+                    updatedList = StorageManager.getInstance().getEvents();
 
                 }
             }
         };
-        if (listOfEvents.size() > 0 && latLng !=null) {
 
-        }
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
 
-        previousDestination = "";
+
 
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
         mAddressOutput = "";
            /* Check for latest version of Play services */
 
-
-
     }
 
-    protected synchronized void buildGoogleApiClient() {
+    public synchronized void build(){
         mGoogleApiClient = new GoogleApiClient.Builder(mainActivity)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
     }
-
-
 
     protected void showToast(String text) {
         Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
-    public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(mainActivity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-                //TODO:
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                //(just doing it here for now, note that with this code, no explanation is shown)
-                ActivityCompat.requestPermissions(mainActivity,
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(mainActivity,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -175,22 +143,16 @@ public class GoogleApi implements OnMapReadyCallback,
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
-
-            // It is possible that the user presses the button to get the address before the
-
-            // GoogleApiClient object successfully connects. In such a case, mAddressRequested
-
-            // is set to true, but no attempt is made to fetch the address (see
-
-            // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
-
             Log.d(TAG, "Service started");
-            startIntentService();
+            if(ConnectionManager.getInstance().isConnected()) {
+                startIntentService();
+                //calculateDistance();
+            }
+            else{
+                mAddressOutput = "Ej tillgänlig";
+                displayAddressOutput();
+            }
         }
-    }
-
-    public void checkForUpdate(){
-
     }
 
     public GoogleApiClient getmGoogleApiClient() {
@@ -207,29 +169,34 @@ public class GoogleApi implements OnMapReadyCallback,
     }
 
     public void calculateDistance() {
+
         System.out.println("Calculate distance");
         System.out.println("Adapter count: " + adapter.getCount());
         System.out.println("Storage list: " + listOfEvents.size());
         System.out.println("Latlng: " + latLng);
-        updatedList = StorageManager.getInstance().getEvents();
+
         if (latLng != null && listOfEvents.size() > 0) {
             System.out.println("Adapter count if: " + adapter.getCount());
+
             for (int index = 0; index < listOfEvents.size(); index++) {
+
                 System.out.println("Adapter in loop: " + adapter.getCount());
                 System.out.println("int i:" + index);
-                new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyCPkKLGhAjwksL-irs3QOElaLvoGD6aePA");
-            }
-            //adapter.updateEventList();
-        }
+                new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyBaDd7HOHSt5IHeCAqWr_MDTXqsYpgZRhQ");
 
+            }
+            adapter.updateEventList();
+            listView.invalidateViews();
+        }
     }
 
     public void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
         StorageManager.getInstance().storeEvents(updatedList);
+        adapter.updateEventList();
         listView.invalidateViews();
-    }
 
+    }
 
     public void displayAddressOutput() {
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
@@ -261,14 +228,15 @@ public class GoogleApi implements OnMapReadyCallback,
 
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
+        updatedList = StorageManager.getInstance().getEvents();
+        //calculateDistance();
         //Set location in coordinates
 
         //stop location updates
-        /*if (mGoogleApiClient != null) {
+        if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-        */
+
     }
 
     @Override
@@ -279,33 +247,9 @@ public class GoogleApi implements OnMapReadyCallback,
              mGoogleApiClient.connect();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-    }
 
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(mainActivity,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED && mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                    }
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(mainActivity, "permission denied", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
+
 
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
