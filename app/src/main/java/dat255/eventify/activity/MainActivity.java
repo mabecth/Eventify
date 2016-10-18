@@ -367,6 +367,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
+                GoogleApi.getLocationManager(this).loopCoordinates();
+            }
+        }
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
@@ -385,13 +390,12 @@ public class MainActivity extends AppCompatActivity
     public void onRestart() {
         super.onRestart();
         System.out.println("onrestart");
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()){
-            GoogleApi.getLocationManager(this).calculateDistance();
-        }
+
         if (Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+
         adapter.updateEventList();
     }
 
@@ -401,9 +405,10 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
-                GoogleApi.getLocationManager(this).calculateDistance();
+                GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
+
         if (Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -418,19 +423,15 @@ public class MainActivity extends AppCompatActivity
         /*if(StorageManager.getInstance().getEvents().size() > 0){
             googleApi.calculateDistance();
         }*/
+
         adapter.updateEventList();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         System.out.println("onstop");
-       /* if(googleApi.getmGoogleApiClient() != null){
-            if(googleApi.getmGoogleApiClient().isConnected()){
-                googleApi.getmGoogleApiClient().disconnect();
-            }
-        }*/
+
 
     }
 
