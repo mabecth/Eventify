@@ -58,7 +58,7 @@
                 android:maxLength="100"
                     android:layout_centerVertical="true"
                     android:scrollHorizontally="false"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorTextLight"
                     android:maxLines="4"
                     android:paddingTop="10dp"
