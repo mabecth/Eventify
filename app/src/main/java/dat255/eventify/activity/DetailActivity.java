@@ -1,18 +1,22 @@
 package dat255.eventify.activity;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
@@ -37,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
     FloatingActionButton fab6;
     FloatingActionMenu transMenu;
 
+    TextView title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int index = intent.getIntExtra("EventIndex", 0);
         event = StorageManager.getInstance().getEvent(index);
+
         initView();
         initButtons();
 
@@ -58,12 +65,37 @@ public class DetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void initButtons(){
+    public void initButtons() {
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_appbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+        collapsingToolbarLayout.setTitle(event.getTitle());
+
+        //Set font and size
+        //collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        final android.support.design.widget.FloatingActionButton showMapsBtn = (android.support.design.widget.FloatingActionButton) findViewById(R.id.showMapsBtn);
+        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
+
+        appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) > Math.round(appBarLayout.getTotalScrollRange() / 3)) {
+                    showMapsBtn.hide();
+                } else if (Math.abs(verticalOffset) > appBarLayout.getTotalScrollRange() - toolbar.getHeight()) {
+                    hideTitle();
+                } else {
+                    showMapsBtn.show();
+                    showTitle();
+                }
+            }
+        });
+
         ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new BackBtnOnClick());
-
-        ImageButton showMapsBtn = (ImageButton) findViewById(R.id.showMapsBtn);
-        showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         ImageButton favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
@@ -89,7 +121,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void initView(){
-        TextView title = (TextView) findViewById(R.id.titleText);
+        title = (TextView) findViewById(R.id.titleText);
         TextView date = (TextView) findViewById(R.id.dateText);
         TextView time = (TextView) findViewById(R.id.timeText);
         TextView place = (TextView) findViewById(R.id.placeText);
@@ -111,6 +143,14 @@ public class DetailActivity extends AppCompatActivity {
                 .fitCenter()
                 .centerCrop()
                 .into(coverImg);
+    }
+
+    public void hideTitle() {
+        title.setVisibility(View.INVISIBLE);
+    }
+
+    public void showTitle() {
+        title.setVisibility(View.VISIBLE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
