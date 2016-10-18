@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     public boolean checkLocationPermission() {
         System.out.println("Checking persmission");
         if (ContextCompat.checkSelfPermission(this,
@@ -266,9 +267,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-
         //Stop location updates when Activity is no longer active
-        if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
+       if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).removeLocationUpdates();
             }
