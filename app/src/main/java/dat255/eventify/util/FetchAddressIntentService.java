@@ -104,41 +104,17 @@ public class FetchAddressIntentService extends IntentService {
         List<Address> addresses = null;
 
         try {
-
-            // Using getFromLocation() returns an array of Addresses for the area immediately
-
-            // surrounding the given latitude and longitude. The results are a best guess and are
-
-            // not guaranteed to be accurate.
-
-            addresses = geocoder.getFromLocation(
-
-                    location.getLatitude(),
-
-                    location.getLongitude(),
-
-                    // In this sample, we get just a single address.
-
-                    1);
-
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         } catch (IOException ioException) {
-
             // Catch network or other I/O problems.
-
             errorMessage = getString(R.string.service_not_available);
-
             Log.e(TAG, errorMessage, ioException);
-
         } catch (IllegalArgumentException e) {
-
             // Catch invalid latitude or longitude values.
             errorMessage = getString(R.string.invalid_lat_long_used);
             Log.e(TAG, errorMessage + ". " +
-
                     "Latitude =" + location.getLatitude() +
-
                     ", Longitude =" + location.getLongitude(), e);
-
         }
 
         // Handle case where no address was found.
@@ -170,13 +146,10 @@ public class FetchAddressIntentService extends IntentService {
 
             // getCountryName() ("United States", for example)
 
-            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
+            addressFragments.add(address.getLocality());
 
             Log.i(TAG, getString(R.string.address_found));
             deliverResultToReceiver(Constants.SUCCESS_RESULT,
-
                     TextUtils.join(System.getProperty("line.separator"), addressFragments));
         }
     }

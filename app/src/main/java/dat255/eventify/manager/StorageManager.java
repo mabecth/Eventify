@@ -1,6 +1,7 @@
 package dat255.eventify.manager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -8,7 +9,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 import dat255.eventify.model.Event;
 import dat255.eventify.util.Constants;
@@ -82,9 +86,6 @@ public class StorageManager {
             preferences = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.commit();
-
-            //Store empty lists
-            storeEvents(events);
         }
     }
 
@@ -151,6 +152,16 @@ public class StorageManager {
         editor.commit();
     }
 
+    public void storeAdress(String adress){
+        editor.putString("adress",adress);
+        editor.commit();
+    }
+
+    public String getAdress(){
+        String adress = preferences.getString("adress","");
+        return adress;
+    }
+
     public List<Event> getEvents() {
         String events_json = preferences.getString(eventsKey, "");
         if (gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType()) == null) {
@@ -158,6 +169,24 @@ public class StorageManager {
         } else {
             return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
         }
+    }
+
+    public int getIndexForDate(Date dateToCheck){
+        int index = 0;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
+        String date = dateFormat.format(dateToCheck);
+        int year = Integer.valueOf(date.split("-")[0]);
+        int month = Integer.valueOf(date.split("-")[1]);
+        int day = Integer.valueOf(date.split("-")[2]);
+        for (Event e : getEvents()) {
+            if (Integer.valueOf(e.getDate().split("-")[0])>=year &&
+                    Integer.valueOf(e.getDate().split("-")[1])>=month &&
+                    Integer.valueOf(e.getDate().split("-")[2])>=day){
+                break;
+            }
+            index++;
+        }
+        return index;
     }
 
     public Event getEvent(int index) {

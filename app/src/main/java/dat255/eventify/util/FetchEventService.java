@@ -40,6 +40,7 @@ public class FetchEventService extends Service {
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
+        //events = StorageManager.getInstance().getEvents();
         events = new CopyOnWriteArrayList<>();
         final String[] organisations = FetchEventService.this.getResources().getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
@@ -148,6 +149,14 @@ public class FetchEventService extends Service {
                                             event.setDate(obj.getString("start_time").substring(0, 10));
                                             event.setTime(obj.getString("start_time").substring(11, 16));
                                         }
+                                           /* if(StorageManager.getInstance().getEvents() != null || StorageManager.getInstance().getEvents().size() != 0) {
+                                                if(StorageManager.getInstance().getEvent(i) != null) {
+                                                    if (StorageManager.getInstance().getEvent(i).getDistance() != null) {
+                                                        event.setDistance(StorageManager.getInstance().getEvent(i).getDistance());
+                                                    }
+                                                }
+*/
+
                                         events.add(event);
                                     } catch (JSONException e) {
                                         Log.e(TAG,"JSONException", e);
