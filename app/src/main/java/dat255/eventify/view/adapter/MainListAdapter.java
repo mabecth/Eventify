@@ -116,7 +116,7 @@ public class MainListAdapter extends BaseAdapter{
 
     public void setOnlyFavorite(boolean onlyFavorite)
     {
-        this.onlyFavorite = onlyFavorite;
+        MainListAdapter.onlyFavorite = onlyFavorite;
     }
     private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
@@ -137,7 +137,7 @@ public class MainListAdapter extends BaseAdapter{
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         locationTextView.setText(currEvent.getPlace());
-        attendeesTextView.setText(currEvent.getNbrAttending() + " people attending");
+        attendeesTextView.setText(currEvent.getNbrAttending());
         distanceTextView.setText(currEvent.getDistance());
 
         //Display image

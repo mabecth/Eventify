@@ -45,13 +45,10 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:padding="6dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -59,7 +56,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text=""
+                    android:text="Titel syns här"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/nameTextView"
@@ -80,7 +77,6 @@
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingRight="5dp"
                     android:paddingTop="10dp">
 
                     <ImageView
@@ -101,48 +97,82 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
-                        <TextView
-                            android:text="TextView"
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/locationTextView"
-                            android:textColor="@color/colorTextDark"
-                            android:layout_weight="1" />
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/placeImg"
+                                android:src="@drawable/ic_place"
+                                android:layout_height="20dp"
+                                android:layout_width="20dp" />
 
-                        <TextView
-                            android:text="TextView"
+                            <TextView
+                                android:text="Angereds Torg 13"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/locationTextView"
+                                android:textColor="@color/colorTextDark"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/timeTextView"
-                            android:layout_weight="1"
-                            android:textColor="@color/colorTextDark"/>
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:text="TextView"
+                            <ImageView
+                                android:id="@+id/timeImg"
+                                android:src="@drawable/ic_access_time"
+                                android:layout_height="20dp"
+                                android:layout_width="20dp" />
+
+                            <TextView
+                                android:text="19:00"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/timeTextView"
+                                android:textColor="@color/colorTextDark"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/attendeesTextView"
-                            android:layout_weight="1"
-                            android:textColor="@color/colorTextDark"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/attendingImg"
+                                android:src="@drawable/ic_supervisor_account"
+                                android:layout_height="20dp"
+                                android:layout_width="20dp" />
+
+                            <TextView
+                                android:text="10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/attendeesTextView"
+                                android:textColor="@color/colorTextDark"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent">
+                        android:orientation="horizontal"
+                        android:layout_height="20dp"
+                        android:layout_width="match_parent"
+                        android:minWidth="120dp">
 
                         <TextView
-                            android:text="TextView"
-                            android:layout_height="match_parent"
+                            android:text="10km"
+                            android:layout_height="wrap_content"
                             android:id="@+id/distanceTextView"
-                            android:layout_weight="1"
                             android:textAlignment="textEnd"
-                            android:layout_gravity="end"
                             android:layout_width="match_parent"
-                            android:textColor="@color/colorTextDark"/>
+                            android:textColor="@color/colorTextDark"
+                            android:layout_gravity="center_vertical|end" />
                     </LinearLayout>
                 </LinearLayout>
 

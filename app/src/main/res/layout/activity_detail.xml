@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="dat255.eventify.activity.DetailActivity">
+    tools:context="dat255.eventify.activity.DetailActivity"
+    android:background="#FAFAFA">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main.appbar"
@@ -52,7 +53,7 @@
                 android:paddingStart="20dp">
 
                 <TextView
-                    android:layout_width="320dp"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/titleText"
                 android:maxLength="100"
@@ -62,7 +63,8 @@
                 android:textColor="@color/colorTextLight"
                     android:maxLines="4"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp"
+                    android:layout_marginEnd="40dp" />
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
@@ -325,7 +327,7 @@
                 android:paddingEnd="20dp"
                 android:paddingRight="20dp"
                 android:paddingStart="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="30dp"
                 android:paddingTop="10dp"
                 android:weightSum="1">
 
@@ -336,16 +338,22 @@
                 android:id="@+id/descText"
                 android:textColor="@color/colorTextDark"
                 android:textSize="16sp"
-                android:paddingBottom="50dp" />
+                    android:paddingBottom="10dp" />
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/info_layout"
+                    android:background="@color/colorSeparator"/>
 
                 <ImageButton
                     android:src="@drawable/facebook"
                     android:cropToPadding="false"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
                     android:background="@android:color/transparent"
-                    android:id="@+id/facebookBtn" />
+                    android:id="@+id/facebookBtn"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
             </LinearLayout>
         </RelativeLayout>
 
