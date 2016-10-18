@@ -1,5 +1,10 @@
 package dat255.eventify.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Event {
 
     private String id, title, place, owner, date, time, desc, nbrAttending, cover, distance,
@@ -97,6 +102,17 @@ public class Event {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public long getEventTimeInMillis(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+        try {
+            Date mDate = sdf.parse(getDate()+" " + getTime());
+            return mDate.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public String getMonth() {
