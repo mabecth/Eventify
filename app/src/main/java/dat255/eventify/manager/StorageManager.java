@@ -181,13 +181,13 @@ public class StorageManager {
         int index = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
         String date = dateFormat.format(dateToCheck);
-        int year = Integer.valueOf(date.split("-")[0]);
-        int month = Integer.valueOf(date.split("-")[1]);
-        int day = Integer.valueOf(date.split("-")[2]);
+        int year = Integer.parseInt(date.split("-")[0]);
+        int month = Integer.parseInt(date.split("-")[1]);
+        int day = Integer.parseInt(date.split("-")[2]);
         for (Event e : getEvents()) {
-            if (Integer.valueOf(e.getDate().split("-")[0])>=year &&
-                    Integer.valueOf(e.getDate().split("-")[1])>=month &&
-                    Integer.valueOf(e.getDate().split("-")[2])>=day){
+            if (Integer.parseInt(e.getDate().split("-")[0])>=year &&
+                    Integer.parseInt(e.getDate().split("-")[1])>=month &&
+                    Integer.parseInt(e.getDate().split("-")[2])>=day){
                 break;
             }
             index++;
