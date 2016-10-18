@@ -65,13 +65,8 @@ public class GoogleApi implements
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
 
-
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public List<Event> getUpdatedList(){
-        return updatedList;
-    }
 
     public static GoogleApi getLocationManager(Context context)     {
         if (instance == null) {
@@ -89,7 +84,16 @@ public class GoogleApi implements
         listView = (ListView) mainActivity.findViewById(R.id.listView);
         adapter = new MainListAdapter();
         listView.setAdapter(adapter);
-
+        if (mLastLocation != null) {
+            if (ConnectionManager.getInstance().isConnected()) {
+                Log.d(TAG, "Service started");
+                startIntentService();
+                //calculateDistance();
+            } else {
+                mAddressOutput = "Recent: " + StorageManager.getInstance().getAdress();
+                displayAddressOutput();
+            }
+        }
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -111,6 +115,8 @@ public class GoogleApi implements
            /* Check for latest version of Play services */
 
     }
+
+
 
     public synchronized void build(){
         mGoogleApiClient = new GoogleApiClient.Builder(mainActivity)
@@ -162,7 +168,7 @@ public class GoogleApi implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        showToast("Could not connect to Play Services");
     }
 
     public void calculateDistance() {
@@ -171,28 +177,23 @@ public class GoogleApi implements
         System.out.println("Adapter count: " + adapter.getCount());
         System.out.println("Storage list: " + listOfEvents.size());
         System.out.println("Latlng: " + latLng);
-
+        String parsedLatLng = latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "");
         if (latLng != null && listOfEvents.size() > 0) {
             System.out.println("Adapter count if: " + adapter.getCount());
 
             for (int index = 0; index < listOfEvents.size(); index++) {
-
-                System.out.println("Adapter in loop: " + adapter.getCount());
+                String parsedEventPlace = listOfEvents.get(index).getPlace().replaceAll(" ", "");
+                System.out.println("Adapter in loop: " + listOfEvents.size());
                 System.out.println("int i:" + index);
-                new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + latLng.toString().replaceAll("[()]", "").replaceAll("lat/lng:", "").replaceAll(" ", "") + "&destinations=" + listOfEvents.get(index).getPlace().replaceAll(" ", "") + "&key=AIzaSyBaDd7HOHSt5IHeCAqWr_MDTXqsYpgZRhQ");
-
+                new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + parsedLatLng + "&destinations=" + parsedEventPlace + "&key=AIzaSyDamwNoDFOSALl3XY2nF7hMphOPQDKlZ-I");
             }
-            adapter.updateEventList();
-            listView.invalidateViews();
         }
     }
 
     public void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
         StorageManager.getInstance().storeEvents(updatedList);
-        adapter.updateEventList();
         listView.invalidateViews();
-
     }
 
     public void displayAddressOutput() {
@@ -205,8 +206,7 @@ public class GoogleApi implements
     }
 
     protected void startIntentService() {
-        // Create an intent for passing to the intent service responsible for fetching the address.
-
+          // Create an intent for passing to the intent service responsible for fetching the address.
            Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
            // Pass the result receiver as an extra to the service.
            intent.putExtra(Constants.RECEIVER, mResultReceiver);
