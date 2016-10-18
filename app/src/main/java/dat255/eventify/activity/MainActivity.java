@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         initCalendarDropDown();
 
         //Only display logout button when using app with Facebook
-        navigationView.getMenu().findItem(R.id.nav_my_events).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
