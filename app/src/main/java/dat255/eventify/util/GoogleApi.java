@@ -183,7 +183,7 @@ public class GoogleApi implements
 
             for (int index = 0; index < listOfEvents.size(); index++) {
                 String parsedEventPlace = listOfEvents.get(index).getPlace().replaceAll(" ", "");
-                System.out.println("Adapter in loop: " + adapter.getCount());
+                System.out.println("Adapter in loop: " + listOfEvents.size());
                 System.out.println("int i:" + index);
                 new ParseDistanceAsyncTask(this, index).execute("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + parsedLatLng + "&destinations=" + parsedEventPlace + "&key=AIzaSyDamwNoDFOSALl3XY2nF7hMphOPQDKlZ-I");
             }
