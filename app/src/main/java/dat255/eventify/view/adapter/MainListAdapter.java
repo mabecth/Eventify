@@ -28,7 +28,7 @@ public class MainListAdapter extends BaseAdapter{
     private ImageView eventProfilePictureView;
     private TextView nameTextView, dateTextView, timeTextView,
             locationTextView, attendeesTextView, distanceTextView,
-            monthTextView;
+            monthTextView, orgTextView;
     private View result;
     private static boolean onlyFavorite = false;
 
@@ -127,6 +127,7 @@ public class MainListAdapter extends BaseAdapter{
         attendeesTextView = (TextView) result.findViewById(R.id.attendeesTextView);
         distanceTextView = (TextView) result.findViewById(R.id.distanceTextView);
         monthTextView = (TextView) result.findViewById(R.id.monthTextView);
+        orgTextView = (TextView) result.findViewById(R.id.orgTextView);
         dateTextView.setVisibility(View.VISIBLE);
         monthTextView.setVisibility(View.VISIBLE);
     }
@@ -139,6 +140,7 @@ public class MainListAdapter extends BaseAdapter{
         locationTextView.setText(currEvent.getPlace());
         attendeesTextView.setText(currEvent.getNbrAttending());
         distanceTextView.setText(currEvent.getDistance());
+        orgTextView.setText(currEvent.getOwner());
 
         //Display image
         Glide.with(viewGroup.getContext())

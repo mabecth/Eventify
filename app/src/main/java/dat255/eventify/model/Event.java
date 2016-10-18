@@ -6,7 +6,10 @@ public class Event {
             latitude, longitude;
 
     public double getLatitude() {
-        return Double.parseDouble(latitude);
+        if (latitude!=null){
+            return Double.parseDouble(latitude);
+        }
+        return 0.0;
     }
 
     public void setLatitude(String latitude) {
@@ -14,7 +17,10 @@ public class Event {
     }
 
     public double getLongitude() {
-        return Double.parseDouble(longitude);
+        if (longitude!=null){
+            return Double.parseDouble(longitude);
+        }
+        return 0.0;
     }
 
     public void setLongitude(String longitude) {
