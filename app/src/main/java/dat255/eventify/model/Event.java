@@ -2,7 +2,25 @@ package dat255.eventify.model;
 
 public class Event {
 
-    private String id, title, place, owner, date, time, desc, nbrAttending, cover, distance;
+    private String id, title, place, owner, date, time, desc, nbrAttending, cover, distance,
+            latitude, longitude;
+
+    public double getLatitude() {
+        return Double.parseDouble(latitude);
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return Double.parseDouble(longitude);
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
 
     public String getId() {
         return id;
