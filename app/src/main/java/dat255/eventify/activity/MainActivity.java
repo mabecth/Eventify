@@ -3,6 +3,7 @@ package dat255.eventify.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -32,9 +33,12 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -242,6 +246,12 @@ public class MainActivity extends AppCompatActivity
         mCompactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         mCompactCalendarView.setLocale(TimeZone.getDefault(), Locale.ENGLISH);
         mCompactCalendarView.setShouldDrawDaysHeader(true);
+        List<Event> eventToShowInCal = new ArrayList<>();
+        for (dat255.eventify.model.Event e : StorageManager.getInstance().getEvents()) {
+            System.out.println(e.getEventTimeInMillis());
+            eventToShowInCal.add(new Event(Color.parseColor("#039BE5"), e.getEventTimeInMillis()));
+        }
+        mCompactCalendarView.addEvents(eventToShowInCal);
         mCompactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
