@@ -104,7 +104,9 @@ public class MainActivity extends AppCompatActivity
         initCalendarDropDown();
 
         //Only display logout button when using app with Facebook
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(StorageManager.getInstance().getLoginType().equals("facebook"));
+        if (StorageManager.getInstance().getLoginType().equals("facebook")) {
+            navigationView.getMenu().findItem(R.id.nav_logout).setTitle(R.string.login);
+        }
 
         //Reach views from nav_header_main.xml
         View view = navigationView.getHeaderView(0);
@@ -357,9 +359,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this,SettingsActivity.class));
         } else if (id == R.id.nav_logout) {
-            LoginManager.getInstance().logOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            if (StorageManager.getInstance().getLoginType().equals("facebook")) {
+                LoginManager.getInstance().logOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
