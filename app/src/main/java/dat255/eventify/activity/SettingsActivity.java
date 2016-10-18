@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -47,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         notifyDay = (Spinner) findViewById(R.id.spinnerDays);
         notifyHours = (Spinner) findViewById(R.id.spinnerHours);
         firstDayCalendar = (Spinner) findViewById(R.id.spinnerFirstDay);
+        ImageButton backBtn = (ImageButton) findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new BackOnClickListener());
 
         //Connect and init switches
         notifications.setChecked(settingsMap.get("notification") == 1);
@@ -81,7 +84,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     class NotifyOnClickListener implements View.OnClickListener{
-
         @Override
         public void onClick(View view) {
             settingsMap.put("notification", notifications.isChecked()?1:0);
@@ -89,15 +91,20 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     class DistanceOnClickListener implements View.OnClickListener{
-
         @Override
         public void onClick(View view) {
             settingsMap.put("distance", distance.isChecked()?1:0);
         }
     }
 
-    class DropdownOnItemSelectedListener implements AdapterView.OnItemSelectedListener{
+    class BackOnClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            finish();
+        }
+    }
 
+    class DropdownOnItemSelectedListener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             switch (adapterView.getId()){
