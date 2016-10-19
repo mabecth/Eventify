@@ -75,40 +75,41 @@ public class GoogleApi implements
     }
 
     private GoogleApi(MainActivity activity) {
-        mResultReceiver = new AddressResultReceiver(new Handler());
+
         mainActivity = activity;
         mAddressRequested = false;
         mAddressOutput = "";
-        listOfEvents = StorageManager.getInstance().getEvents();
-
-        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        if(listOfEvents == null) {
+            listOfEvents = StorageManager.getInstance().getEvents();
+        }
+        //mainActivity.updateAdapter();
+        /*SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
-                    mainActivity.updateAdapter();
+
                     System.out.println("Google api");
                     Log.d(TAG, "Events in storage changed!");
                     listOfEvents = StorageManager.getInstance().getEvents();
-                    updatedList = StorageManager.getInstance().getEvents();
+                    //updatedList = StorageManager.getInstance().getEvents();
                     if (mLastLocation != null) {
                         if(ConnectionManager.getInstance().isConnected()) {
                             Log.d(TAG, "Service started");
-                            startIntentService();
-                            loopCoordinates();
+                           //startIntentService();
+                            //loopCoordinates();
                             //calculateDistance();
                         }
                         else{
-                            mAddressOutput = "Recent: " + StorageManager.getInstance().getAdress();
-                            displayAddressOutput();
+                          //  mAddressOutput = "Recent: " + StorageManager.getInstance().getAdress();
+                            //displayAddressOutput();
                         }
                     }
-
                 }
             }
         };
 
-        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
+        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);*/
         // Set defaults, then update using values stored in the Bundle.
     }
 
@@ -120,22 +121,23 @@ public class GoogleApi implements
         return (double) tmp / factor;
     }
 
-    public void loopCoordinates(){
+    public synchronized void loopCoordinates(){
+        listOfEvents = StorageManager.getInstance().getEvents();
+        updatedList = StorageManager.getInstance().getEvents();
         System.out.println("listofevents size "+ listOfEvents.size());
         if(latLng ==null){
         }else{
             if (listOfEvents.size() > 0) {
                 for (int index = 0; index < listOfEvents.size(); index++) {
                     LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(),StorageManager.getInstance().getEvents().get(index).getLongitude());
-                    Double dbl = CalculationByDistance(latLng, endLatLng);
-                    System.out.println("Distance: "+ dbl);
-                    updateDistance(index, round(dbl,1) + " km");
+                    CalculationByDistance(latLng, endLatLng, index);
                 }
+
             }
         }
     }
 
-    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+    public synchronized void CalculationByDistance(LatLng StartP, LatLng EndP, int index) {
         int Radius = 6371;// radius of earth in Km
         double lat1 = StartP.latitude;
         double lat2 = EndP.latitude;
@@ -156,7 +158,14 @@ public class GoogleApi implements
         int meterInDec = Integer.valueOf(newFormat.format(meter));
         Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
                 + " Meter   " + meterInDec);
-        return Radius * c;
+        System.out.println("Distance: "+ Radius * c);
+        updateDistance(index, round(Radius * c,1) + " km");
+    }
+
+    public synchronized void updateDistance(int id, String result) {
+        updatedList.get(id).setDistance(result);
+        StorageManager.getInstance().storeEvents(updatedList);
+        //mainActivity.updateAdapter();
     }
 
     public synchronized void build(){
@@ -165,7 +174,7 @@ public class GoogleApi implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        mGoogleApiClient.connect();
+
     }
 
     protected void showToast(String text) {
@@ -176,15 +185,20 @@ public class GoogleApi implements
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1);
-        mLocationRequest.setFastestInterval(1);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        if (ContextCompat.checkSelfPermission(mainActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        try{
+            if (ContextCompat.checkSelfPermission(mainActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }catch (java.lang.IllegalStateException e){
+            Log.e(TAG,"GoogleApiClient is not connected");
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
 
 
     }
@@ -203,19 +217,20 @@ public class GoogleApi implements
     }
 
 
-    public void updateDistance(int id, String result) {
-        updatedList.get(id).setDistance(result);
-        StorageManager.getInstance().storeEvents(updatedList);
-        mainActivity.updateAdapter();
-    }
+
     public void displayAddressOutput() {
+
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(mainActivity);
         View view = navigationView.getHeaderView(0);
         locationTextView = (TextView) view.findViewById(R.id.locationTV);
-        locationTextView.setText(mAddressOutput);
-        Log.d(TAG, mAddressOutput);
+        if(mAddressOutput == locationTextView.getText()){
 
+        }else{
+            locationTextView.setText(mAddressOutput);
+        }
+
+        Log.d(TAG, mAddressOutput);
     }
 
     protected void startIntentService() {
@@ -241,8 +256,11 @@ public class GoogleApi implements
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        updatedList = StorageManager.getInstance().getEvents();
-
+        //updatedList = StorageManager.getInstance().getEvents();
+        mResultReceiver = new AddressResultReceiver(new Handler());
+        loopCoordinates();
+        startIntentService();
+        mainActivity.updateAdapter();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

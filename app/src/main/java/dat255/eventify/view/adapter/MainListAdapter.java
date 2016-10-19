@@ -41,7 +41,8 @@ public class MainListAdapter extends BaseAdapter{
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
                     //Events changed
                     Log.d(TAG, "Events in storage changed!");
-                    updateEventList();
+                    //Kommentera bort detta så funkar ej distance då den skrivs över
+                    //updateEventList();
                 }
             }
         };

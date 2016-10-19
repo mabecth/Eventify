@@ -73,13 +73,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            GoogleApi.getLocationManager(this).build();
-        }else {
-            checkLocationPermission();
-        }
+
+        checkLocationPermission();
+
         adapter = new MainListAdapter();
 
         //Start collecting events if we have access to the internet
@@ -128,6 +124,7 @@ public class MainActivity extends AppCompatActivity
             };
 
         } else {
+
             //Use available info to update views
             if (Profile.getCurrentProfile().getName() != null) {
                 fbName.setText(Profile.getCurrentProfile().getName());
@@ -139,7 +136,15 @@ public class MainActivity extends AppCompatActivity
 
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            System.out.println("permission granted");
+            GoogleApi.getLocationManager(this).build();
+            GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
+            GoogleApi.getLocationManager(this).loopCoordinates();
+        }
+        adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -220,6 +225,7 @@ public class MainActivity extends AppCompatActivity
                             == PackageManager.PERMISSION_GRANTED) {
                         System.out.println("permission granted");
                         GoogleApi.getLocationManager(this).build();
+                        GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
                     }
 
                 } else {
@@ -447,12 +453,12 @@ public class MainActivity extends AppCompatActivity
     public void onStart(){
         System.out.println("OnStart");
         super.onStart();
-        adapter.updateEventList();
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+        //adapter.updateEventList();
+        /*if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
-        }
+        }*/
 
         if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
