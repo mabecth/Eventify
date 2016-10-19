@@ -1,6 +1,7 @@
 package dat255.eventify.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -152,13 +153,17 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
+                    //calculates distance when refreshed (Does get bug when refreshing, change to myevents and back)
+                    GoogleApi.getLocationManager(getMain()).loopCoordinates();
                     adapter.updateEventList();
                 } else {
                     adapter.updateEventList();
                 }
                 swipeRefresh.setRefreshing(false);
             }
+
         });
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -171,6 +176,10 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+    }
+
+    public MainActivity getMain(){
+        return this;
     }
 
 
