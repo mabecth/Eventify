@@ -35,6 +35,7 @@ public class DetailActivity extends AppCompatActivity {
     private Event event;
     private TextView desc;
 
+    FloatingActionButton fab;
     FloatingActionButton fab1;
     FloatingActionButton fab2;
     FloatingActionButton fab3;
@@ -109,12 +110,14 @@ public class DetailActivity extends AppCompatActivity {
         transMenu = (FloatingActionMenu) findViewById(R.id.menu_translate);
 
         TranslateBtnOnClick transOnClick = new TranslateBtnOnClick();
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab3 = (FloatingActionButton) findViewById(R.id.fab3);
         fab4 = (FloatingActionButton) findViewById(R.id.fab4);
         fab5 = (FloatingActionButton) findViewById(R.id.fab5);
         fab6 = (FloatingActionButton) findViewById(R.id.fab6);
+        fab.setOnClickListener(transOnClick);
         fab1.setOnClickListener(transOnClick);
         fab2.setOnClickListener(transOnClick);
         fab3.setOnClickListener(transOnClick);
@@ -222,6 +225,9 @@ public class DetailActivity extends AppCompatActivity {
         public void onClick(View view) {
             desc.setGravity(Gravity.LEFT);
             switch (view.getId()){
+                case R.id.fab: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SWEDISH, event.getDesc()));
+                    transMenu.close(true);
+                    break;
                 case R.id.fab1: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
                     transMenu.close(true);
                     break;

@@ -350,6 +350,15 @@
         android:layout_alignParentStart="true">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_collapse_00015"
+            app:fab_size="mini"
+            app:fab_label="@string/swedish"
+            app:fab_colorNormal="@color/colorPrimary" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -41,6 +42,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.6.1'
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.github.sundeepk:compact-calendar-view:1.9.1'
+    compile 'com.android.support:multidex:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

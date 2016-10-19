@@ -16,6 +16,7 @@
     <string name="settings">Settings</string>
 
     <!-- Languages -->
+    <string name="swedish">Swedish</string>
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
     <string name="slovak">Slovak</string>
