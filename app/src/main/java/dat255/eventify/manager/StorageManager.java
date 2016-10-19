@@ -29,14 +29,35 @@ public class StorageManager {
     private static String settingsKey = "1";
     private static String eventsKey = "2";
     private static String loginTypeKey = "3";
+    private static String favoritesKey = "4";
 
     //Empty objects
     private static HashMap<String, Integer> settings = new HashMap<>();
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
     //Favorite stuff
-    private static List<Event> favorites = new ArrayList<>();
+    private static List<Event> favorites;
     private static Event chosenEvent = new Event();
+
+    public List<String> getOrgnzList(){
+        List<Event> allEvents = new CopyOnWriteArrayList<>();
+        List<String> allOrgnz = new ArrayList<>();
+        allEvents = getEvents();
+        for (int i = 0; i < allEvents.size();i++){
+            if (allOrgnz.contains(allEvents.get(i).getOwner()))
+            {
+                System.out.println(allEvents.get(i).getOwner());
+            }
+            else
+            {
+                allOrgnz.add(allEvents.get(i).getOwner());
+                System.out.println("ADDED " + allEvents.get(i).getOwner());
+
+            }
+        }
+
+        return allOrgnz;
+    }
 
     public void setChosenEvent(Event e){
         chosenEvent = e;
@@ -55,11 +76,13 @@ public class StorageManager {
         {
             for (int i = 0; i < favorites.size() ; i++)
             {
-                if (favorites.get(i).getId() == chosenEvent.getId())
+                if (favorites.get(i).getId().equals(chosenEvent.getId()))
                     favorites.remove(i);
             }
         }
         else favorites.add(chosenEvent);
+
+        storeFavorites();
     }
 
     public boolean isFavorite()
@@ -68,15 +91,10 @@ public class StorageManager {
 
         for (int i = 0; i < favorites.size() ; i++)
         {
-            if (favorites.get(i).getId() == chosenEvent.getId())
+            if (favorites.get(i).getId().equals(chosenEvent.getId()))
                 isFavorite = true;
         }
         return isFavorite;
-    }
-
-    public List<Event> getFavorites()
-    {
-        return favorites;
     }
 
     private StorageManager() {
@@ -150,6 +168,26 @@ public class StorageManager {
         } else {
             return gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType());
         }
+    }
+
+    public void storeFavorites()
+    {
+        String events_json = gson.toJson(favorites);
+        editor.putString(favoritesKey,events_json);
+        editor.commit();
+    }
+
+    public List<Event> getFavorites()
+    {
+        String events_json = preferences.getString(favoritesKey,"");
+        if (gson.fromJson(events_json,new TypeToken<List<Event>>(){}.getType()) == null)
+        {
+            favorites = new ArrayList<>();
+        }
+        else {
+            favorites = gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
+        }
+        return favorites;
     }
 
     public void storeEvents(List<Event> events) {

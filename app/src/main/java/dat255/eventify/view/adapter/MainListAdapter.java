@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +32,11 @@ public class MainListAdapter extends BaseAdapter{
             locationTextView, attendeesTextView, distanceTextView,
             monthTextView, orgTextView;
     private View result;
-    private static boolean onlyFavorite = false;
+    private String allEvents = "1";
+    private String onlyFavorites = "2";
+    private String filtered = "3";
+    private static String typeOfList = "1";
+    private static List<String> chosenOrgnz;
 
     public MainListAdapter(){
         listOfEvents = StorageManager.getInstance().getEvents();
@@ -102,22 +108,41 @@ public class MainListAdapter extends BaseAdapter{
         StorageManager.getInstance().setChosenEvent(listOfEvents.get(position));
     }
 
+    public void setChosenOrgnz(List<String> orgnz)
+    {
+        chosenOrgnz = orgnz;
+    }
+
     public void updateEventList() {
 
-        if (onlyFavorite == true)
+        if (typeOfList.equals(onlyFavorites))
         {
             listOfEvents = StorageManager.getInstance().getFavorites();
         }
-        else listOfEvents = StorageManager.getInstance().getEvents();
+        else if (typeOfList.equals(allEvents)){
+            listOfEvents = StorageManager.getInstance().getEvents();
+        }
+        else {
+            List<Event> temp = StorageManager.getInstance().getEvents();
+            listOfEvents.clear();
+            for (int i = 0; i<temp.size();i++)
+            {
+                if (chosenOrgnz.contains(temp.get(i).getOwner())){
+                    listOfEvents.add(temp.get(i));
+                }
+            }
+        }
+
 
         SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();
+        System.out.println(typeOfList + "");
         Log.d(TAG,"Event List Updated");
     }
 
-    public void setOnlyFavorite(boolean onlyFavorite)
+    public void setOnlyFavorite(String typeOfList)
     {
-        MainListAdapter.onlyFavorite = onlyFavorite;
+        MainListAdapter.typeOfList = typeOfList;
     }
     private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);

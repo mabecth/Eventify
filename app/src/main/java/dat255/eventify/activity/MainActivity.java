@@ -2,6 +2,7 @@ package dat255.eventify.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import dat255.eventify.R;
 import dat255.eventify.util.FetchEventService;
@@ -62,8 +65,10 @@ public class MainActivity extends AppCompatActivity
     private CompactCalendarView mCompactCalendarView;
     private AppBarLayout mAppBarLayout;
     private boolean isCalendarExpanded = false;
-    private boolean onlyFavorites = false;
-
+    private String allEvents = "1";
+    private String onlyFavorites = "2";
+    private String filtered = "3";
+    private String typeOfList = allEvents;
     private TextView toolbarTitle;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -369,6 +374,55 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            CharSequence[] items = StorageManager.getInstance().getOrgnzList().toArray(new CharSequence[
+                    StorageManager.getInstance().getOrgnzList().size()]);
+
+            final ArrayList seletedItems=new ArrayList();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select The Organization");
+            builder.setMultiChoiceItems(items, null,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        // indexSelected contains the index of item (of which checkbox checked)
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected,
+                                            boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                // write your code when user checked the checkbox
+                                seletedItems.add(StorageManager.getInstance().getOrgnzList().get(indexSelected));
+                            } else if (seletedItems.contains(StorageManager.getInstance().getOrgnzList().get(indexSelected))) {
+                                // Else, if the item is already in the array, remove it
+                                // write your code when user Uchecked the checkbox
+                                seletedItems.remove(StorageManager.getInstance().getOrgnzList().get(indexSelected));
+                            }
+                        }
+                    })
+                    // Set the action buttons
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on OK
+                            //  You can write the code  to save the selected item here
+                            for (int i = 0; i< seletedItems.size();i++){
+                                System.out.println(seletedItems.get(i) + "");
+                            }
+                            adapter.setChosenOrgnz(seletedItems);
+                            typeOfList = filtered;
+                            adapter.setOnlyFavorite(typeOfList);
+                            adapter.updateEventList();
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                            seletedItems.clear();
+                        }
+                    }).show();
+
+
             return true;
         }
 
@@ -383,14 +437,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             toolbarTitle.setText(R.string.app_name);
-            onlyFavorites = false;
-            adapter.setOnlyFavorite(onlyFavorites);
+            typeOfList = allEvents;
+            adapter.setOnlyFavorite(typeOfList);
             adapter.updateEventList();
 
         } else if (id == R.id.nav_my_events) {
             toolbarTitle.setText(R.string.my_events);
-            onlyFavorites = true;
-            adapter.setOnlyFavorite(onlyFavorites);
+            typeOfList = onlyFavorites;
+            adapter.setOnlyFavorite(typeOfList);
             adapter.updateEventList();
             Log.e("shiet","Button pressed");
 
@@ -444,10 +498,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        if (!onlyFavorites) {
-            toolbarTitle.setText(R.string.app_name);
-        } else {
+        if (typeOfList.equals(onlyFavorites)) {
             toolbarTitle.setText(R.string.my_events);
+        } else {
+            toolbarTitle.setText(R.string.app_name);
         }
     }
 
