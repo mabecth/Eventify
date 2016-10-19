@@ -154,7 +154,11 @@ public class MainActivity extends AppCompatActivity
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
                     //calculates distance when refreshed (Does get bug when refreshing, change to myevents and back)
-                    GoogleApi.getLocationManager(getMain()).loopCoordinates();
+                    if (ContextCompat.checkSelfPermission(getMain(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        GoogleApi.getLocationManager(getMain()).loopCoordinates();
+                    }
                     adapter.updateEventList();
                 } else {
                     adapter.updateEventList();
