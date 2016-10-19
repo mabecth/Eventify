@@ -409,6 +409,7 @@ public class MainActivity extends AppCompatActivity
                             }
                             adapter.setChosenOrgnz(seletedItems);
                             typeOfList = filtered;
+                            adapter.setChosenOrgnz(seletedItems);
                             adapter.setOnlyFavorite(typeOfList);
                             adapter.updateEventList();
 

@@ -36,7 +36,7 @@ public class StorageManager {
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
     //Favorite stuff
-    private static List<Event> favorites;
+    private static List<Event> favorites = new ArrayList<>();
     private static Event chosenEvent = new Event();
 
     public List<String> getOrgnzList(){
