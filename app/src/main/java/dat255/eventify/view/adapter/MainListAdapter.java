@@ -1,6 +1,5 @@
 package dat255.eventify.view.adapter;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import dat255.eventify.activity.DetailActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.manager.StorageManager;
@@ -24,6 +18,7 @@ import dat255.eventify.util.SortByDate;
 public class MainListAdapter extends BaseAdapter{
 
     private static final String TAG = "MainListAdapter";
+
     private static List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
@@ -41,7 +36,8 @@ public class MainListAdapter extends BaseAdapter{
     public MainListAdapter(){
         listOfEvents = StorageManager.getInstance().getEvents();
 
-        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        SharedPreferences.OnSharedPreferenceChangeListener listener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(StorageManager.getInstance().getEventsKey())) {
@@ -77,7 +73,8 @@ public class MainListAdapter extends BaseAdapter{
         currEvent = listOfEvents.get(position);
 
         if (view == null) {
-            result = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.small_event, viewGroup, false);
+            result = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.small_event,
+                    viewGroup, false);
         } else {
             result = view;
         }
@@ -160,7 +157,8 @@ public class MainListAdapter extends BaseAdapter{
 
     private void setViewData(final ViewGroup viewGroup) {
         nameTextView.setText(currEvent.getTitle());
-        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2, currEvent.getDate().length()));
+        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,
+                currEvent.getDate().length()));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         locationTextView.setText(currEvent.getPlace());

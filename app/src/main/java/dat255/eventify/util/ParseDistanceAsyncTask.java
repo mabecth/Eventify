@@ -10,8 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import dat255.eventify.manager.StorageManager;
-
 public class ParseDistanceAsyncTask extends AsyncTask<String, String, String> {
 
     private static final String TAG = "ParseDistanceAsyncTask";

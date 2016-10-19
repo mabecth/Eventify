@@ -1,9 +1,5 @@
 package dat255.eventify.util;
 
-/**
- * Created by Kristoffer on 2016-10-16.
- */
-
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,7 +13,8 @@ public class ScrollingCalendarBehavior extends AppBarLayout.Behavior {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(CoordinatorLayout parent, AppBarLayout child, MotionEvent ev) {
+    public boolean onInterceptTouchEvent(CoordinatorLayout parent, AppBarLayout child,
+                                         MotionEvent ev) {
         return false;/*super.onInterceptTouchEvent(parent, child, ev);*/
     }
 }

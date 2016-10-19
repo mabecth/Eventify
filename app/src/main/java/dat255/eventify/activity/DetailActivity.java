@@ -10,16 +10,13 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -67,17 +64,19 @@ public class DetailActivity extends AppCompatActivity {
 
     public void initButtons() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_appbar);
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+        final CollapsingToolbarLayout collapsingToolbarLayout =
+                (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(event.getTitle());
 
         //Set font and size
-        //collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
-        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.create("sans-serif",
+                Typeface.NORMAL));
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        final FloatingActionButton showMapsBtn = (FloatingActionButton) findViewById(R.id.showMapsBtn);
+        final FloatingActionButton showMapsBtn =
+                (FloatingActionButton) findViewById(R.id.showMapsBtn);
         showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
         appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
@@ -85,7 +84,8 @@ public class DetailActivity extends AppCompatActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (Math.abs(verticalOffset) > Math.round(appBarLayout.getTotalScrollRange() / 3)) {
                     showMapsBtn.hide(true);
-                } else if (Math.abs(verticalOffset) > appBarLayout.getTotalScrollRange() - toolbar.getHeight()) {
+                } else if (Math.abs(verticalOffset) > appBarLayout.getTotalScrollRange() -
+                        toolbar.getHeight()) {
                     hideTitle();
                 } else {
                     showMapsBtn.show(true);
@@ -208,10 +208,12 @@ public class DetailActivity extends AppCompatActivity {
         public void onClick(View view) {
             //Facebook intent
             try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://event/"+event.getId()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://event/" +
+                        event.getId()));
                 startActivity(intent);
             } catch(Exception e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/events/"+event.getId())));
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.facebook.com/events/"+event.getId())));
             }
         }
     }
@@ -225,26 +227,33 @@ public class DetailActivity extends AppCompatActivity {
         public void onClick(View view) {
             desc.setGravity(Gravity.LEFT);
             switch (view.getId()){
-                case R.id.fab: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SWEDISH, event.getDesc()));
+                case R.id.fab: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.SWEDISH, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab1: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
+                case R.id.fab1: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab2: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
+                case R.id.fab2: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
                     desc.setGravity(Gravity.RIGHT);
                     transMenu.close(true);
                     break;
-                case R.id.fab3: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
+                case R.id.fab3: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab4: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
+                case R.id.fab4: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab5: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
+                case R.id.fab5: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab6: new TranslateAsyncTask(desc).execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
+                case R.id.fab6: new TranslateAsyncTask(desc).
+                        execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
                     transMenu.close(true);
                     break;
                 default: break;

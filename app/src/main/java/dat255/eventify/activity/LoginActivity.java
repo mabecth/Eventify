@@ -24,15 +24,16 @@ import dat255.eventify.R;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
 
+/** Class used for handling the login system through Facebook and Firebase **/
 public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
 
-    //Firebase
+    //Firebase API
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    //Facebook
+    //Facebook API
     private CallbackManager callbackManager;
     private LoginButton loginButton;
 
@@ -62,9 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                     StorageManager.getInstance().setLoginTypeGuest();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
-                } else {
-                    // User is signed out
-
                 }
             }
         };
@@ -93,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:");
                     Toast.makeText(LoginActivity.this, "Authentication successful",
                             Toast.LENGTH_SHORT).show();
 
@@ -104,15 +101,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
                 Toast.makeText(LoginActivity.this, "Authentication canceled",
                         Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
                 Toast.makeText(LoginActivity.this, "Authentication failed",
                         Toast.LENGTH_SHORT).show();
             }
@@ -149,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInAnonymously", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

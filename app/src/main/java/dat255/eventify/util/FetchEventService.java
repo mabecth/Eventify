@@ -28,6 +28,7 @@ import dat255.eventify.model.Event;
 public class FetchEventService extends Service {
 
     private static final String TAG = "FetchEventService";
+
     private List<Event> events;
     private Event event;
     private int nbrOfOrganisations;
@@ -41,12 +42,11 @@ public class FetchEventService extends Service {
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        //events = StorageManager.getInstance().getEvents();
         events = new CopyOnWriteArrayList<>();
-        final String[] organisations = FetchEventService.this.getResources().getStringArray(R.array.organisations);
+        final String[] organisations = FetchEventService.this.getResources().
+                getStringArray(R.array.organisations);
         nbrOfOrganisations = organisations.length;
         dataCollectCycles = 0;
-        Log.d(TAG, "Service started");
 
         if (StorageManager.getInstance().getLoginType().equals("facebook")) {
             for(String s : organisations) {
@@ -87,7 +87,6 @@ public class FetchEventService extends Service {
         if (dataCollectCycles == nbrOfOrganisations) {
             SortByDate.sortDates(events);
             StorageManager.getInstance().storeEvents(events);
-            Log.d(TAG, "Service done");
             stopSelf();
         }
     }
@@ -103,11 +102,15 @@ public class FetchEventService extends Service {
 
         if (loginType.equals("facebook")) {
             accessToken = AccessToken.getCurrentAccessToken();
-            graphPath = "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"";
+            graphPath = "/" + id + "/events?fields=id,name,description,attending_count," +
+                    "cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="
+                    +monthForward+"";
 
         } else {
             accessToken = null;
-            graphPath = "/" + id + "/events?fields=id,name,description,attending_count,cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="+monthForward+"&access_token="+userToken+"";
+            graphPath = "/" + id + "/events?fields=id,name,description,attending_count," +
+                    "cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="
+                    +monthForward+"&access_token="+userToken+"";
         }
 
         new GraphRequest(
@@ -121,7 +124,7 @@ public class FetchEventService extends Service {
                         if (response.getJSONObject() != null) {
                             try {
                                 JSONArray jsonArray = response.getJSONObject().getJSONArray("data");
-                                //Loop through events
+                                //Loop through events pulled for Facebook
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     event = new Event();
                                     try {
@@ -160,13 +163,6 @@ public class FetchEventService extends Service {
                                             event.setDate(obj.getString("start_time").substring(0, 10));
                                             event.setTime(obj.getString("start_time").substring(11, 16));
                                         }
-                                           /* if(StorageManager.getInstance().getEvents() != null || StorageManager.getInstance().getEvents().size() != 0) {
-                                                if(StorageManager.getInstance().getEvent(i) != null) {
-                                                    if (StorageManager.getInstance().getEvent(i).getDistance() != null) {
-                                                        event.setDistance(StorageManager.getInstance().getEvent(i).getDistance());
-                                                    }
-                                                }
-*/
 
                                         events.add(event);
                                     } catch (JSONException e) {

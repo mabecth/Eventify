@@ -13,7 +13,7 @@ public class TranslateAsyncTask extends AsyncTask<TranslateRequest, Void, String
     private WeakReference<TextView> translatedView;
 
     public TranslateAsyncTask(TextView translatedView) {
-        this.translatedView = new WeakReference<TextView>(translatedView);
+        this.translatedView = new WeakReference<>(translatedView);
 
         Translate.setClientId("dat255_rolf");
         Translate.setClientSecret("nSg9iOcBBD1odZXyy1b/y/xDYDmDC62KnpJU5YJ8CP4=");

@@ -16,7 +16,8 @@ public class ConnectionManager {
 
     private void setConnectivityManager(Context context) {
         if (connectivityManager == null) {
-            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
             activeNetwork = connectivityManager.getActiveNetworkInfo();
         }
     }

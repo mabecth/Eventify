@@ -167,6 +167,7 @@
                             android:textColor="@color/colorTextDark"
                             android:textSize="16sp"
                             android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                             android:layout_toRightOf="@id/placeImg"
                             android:layout_toEndOf="@id/placeImg"
                             android:layout_centerInParent="true"  />
@@ -195,6 +196,7 @@
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                         android:layout_toRightOf="@+id/attendingImg"
                         android:layout_toEndOf="@+id/attendingImg"/>
                     </RelativeLayout>
@@ -221,6 +223,7 @@
                             android:textColor="@color/colorTextDark"
                             android:textSize="16sp"
                             android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                             android:layout_toRightOf="@id/dateImg"
                             android:layout_toEndOf="@id/dateImg"
                             android:layout_centerInParent="true"  />
@@ -247,6 +250,7 @@
                             android:textColor="@color/colorTextDark"
                             android:textSize="16sp"
                             android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                             android:layout_centerInParent="true"
                             android:layout_toRightOf="@+id/timeImg"
                             android:layout_toEndOf="@+id/timeImg"
@@ -274,6 +278,7 @@
                         android:textColor="@color/colorTextDark"
                         android:textSize="16sp"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:layout_centerInParent="true"
                         android:layout_toRightOf="@+id/orgImg"
                         android:layout_toEndOf="@+id/orgImg"
@@ -315,7 +320,6 @@
                     android:id="@+id/separator2"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@+id/info_layout"
                     android:background="@color/colorSeparator"/>
 
                 <ImageButton

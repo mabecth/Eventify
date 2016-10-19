@@ -1,13 +1,9 @@
 package dat255.eventify.manager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,67 +27,55 @@ public class StorageManager {
     private static String loginTypeKey = "3";
     private static String favoritesKey = "4";
 
-    //Empty objects
+    //Empty objects to avoid null
     private static HashMap<String, Integer> settings = new HashMap<>();
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
-    //Favorite stuff
-    private static List<Event> favorites = new ArrayList<>();
+    //My events
+    private static List<Event> myEvents = new ArrayList<>();
     private static Event chosenEvent = new Event();
 
-    public List<String> getOrgnzList(){
-        List<Event> allEvents = new CopyOnWriteArrayList<>();
-        List<String> allOrgnz = new ArrayList<>();
-        allEvents = getEvents();
-        for (int i = 0; i < allEvents.size();i++){
-            if (allOrgnz.contains(allEvents.get(i).getOwner()))
-            {
-                System.out.println(allEvents.get(i).getOwner());
-            }
-            else
-            {
-                allOrgnz.add(allEvents.get(i).getOwner());
-                System.out.println("ADDED " + allEvents.get(i).getOwner());
+    public List<String> getOrgnzList() {
+        List<Event> allEvents = getEvents();
+        List<String> allOrgns = new ArrayList<>();
 
+        for (int i = 0; i < allEvents.size(); i++) {
+            if (allOrgns.contains(allEvents.get(i).getOwner())) {
+                System.out.println(allEvents.get(i).getOwner());
+            } else {
+                allOrgns.add(allEvents.get(i).getOwner());
             }
         }
-
-        return allOrgnz;
+        return allOrgns;
     }
 
-    public void setChosenEvent(Event e){
+    public void setChosenEvent(Event e) {
         chosenEvent = e;
         System.out.println("Chosen Event is " + chosenEvent.getTitle());
     }
 
-    public Event getChosenEvent()
-    {
+    public Event getChosenEvent() {
         return chosenEvent;
     }
 
-    public void addToFavorite()
-    {
+    public void addToFavorite() {
 
-        if (isFavorite() == true)
-        {
-            for (int i = 0; i < favorites.size() ; i++)
-            {
-                if (favorites.get(i).getId().equals(chosenEvent.getId()))
-                    favorites.remove(i);
-            }
+        if (isFavorite()) {
+            for (int i = 0; i < myEvents.size(); i++) {
+                if (myEvents.get(i).getId().equals(chosenEvent.getId()))
+                    myEvents.remove(i);
+                }
         }
-        else favorites.add(chosenEvent);
+        else myEvents.add(chosenEvent);
 
         storeFavorites();
     }
 
-    public boolean isFavorite()
-    {
+    public boolean isFavorite() {
         boolean isFavorite = false;
 
-        for (int i = 0; i < favorites.size() ; i++)
-        {
-            if (favorites.get(i).getId().equals(chosenEvent.getId()))
+        for (int i = 0; i <myEvents.size(); i++) {
+            if (myEvents.get(i).getId().equals(chosenEvent.getId()))
                 isFavorite = true;
         }
         return isFavorite;
@@ -102,7 +86,8 @@ public class StorageManager {
 
     private void setPreferences(Context context) {
         if (preferences == null) {
-            preferences = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
+            preferences = context.getSharedPreferences(Constants.PACKAGE_NAME,
+                    Context.MODE_PRIVATE);
             editor = preferences.edit();
             editor.commit();
         }
@@ -142,11 +127,13 @@ public class StorageManager {
         return instance;
     }
 
-    public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+    public void registerOnSharedPreferenceChangeListener(
+            SharedPreferences.OnSharedPreferenceChangeListener listener) {
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+    public void unregisterOnSharedPreferenceChangeListener(
+            SharedPreferences.OnSharedPreferenceChangeListener listener) {
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
@@ -158,7 +145,8 @@ public class StorageManager {
 
     public HashMap<String, Integer> getSettings() {
         String events_json = preferences.getString(settingsKey, "");
-        if (gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType()) == null) {
+        if (gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType())
+                == null) {
             settings.put("notification", 1);
             settings.put("distance", 0);
             settings.put("notifyDay", 0);
@@ -170,24 +158,21 @@ public class StorageManager {
         }
     }
 
-    public void storeFavorites()
-    {
-        String events_json = gson.toJson(favorites);
+    public void storeFavorites() {
+        String events_json = gson.toJson(myEvents);
         editor.putString(favoritesKey,events_json);
         editor.commit();
     }
 
-    public List<Event> getFavorites()
-    {
+    public List<Event> getFavorites() {
         String events_json = preferences.getString(favoritesKey,"");
-        if (gson.fromJson(events_json,new TypeToken<List<Event>>(){}.getType()) == null)
-        {
-            favorites = new ArrayList<>();
+
+        if (gson.fromJson(events_json,new TypeToken<List<Event>>(){}.getType()) == null) {
+            myEvents = new ArrayList<>();
+        } else {
+            myEvents = gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
         }
-        else {
-            favorites = gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
-        }
-        return favorites;
+        return myEvents;
     }
 
     public void storeEvents(List<Event> events) {
@@ -201,7 +186,7 @@ public class StorageManager {
         editor.commit();
     }
 
-    public String getAdress(){
+    public String getAdress() {
         String adress = preferences.getString("adress","");
         return adress;
     }
@@ -215,7 +200,7 @@ public class StorageManager {
         }
     }
 
-    public int getIndexForDate(Date dateToCheck){
+    public int getIndexForDate(Date dateToCheck) {
         int index = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
         String date = dateFormat.format(dateToCheck);
@@ -236,6 +221,4 @@ public class StorageManager {
     public Event getEvent(int index) {
         return getEvents().get(index);
     }
-
-
 }

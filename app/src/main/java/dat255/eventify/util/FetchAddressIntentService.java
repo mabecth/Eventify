@@ -16,13 +16,9 @@ import java.util.Locale;
 import dat255.eventify.R;
 
 /**
-
  * Asynchronously handles an intent using a worker thread. Receives a ResultReceiver object and a
-
  * location through an intent. Tries to fetch the address for the location using a Geocoder, and
-
  * sends the result to the ResultReceiver.
-
  */
 public class FetchAddressIntentService extends IntentService {
 
@@ -34,29 +30,10 @@ public class FetchAddressIntentService extends IntentService {
         super(TAG);
     }
 
-    /**
-
-     * Tries to get the location address using a Geocoder. If successful, sends an address to a
-
-     * result receiver. If unsuccessful, sends an error message instead.
-
-     * Note: We define a {@link android.os.ResultReceiver} in * MainActivity to process content
-
-     * sent from this service.
-
-     *
-
-     * This service calls this method from the default worker thread with the intent that started
-
-     * the service. When this method returns, the service automatically stops.
-
-     */
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
         String errorMessage = "";
-
         mReceiver = intent.getParcelableExtra("dat255.refugeeevent.RECEIVER");
 
         // Check if receiver was properly registered.

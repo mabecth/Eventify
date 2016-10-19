@@ -1,7 +1,6 @@
 package dat255.eventify.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 import dat255.eventify.R;
 import dat255.eventify.util.FetchEventService;
@@ -57,21 +55,22 @@ public class MainActivity extends AppCompatActivity
 
     //Google
     private GoogleApi googleApi;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     //Event list
     private ListView listView;
     private MainListAdapter adapter;
-    private SwipeRefreshLayout swipeRefresh;
-    private CompactCalendarView mCompactCalendarView;
-    private AppBarLayout mAppBarLayout;
-    private boolean isCalendarExpanded = false;
     private String allEvents = "1";
     private String onlyFavorites = "2";
     private String filtered = "3";
     private String typeOfList = allEvents;
-    private TextView toolbarTitle;
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private TextView toolbarTitle;
+    private SwipeRefreshLayout swipeRefresh;
+    private CompactCalendarView mCompactCalendarView;
+    private AppBarLayout mAppBarLayout;
+    private boolean isCalendarExpanded = false;
+
     //Facebook
     private ProfileTracker profileTracker;
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-
         toolbarTitle.setText(R.string.app_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,7 +128,6 @@ public class MainActivity extends AppCompatActivity
             };
 
         } else {
-
             //Use available info to update views
             if (Profile.getCurrentProfile().getName() != null) {
                 fbName.setText(Profile.getCurrentProfile().getName());
@@ -142,6 +139,7 @@ public class MainActivity extends AppCompatActivity
 
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -150,6 +148,7 @@ public class MainActivity extends AppCompatActivity
             GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
             GoogleApi.getLocationManager(this).loopCoordinates();
         }
+
         adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-                    //calculates distance when refreshed (Does get bug when refreshing, change to myevents and back)
+
                     if (ContextCompat.checkSelfPermission(getMain(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
@@ -170,30 +169,23 @@ public class MainActivity extends AppCompatActivity
                 }
                 swipeRefresh.setRefreshing(false);
             }
-
         });
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("HELLOOOOO");
                 adapter.setChosenEvent(i);
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                 startActivity(intent);
             }
         });
-
-
     }
 
-    public MainActivity getMain(){
+    public MainActivity getMain() {
         return this;
     }
 
-
     public boolean checkLocationPermission() {
-        System.out.println("Checking persmission");
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -207,15 +199,10 @@ public class MainActivity extends AppCompatActivity
                 // sees the explanation, try again to request the permission.
 
                 //Prompt the user once explanation has been shown
-                //(just doing it here for now, note that with this code, no explanation is shown)
-
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
-
-
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
@@ -255,9 +242,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void initCalendarDropDown(){
+    public void initCalendarDropDown() {
         //No title
-        CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
+        CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout)
+                findViewById(R.id.collapsingToolbarLayout);
         mCollapsingToolbar.setTitle(" ");
 
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
@@ -269,10 +257,11 @@ public class MainActivity extends AppCompatActivity
         mCompactCalendarView.setShouldDrawDaysHeader(true);
 
         //if saved vaule == 2 show monday as first
-        boolean showMondayFirst = StorageManager.getInstance().getSettings().get("firstDayOfWeek")==2;
+        boolean showMondayFirst = StorageManager.getInstance().getSettings().
+                get("firstDayOfWeek") == 2;
         mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
 
-        //If user change first day of week in settings, then update this calendar to the correct values
+        //If user change first day of week in settings, then update this calendar
         setUpOnSettingsChangedListener();
 
         //Show the events in the calendar view
@@ -374,7 +363,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            CharSequence[] items = StorageManager.getInstance().getOrgnzList().toArray(new CharSequence[
+            CharSequence[] items = StorageManager.getInstance().getOrgnzList().
+                    toArray(new CharSequence[
                     StorageManager.getInstance().getOrgnzList().size()]);
 
             final ArrayList seletedItems=new ArrayList();
@@ -390,11 +380,14 @@ public class MainActivity extends AppCompatActivity
                             if (isChecked) {
                                 // If the user checked the item, add it to the selected items
                                 // write your code when user checked the checkbox
-                                seletedItems.add(StorageManager.getInstance().getOrgnzList().get(indexSelected));
-                            } else if (seletedItems.contains(StorageManager.getInstance().getOrgnzList().get(indexSelected))) {
+                                seletedItems.add(StorageManager.getInstance().
+                                        getOrgnzList().get(indexSelected));
+                            } else if (seletedItems.contains(StorageManager.getInstance().
+                                    getOrgnzList().get(indexSelected))) {
                                 // Else, if the item is already in the array, remove it
                                 // write your code when user Uchecked the checkbox
-                                seletedItems.remove(StorageManager.getInstance().getOrgnzList().get(indexSelected));
+                                seletedItems.remove(StorageManager.getInstance().
+                                        getOrgnzList().get(indexSelected));
                             }
                         }
                     })
@@ -447,7 +440,6 @@ public class MainActivity extends AppCompatActivity
             typeOfList = onlyFavorites;
             adapter.setOnlyFavorite(typeOfList);
             adapter.updateEventList();
-            Log.e("shiet","Button pressed");
 
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this,SettingsActivity.class));
@@ -468,15 +460,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void setUpOnSettingsChangedListener(){
-        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+    public void setUpOnSettingsChangedListener() {
+        SharedPreferences.OnSharedPreferenceChangeListener listener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals(StorageManager.getInstance().getSettingsKey())) {
                     //Storage has changed
 
                     //if firstDayOfWeek == 2 show monday as first
-                    boolean showMondayFirst = StorageManager.getInstance().getSettings().get("firstDayOfWeek")==2;
+                    boolean showMondayFirst = StorageManager.getInstance().getSettings().
+                            get("firstDayOfWeek")==2;
                     mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
                 }
             }
@@ -487,7 +481,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+        if(GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
@@ -495,7 +489,8 @@ public class MainActivity extends AppCompatActivity
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
-        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
+        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+                Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -509,9 +504,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRestart() {
         super.onRestart();
-        System.out.println("onrestart");
         //adapter.updateEventList();
-        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
+        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+                Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -519,7 +514,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStart(){
-        System.out.println("OnStart");
         super.onStart();
         //adapter.updateEventList();
         /*if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
@@ -528,7 +522,8 @@ public class MainActivity extends AppCompatActivity
             }
         }*/
 
-        if (StorageManager.getInstance().getLoginType().equals("facebook") && Profile.getCurrentProfile() == null) {
+        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+                Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -537,11 +532,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
+        if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             GoogleApi.getLocationManager(this).getmGoogleApiClient().disconnect();
         }
-        System.out.println("ondestroy");
-        if (profileTracker != null){
+        if (profileTracker != null) {
             profileTracker.stopTracking();
         }
     }
