@@ -49,17 +49,17 @@ import java.util.Locale;
 import java.util.TimeZone;
 import dat255.eventify.R;
 import dat255.eventify.util.FetchEventService;
+import dat255.eventify.util.LocationUtil;
 import dat255.eventify.util.MyActivityListener;
 import dat255.eventify.view.adapter.MainListAdapter;
 import dat255.eventify.manager.ConnectionManager;
-import dat255.eventify.util.GoogleApi;
 import dat255.eventify.manager.StorageManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MyActivityListener {
 
     //Google
-    private GoogleApi googleApi;
+    private LocationUtil locationUtil;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     //Event list
@@ -170,9 +170,9 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             System.out.println("permission granted");
-            googleApi.build();
-            googleApi.getmGoogleApiClient().connect();
-            googleApi.loopCoordinates();
+            locationUtil.buildGoogleApi();
+            locationUtil.getmGoogleApiClient().connect();
+            locationUtil.loopCoordinates();
         }
         adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
@@ -185,14 +185,14 @@ public class MainActivity extends AppCompatActivity
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        googleApi.loopCoordinates();
+                        locationUtil.loopCoordinates();
                     }
                     adapter.updateEventList();
                 } else {
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        googleApi.loopCoordinates();
+                        locationUtil.loopCoordinates();
                     }
                     adapter.updateEventList();
                 }
@@ -213,11 +213,11 @@ public class MainActivity extends AppCompatActivity
     public void initFragment(){
         fm = this.getSupportFragmentManager();
         fragtrans = fm.beginTransaction();
-        fragtrans.add(new GoogleApi(), "GoogleApi");
-        fragtrans.addToBackStack("GoogleApi");
+        fragtrans.add(new LocationUtil(), "LocationUtil");
+        fragtrans.addToBackStack("LocationUtil");
         fragtrans.commit();
         fm.executePendingTransactions();
-        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
+        locationUtil = (LocationUtil) fm.findFragmentByTag("LocationUtil");
     }
 
     public boolean checkLocationPermission() {
@@ -265,9 +265,9 @@ public class MainActivity extends AppCompatActivity
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         System.out.println("permission granted");
-                        googleApi.build();
-                        googleApi.getmGoogleApiClient().connect();
-                        googleApi.loopCoordinates();
+                        locationUtil.buildGoogleApi();
+                        locationUtil.getmGoogleApiClient().connect();
+                        locationUtil.loopCoordinates();
                         updateAdapter();
                     }
 
@@ -357,9 +357,9 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         //Stop location updates when Activity is no longer active
-        if(googleApi.getmGoogleApiClient() != null){
-            if(googleApi.getmGoogleApiClient().isConnected()){
-                googleApi.removeLocationUpdates();
+        if(locationUtil.getmGoogleApiClient() != null){
+            if(locationUtil.getmGoogleApiClient().isConnected()){
+                locationUtil.removeLocationUpdates();
             }
         }
 
@@ -467,9 +467,9 @@ public class MainActivity extends AppCompatActivity
             toolbarTitle.setText(R.string.app_name);
             typeOfList = allEvents;
             adapter.setOnlyFavorite(typeOfList);
-            if(googleApi.getmGoogleApiClient() != null) {
-                if (googleApi.getmGoogleApiClient().isConnected()) {
-                    googleApi.loopCoordinates();
+            if(locationUtil.getmGoogleApiClient() != null) {
+                if (locationUtil.getmGoogleApiClient().isConnected()) {
+                    locationUtil.loopCoordinates();
                 }
             }
             adapter.updateEventList();
@@ -520,11 +520,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        if(googleApi.getmGoogleApiClient() != null){
-            if(googleApi.getmGoogleApiClient().isConnected()){
-                googleApi.loopCoordinates();
+        if(locationUtil.getmGoogleApiClient() != null){
+            if(locationUtil.getmGoogleApiClient().isConnected()){
+                locationUtil.loopCoordinates();
             }else{
-                googleApi.getmGoogleApiClient().connect();
+                locationUtil.getmGoogleApiClient().connect();
             }
         }
         adapter.updateEventList();
@@ -567,8 +567,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(googleApi.getmGoogleApiClient() !=null){
-            googleApi.getmGoogleApiClient().disconnect();
+        if(locationUtil.getmGoogleApiClient() !=null){
+            locationUtil.getmGoogleApiClient().disconnect();
         }
         if (profileTracker != null) {
             profileTracker.stopTracking();

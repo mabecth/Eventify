@@ -32,7 +32,7 @@ import dat255.eventify.manager.StorageManager;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 
-public class GoogleApi extends Fragment implements
+public class LocationUtil extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -44,14 +44,10 @@ public class GoogleApi extends Fragment implements
     private LatLng latLng;
     private List<Event> listOfEvents;
     private LocationRequest mLocationRequest;
-    private TextView locationTextView;
     private static List<Event> updatedList;
     protected boolean mAddressRequested;
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
 
     private MyActivityListener listener;
 
@@ -64,35 +60,7 @@ public class GoogleApi extends Fragment implements
         }
     }
 
-    public GoogleApi() {
-        //((MainActivity)getActivity()).updateAdapter();
-        /*SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(StorageManager.getInstance().getEventsKey())) {
-                    //Events changed
-
-                    System.out.println("Google api");
-                    Log.d(TAG, "Events in storage changed!");
-                    listOfEvents = StorageManager.getInstance().getEvents();
-                    //updatedList = StorageManager.getInstance().getEvents();
-                    if (mLastLocation != null) {
-                        if(ConnectionManager.getInstance().isConnected()) {
-                            Log.d(TAG, "Service started");
-                           //startIntentService();
-                            //loopCoordinates();
-                            //calculateDistance();
-                        }
-                        else{
-                          //  mAddressOutput = "Recent: " + StorageManager.getInstance().getAdress();
-                            //displayAddressOutput();
-                        }
-                    }
-                }
-            }
-        };
-
-        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);*/
+    public LocationUtil() {
     }
 
     @Override
@@ -159,7 +127,7 @@ public class GoogleApi extends Fragment implements
         StorageManager.getInstance().storeEvents(updatedList);
     }
 
-    public synchronized void build(){
+    public synchronized void buildGoogleApi(){
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
