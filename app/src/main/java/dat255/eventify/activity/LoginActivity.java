@@ -61,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     StorageManager.getInstance().setLoginTypeGuest();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            ScreenManager.getInstance().getMainActivity()));
                     finish();
                 }
             }
@@ -73,12 +74,14 @@ public class LoginActivity extends AppCompatActivity {
         if (StorageManager.getInstance().isLoginTypeSet()) {
             if (StorageManager.getInstance().getLoginType().equals("facebook")) {
                 if (Profile.getCurrentProfile() != null) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            ScreenManager.getInstance().getMainActivity()));
                     finish();
                 }
             } else {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            ScreenManager.getInstance().getMainActivity()));
                     finish();
                 }
             }
@@ -95,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
 
                     StorageManager.getInstance().setLoginTypeFacebook();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            ScreenManager.getInstance().getMainActivity()));
                     finish();
             }
 
@@ -127,9 +131,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
