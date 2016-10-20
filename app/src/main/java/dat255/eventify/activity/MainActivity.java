@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-
                     if (ContextCompat.checkSelfPermission(getMain(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
@@ -172,6 +171,11 @@ public class MainActivity extends AppCompatActivity
                     }
                     adapter.updateEventList();
                 } else {
+                    if (ContextCompat.checkSelfPermission(getMain(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        googleApi.loopCoordinates();
+                    }
                     adapter.updateEventList();
                 }
                 swipeRefresh.setRefreshing(false);
@@ -503,6 +507,8 @@ public class MainActivity extends AppCompatActivity
         if(googleApi.getmGoogleApiClient() != null){
             if(googleApi.getmGoogleApiClient().isConnected()){
                 googleApi.loopCoordinates();
+            }else{
+                googleApi.getmGoogleApiClient().connect();
             }
         }
         adapter.updateEventList();
@@ -534,7 +540,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
-
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -548,7 +553,6 @@ public class MainActivity extends AppCompatActivity
         if(googleApi.getmGoogleApiClient() !=null){
             googleApi.getmGoogleApiClient().disconnect();
         }
-
         if (profileTracker != null) {
             profileTracker.stopTracking();
         }

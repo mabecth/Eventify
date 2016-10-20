@@ -1,23 +1,18 @@
 package dat255.eventify.util;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Handler;
@@ -26,12 +21,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import dat255.eventify.manager.ConnectionManager;
@@ -39,7 +31,6 @@ import dat255.eventify.manager.StorageManager;
 import dat255.eventify.activity.MainActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
-import dat255.eventify.view.adapter.MainListAdapter;
 
 public class GoogleApi extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
@@ -50,14 +41,9 @@ public class GoogleApi extends Fragment implements
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
-    private static GoogleApi instance = null;
-
-
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
-    private ListView listView;
-    private MainListAdapter adapter;
     private List<Event> listOfEvents;
     private LocationRequest mLocationRequest;
     private TextView locationTextView;
@@ -68,13 +54,7 @@ public class GoogleApi extends Fragment implements
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-
     public GoogleApi() {
-        mAddressRequested = false;
-        mAddressOutput = "";
-        if(listOfEvents == null) {
-            listOfEvents = StorageManager.getInstance().getEvents();
-        }
         //((MainActivity)getActivity()).updateAdapter();
         /*SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -110,10 +90,12 @@ public class GoogleApi extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        mAddressRequested = false;
+        mAddressOutput = "";
+        if(listOfEvents == null) {
+            listOfEvents = StorageManager.getInstance().getEvents();
+        }
     }
-
-
-
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -134,7 +116,6 @@ public class GoogleApi extends Fragment implements
                     LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(),StorageManager.getInstance().getEvents().get(index).getLongitude());
                     CalculationByDistance(latLng, endLatLng, index);
                 }
-
             }
         }
     }
@@ -176,13 +157,7 @@ public class GoogleApi extends Fragment implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
     }
-
-    protected void showToast(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-    }
-
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -201,8 +176,6 @@ public class GoogleApi extends Fragment implements
             Log.e(TAG,"GoogleApiClient is not connected");
         }
 
-
-
     }
 
     public GoogleApiClient getmGoogleApiClient() {
@@ -215,23 +188,18 @@ public class GoogleApi extends Fragment implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        showToast("Could not connect to Play Services");
+        Toast.makeText(getActivity(), "Could not connect to Play Services", Toast.LENGTH_SHORT).show();
     }
 
-
-
     public void displayAddressOutput() {
-
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(((MainActivity)getActivity()));
+        navigationView.setNavigationItemSelectedListener((MainActivity)getActivity());
         View view = navigationView.getHeaderView(0);
         locationTextView = (TextView) view.findViewById(R.id.locationTV);
         if(mAddressOutput == locationTextView.getText()){
-
         }else{
             locationTextView.setText(mAddressOutput);
         }
-
         Log.d(TAG, mAddressOutput);
     }
 
@@ -267,7 +235,6 @@ public class GoogleApi extends Fragment implements
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-
     }
 
     @Override
@@ -278,28 +245,16 @@ public class GoogleApi extends Fragment implements
         mGoogleApiClient.connect();
     }
 
-
-
-
-
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
         }
-
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-           /* mAddressOutput = mAddressOutput.replace("\n", " ");
-            String[] split = mAddressOutput.split("\\s+");
-            mAddressOutput = split[split.length - 1]; // Only display city
-            */
             StorageManager.getInstance().storeAdress(mAddressOutput);
-            //calculateDistance();
             displayAddressOutput();
-            // Show a toast message if an address was found.
-            // Reset. Enable the Fetch Address button and stop showing the progress bar.
         }
     }
 }

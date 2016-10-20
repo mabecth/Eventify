@@ -15,11 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import dat255.eventify.R;
 
-/**
- * Asynchronously handles an intent using a worker thread. Receives a ResultReceiver object and a
- * location through an intent. Tries to fetch the address for the location using a Geocoder, and
- * sends the result to the ResultReceiver.
- */
 public class FetchAddressIntentService extends IntentService {
 
     private static final String TAG = "FetchAddressIS";
@@ -45,7 +40,6 @@ public class FetchAddressIntentService extends IntentService {
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
 
-
         // Make sure that the location data was really sent over through an extra. If it wasn't,
         // send an error error message and return.
         if (location == null) {
@@ -54,26 +48,6 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
             return;
         }
-
-        // Errors could still arise from using the Geocoder (for example, if there is no
-
-        // connectivity, or if the Geocoder is given illegal location data). Or, the Geocoder may
-
-        // simply not have an address for a location. In all these cases, we communicate with the
-
-        // receiver using a resultCode indicating failure. If an address is found, we use a
-
-        // resultCode indicating success.
-
-
-
-        // The Geocoder used in this sample. The Geocoder's responses are localized for the given
-
-        // Locale, which represents a specific geographical or linguistic region. Locales are used
-
-        // to alter the presentation of information such as numbers or dates to suit the conventions
-
-        // in the region they describe.
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -105,24 +79,7 @@ public class FetchAddressIntentService extends IntentService {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<>();
 
-            // Fetch the address lines using {@code getAddressLine},
-
-            // join them, and send them to the thread. The {@link android.location.address}
-
-            // class provides other options for fetching address details that you may prefer
-
-            // to use. Here are some examples:
-
-            // getLocality() ("Mountain View", for example)
-
-            // getAdminArea() ("CA", for example)
-
-            // getPostalCode() ("94043", for example)
-
-            // getCountryCode() ("US", for example)
-
-            // getCountryName() ("United States", for example)
-
+            //Get the locality only
             addressFragments.add(address.getLocality());
 
             Log.i(TAG, getString(R.string.address_found));

@@ -180,7 +180,7 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if(event.getPlace() == null) {
-                Toast.makeText(DetailActivity.this, "No address found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "Event has no address", Toast.LENGTH_SHORT).show();
             }else{
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
