@@ -49,13 +49,13 @@ public class LocationUtil extends Fragment implements
     protected String mAddressOutput;
     private AddressResultReceiver mResultReceiver;
 
-    private MyActivityListener listener;
+    private MyActivityListener myActivityListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (MyActivityListener) context;
+            myActivityListener = (MyActivityListener) context;
         } catch (ClassCastException castException) {
         }
     }
@@ -169,10 +169,10 @@ public class LocationUtil extends Fragment implements
 
     public void sendAddressResultToMain() {
         if(ConnectionManager.getInstance().isConnected()){
-            listener.displayAddress(mAddressOutput);
+            myActivityListener.displayAddress(mAddressOutput);
         }else if(!ConnectionManager.getInstance().isConnected()){
             if (StorageManager.getInstance().getAddress() != null) {
-                listener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
+                myActivityListener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
             }
         }
 
@@ -209,7 +209,7 @@ public class LocationUtil extends Fragment implements
         mResultReceiver = new AddressResultReceiver(new Handler());
         loopCoordinates();
         startIntentService();
-        listener.updateAdapter();
+        myActivityListener.updateAdapter();
 
         //stop location updates
         if (mGoogleApiClient != null) {
