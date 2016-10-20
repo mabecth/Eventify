@@ -1,6 +1,7 @@
 package dat255.eventify.util;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -53,6 +54,19 @@ public class GoogleApi extends Fragment implements
     private AddressResultReceiver mResultReceiver;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+
+    private MyActivityListener listener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (MyActivityListener) context;
+        } catch (ClassCastException castException) {
+            /** The activity does not implement the listener. */
+        }
+    }
 
     public GoogleApi() {
         //((MainActivity)getActivity()).updateAdapter();
@@ -230,7 +244,8 @@ public class GoogleApi extends Fragment implements
         mResultReceiver = new AddressResultReceiver(new Handler());
         loopCoordinates();
         startIntentService();
-        ((MainActivity)getActivity()).updateAdapter();
+        listener.update();
+        //((MainActivity)getActivity()).updateAdapter();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

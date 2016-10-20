@@ -49,13 +49,14 @@ import java.util.Locale;
 import java.util.TimeZone;
 import dat255.eventify.R;
 import dat255.eventify.util.FetchEventService;
+import dat255.eventify.util.MyActivityListener;
 import dat255.eventify.view.adapter.MainListAdapter;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.util.GoogleApi;
 import dat255.eventify.manager.StorageManager;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, MyActivityListener {
 
     //Google
     private GoogleApi googleApi;
@@ -80,6 +81,11 @@ public class MainActivity extends AppCompatActivity
 
     //Facebook
     private ProfileTracker profileTracker;
+
+    @Override
+    public void update(){
+        adapter.updateEventList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
