@@ -88,6 +88,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void displayAddress(String mAddressOutput){
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View view = navigationView.getHeaderView(0);
+        TextView locationTextView = (TextView) view.findViewById(R.id.locationTV);
+        if(mAddressOutput == locationTextView.getText()){
+        }else{
+            locationTextView.setText(mAddressOutput);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

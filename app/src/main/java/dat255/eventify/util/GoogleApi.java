@@ -206,14 +206,8 @@ public class GoogleApi extends Fragment implements
     }
 
     public void displayAddressOutput() {
-        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((MainActivity)getActivity());
-        View view = navigationView.getHeaderView(0);
-        locationTextView = (TextView) view.findViewById(R.id.locationTV);
-        if(mAddressOutput == locationTextView.getText()){
-        }else{
-            locationTextView.setText(mAddressOutput);
-        }
+        listener.displayAddress(mAddressOutput);
+
         Log.d(TAG, mAddressOutput);
     }
 
