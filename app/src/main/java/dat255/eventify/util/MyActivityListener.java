@@ -8,7 +8,7 @@ import android.content.Context;
 
 public interface MyActivityListener {
 
-    public void update();
+    public void updateAdapter();
 
     public void displayAddress(String mAddressOutput);
 }

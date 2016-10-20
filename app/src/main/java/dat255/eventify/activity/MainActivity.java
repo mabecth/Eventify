@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     private ProfileTracker profileTracker;
 
     @Override
-    public void update(){
+    public void updateAdapter(){
         adapter.updateEventList();
     }
 
@@ -356,10 +356,6 @@ public class MainActivity extends AppCompatActivity
         monthView.setText(dateFormat.format(date));
     }
 
-    public void updateAdapter(){
-        adapter.updateEventList();
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -474,6 +470,11 @@ public class MainActivity extends AppCompatActivity
             toolbarTitle.setText(R.string.app_name);
             typeOfList = allEvents;
             adapter.setOnlyFavorite(typeOfList);
+            if(googleApi.getmGoogleApiClient() != null) {
+                if (googleApi.getmGoogleApiClient().isConnected()) {
+                    googleApi.loopCoordinates();
+                }
+            }
             adapter.updateEventList();
 
         } else if (id == R.id.nav_my_events) {
@@ -558,6 +559,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
+        adapter.updateEventList();
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));

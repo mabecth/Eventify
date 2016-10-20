@@ -206,7 +206,6 @@ public class GoogleApi extends Fragment implements
 
     public void displayAddressOutput() {
         listener.displayAddress(mAddressOutput);
-
         Log.d(TAG, mAddressOutput);
     }
 
@@ -237,7 +236,7 @@ public class GoogleApi extends Fragment implements
         mResultReceiver = new AddressResultReceiver(new Handler());
         loopCoordinates();
         startIntentService();
-        listener.update();
+        listener.updateAdapter();
         //((MainActivity)getActivity()).updateAdapter();
         //stop location updates
         if (mGoogleApiClient != null) {
