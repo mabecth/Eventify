@@ -13,5 +13,6 @@ Our vision with Eventify revolves around integrating refugees into the swedish s
 * Oscar Hansson
 
 ##Screenhots
-![Screenshot 1](https://raw.githubusercontent.com/mabecth/dat255/develop/documentation/screenshots/screenshot_1.png)
-![Screenshot 2](https://raw.githubusercontent.com/mabecth/dat255/develop/documentation/screenshots/screenshot_2.png)
+
+![Screenshot 1](https://raw.githubusercontent.com/mabecth/DAT255/documentation/screenshots/Screenshot_1.png )
+![Screenshot 2](https://raw.githubusercontent.com/mabecth/DAT255/documentation/screenshots/Screenshot_2.png )
