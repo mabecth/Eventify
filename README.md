@@ -14,5 +14,5 @@ Our vision with Eventify revolves around integrating refugees into the swedish s
 
 ##Screenhots
 
-![Screenshot 1](DAT255/documentation/screenshots/Screenshot_1.png)
-![Screenshot 2](DAT255/documentation/screenshots/Screenshot_2.png)
+![Screenshot 1](documentation/screenshots/Screenshot_1.png)
+![Screenshot 2](documentation/screenshots/Screenshot_2.png)
