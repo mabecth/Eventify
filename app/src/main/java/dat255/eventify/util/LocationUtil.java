@@ -3,18 +3,14 @@ package dat255.eventify.util;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Handler;
 import com.google.android.gms.common.ConnectionResult;
@@ -29,7 +25,6 @@ import java.util.List;
 
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
-import dat255.eventify.R;
 import dat255.eventify.model.Event;
 
 public class LocationUtil extends Fragment implements
