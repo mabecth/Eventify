@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     private ProfileTracker profileTracker;
 
     @Override
-    public void update(){
+    public void updateAdapter(){
         adapter.updateEventList();
     }
 
@@ -182,14 +182,14 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-                    if (ContextCompat.checkSelfPermission(getMain(),
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         googleApi.loopCoordinates();
                     }
                     adapter.updateEventList();
                 } else {
-                    if (ContextCompat.checkSelfPermission(getMain(),
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         googleApi.loopCoordinates();
@@ -278,9 +278,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public MainActivity getMain() {
-        return this;
-    }
 
     public void initCalendarDropDown() {
         //No title
@@ -354,10 +351,6 @@ public class MainActivity extends AppCompatActivity
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
         TextView monthView = (TextView) findViewById(R.id.monthTextView);
         monthView.setText(dateFormat.format(date));
-    }
-
-    public void updateAdapter(){
-        adapter.updateEventList();
     }
 
     @Override
@@ -474,6 +467,11 @@ public class MainActivity extends AppCompatActivity
             toolbarTitle.setText(R.string.app_name);
             typeOfList = allEvents;
             adapter.setOnlyFavorite(typeOfList);
+            if(googleApi.getmGoogleApiClient() != null) {
+                if (googleApi.getmGoogleApiClient().isConnected()) {
+                    googleApi.loopCoordinates();
+                }
+            }
             adapter.updateEventList();
 
         } else if (id == R.id.nav_my_events) {
@@ -563,6 +561,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
+        adapter.updateEventList();
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(MainActivity.this,

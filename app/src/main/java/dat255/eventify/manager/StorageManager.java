@@ -181,14 +181,14 @@ public class StorageManager {
         editor.commit();
     }
 
-    public void storeAdress(String adress){
-        editor.putString("adress",adress);
+    public void storeAddress(String address){
+        editor.putString("address",address);
         editor.commit();
     }
 
-    public String getAdress() {
-        String adress = preferences.getString("adress","");
-        return adress;
+    public String getAddress() {
+        String address = preferences.getString("address","");
+        return address;
     }
 
     public List<Event> getEvents() {
