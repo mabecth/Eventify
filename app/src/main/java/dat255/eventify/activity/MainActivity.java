@@ -481,15 +481,18 @@ public class MainActivity extends AppCompatActivity
             adapter.updateEventList();
 
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(MainActivity.this,
+                    ScreenManager.getInstance().getSettingsActivity()));
         } else if (id == R.id.nav_logout) {
             if (StorageManager.getInstance().getLoginType().equals("facebook")) {
                 LoginManager.getInstance().logOut();
-                startActivity(new Intent(this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this,
+                        ScreenManager.getInstance().getLoginActivity()));
                 finish();
             } else {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this,
+                        ScreenManager.getInstance().getLoginActivity()));
                 finish();
             }
         }
@@ -532,7 +535,8 @@ public class MainActivity extends AppCompatActivity
 
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(MainActivity.this,
+                    ScreenManager.getInstance().getLoginActivity()));
             finish();
         }
         if (typeOfList.equals(onlyFavorites)) {
@@ -548,7 +552,8 @@ public class MainActivity extends AppCompatActivity
         //adapter.updateEventList();
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(MainActivity.this,
+                    ScreenManager.getInstance().getLoginActivity()));
             finish();
         }
     }
@@ -559,7 +564,8 @@ public class MainActivity extends AppCompatActivity
         adapter.updateEventList();
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(MainActivity.this,
+                    ScreenManager.getInstance().getLoginActivity()));
             finish();
         }
     }
