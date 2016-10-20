@@ -329,7 +329,8 @@
                     android:id="@+id/facebookBtn"
                     android:layout_marginTop="10dp"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
         </RelativeLayout>
 
