@@ -182,14 +182,14 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-                    if (ContextCompat.checkSelfPermission(getMain(),
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         googleApi.loopCoordinates();
                     }
                     adapter.updateEventList();
                 } else {
-                    if (ContextCompat.checkSelfPermission(getMain(),
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         googleApi.loopCoordinates();
@@ -278,9 +278,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public MainActivity getMain() {
-        return this;
-    }
 
     public void initCalendarDropDown() {
         //No title

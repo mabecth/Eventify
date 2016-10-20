@@ -38,8 +38,6 @@ public class GoogleApi extends Fragment implements
         LocationListener {
 
     protected static final String TAG = "GoogleApi";
-    protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-    protected static final String LOCATION_ADDRESS_KEY = "location-address";
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -63,7 +61,6 @@ public class GoogleApi extends Fragment implements
         try {
             listener = (MyActivityListener) context;
         } catch (ClassCastException castException) {
-            /** The activity does not implement the listener. */
         }
     }
 
@@ -96,7 +93,6 @@ public class GoogleApi extends Fragment implements
         };
 
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);*/
-        // Set defaults, then update using values stored in the Bundle.
     }
 
     @Override
@@ -121,7 +117,6 @@ public class GoogleApi extends Fragment implements
     public synchronized void loopCoordinates(){
         listOfEvents = StorageManager.getInstance().getEvents();
         updatedList = StorageManager.getInstance().getEvents();
-        System.out.println("listofevents size "+ listOfEvents.size());
         if(latLng ==null){
         }else{
             if (listOfEvents.size() > 0) {
@@ -132,6 +127,7 @@ public class GoogleApi extends Fragment implements
             }
         }
     }
+
 
     public synchronized void CalculationByDistance(LatLng StartP, LatLng EndP, int index) {
         int Radius = 6371;// radius of earth in Km
@@ -161,7 +157,6 @@ public class GoogleApi extends Fragment implements
     public synchronized void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
         StorageManager.getInstance().storeEvents(updatedList);
-        //getActivity().updateAdapter();
     }
 
     public synchronized void build(){
@@ -204,8 +199,15 @@ public class GoogleApi extends Fragment implements
         Toast.makeText(getActivity(), "Could not connect to Play Services", Toast.LENGTH_SHORT).show();
     }
 
-    public void displayAddressOutput() {
-        listener.displayAddress(mAddressOutput);
+    public void sendAddressResultToMain() {
+        if(ConnectionManager.getInstance().isConnected()){
+            listener.displayAddress(mAddressOutput);
+        }else if(!ConnectionManager.getInstance().isConnected()){
+            if (StorageManager.getInstance().getAddress() != null) {
+                listener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
+            }
+        }
+
         Log.d(TAG, mAddressOutput);
     }
 
@@ -232,12 +234,11 @@ public class GoogleApi extends Fragment implements
         //Get coordinates
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        //updatedList = StorageManager.getInstance().getEvents();
         mResultReceiver = new AddressResultReceiver(new Handler());
         loopCoordinates();
         startIntentService();
         listener.updateAdapter();
-        //((MainActivity)getActivity()).updateAdapter();
+
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -260,8 +261,10 @@ public class GoogleApi extends Fragment implements
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            StorageManager.getInstance().storeAdress(mAddressOutput);
-            displayAddressOutput();
+            if(ConnectionManager.getInstance().isConnected()) {
+                StorageManager.getInstance().storeAddress(mAddressOutput);
+            }
+            sendAddressResultToMain();
         }
     }
 }
