@@ -29,7 +29,6 @@ import java.util.List;
 
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
-import dat255.eventify.activity.MainActivity;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 
