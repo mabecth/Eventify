@@ -109,10 +109,12 @@ public class GoogleApi extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true); // Must be set to true
-        build();
-
+        setRetainInstance(true);
     }
+
+
+
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         long factor = (long) Math.pow(10, places);
