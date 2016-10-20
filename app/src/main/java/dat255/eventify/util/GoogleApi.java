@@ -13,6 +13,7 @@ import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,7 @@ import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.view.adapter.MainListAdapter;
 
-public class GoogleApi implements
+public class GoogleApi extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -51,7 +52,7 @@ public class GoogleApi implements
 
     private static GoogleApi instance = null;
 
-    private MainActivity mainActivity;
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
@@ -67,22 +68,14 @@ public class GoogleApi implements
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public static GoogleApi getLocationManager(MainActivity activity)     {
-        if (instance == null) {
-            instance = new GoogleApi(activity);
-        }
-        return instance;
-    }
 
-    private GoogleApi(MainActivity activity) {
-
-        mainActivity = activity;
+    public GoogleApi() {
         mAddressRequested = false;
         mAddressOutput = "";
         if(listOfEvents == null) {
             listOfEvents = StorageManager.getInstance().getEvents();
         }
-        //mainActivity.updateAdapter();
+        //((MainActivity)getActivity()).updateAdapter();
         /*SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -113,6 +106,13 @@ public class GoogleApi implements
         // Set defaults, then update using values stored in the Bundle.
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true); // Must be set to true
+        build();
+
+    }
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         long factor = (long) Math.pow(10, places);
@@ -165,11 +165,11 @@ public class GoogleApi implements
     public synchronized void updateDistance(int id, String result) {
         updatedList.get(id).setDistance(result);
         StorageManager.getInstance().storeEvents(updatedList);
-        //mainActivity.updateAdapter();
+        //getActivity().updateAdapter();
     }
 
     public synchronized void build(){
-        mGoogleApiClient = new GoogleApiClient.Builder(mainActivity)
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -178,7 +178,7 @@ public class GoogleApi implements
     }
 
     protected void showToast(String text) {
-        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -189,7 +189,7 @@ public class GoogleApi implements
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         try{
-            if (ContextCompat.checkSelfPermission(mainActivity,
+            if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -220,8 +220,8 @@ public class GoogleApi implements
 
     public void displayAddressOutput() {
 
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(mainActivity);
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(((MainActivity)getActivity()));
         View view = navigationView.getHeaderView(0);
         locationTextView = (TextView) view.findViewById(R.id.locationTV);
         if(mAddressOutput == locationTextView.getText()){
@@ -234,17 +234,17 @@ public class GoogleApi implements
     }
 
     protected void startIntentService() {
-          // Create an intent for passing to the intent service responsible for fetching the address.
-           Intent intent = new Intent(mainActivity, FetchAddressIntentService.class);
-           // Pass the result receiver as an extra to the service.
-           intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        // Create an intent for passing to the intent service responsible for fetching the address.
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        // Pass the result receiver as an extra to the service.
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
 
-           // Pass the location data as an extra to the service.
-           intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-           // Start the service. If the service isn't already running, it is instantiated and started
-           // (creating a process for it if needed); if it is running then it remains running. The
-           // service kills itself automatically once all intents are processed.
-           mainActivity.startService(intent);
+        // Pass the location data as an extra to the service.
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        // Start the service. If the service isn't already running, it is instantiated and started
+        // (creating a process for it if needed); if it is running then it remains running. The
+        // service kills itself automatically once all intents are processed.
+        getActivity().startService(intent);
 
     }
 
@@ -260,7 +260,7 @@ public class GoogleApi implements
         mResultReceiver = new AddressResultReceiver(new Handler());
         loopCoordinates();
         startIntentService();
-        mainActivity.updateAdapter();
+        ((MainActivity)getActivity()).updateAdapter();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -272,8 +272,8 @@ public class GoogleApi implements
     public void onConnectionSuspended(int cause) {
         // The connection to Google Play services was lost for some reason. We call connect() to
         // attempt to re-establish the connection.
-           Log.e(TAG, "ConnectionManager suspended");
-             mGoogleApiClient.connect();
+        Log.e(TAG, "ConnectionManager suspended");
+        mGoogleApiClient.connect();
     }
 
 

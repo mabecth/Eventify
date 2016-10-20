@@ -1,3 +1,4 @@
+
 package dat255.eventify.activity;
 
 import android.Manifest;
@@ -11,6 +12,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
@@ -71,6 +75,9 @@ public class MainActivity extends AppCompatActivity
     private AppBarLayout mAppBarLayout;
     private boolean isCalendarExpanded = false;
 
+    private FragmentManager fm;
+    private FragmentTransaction fragtrans;
+
     //Facebook
     private ProfileTracker profileTracker;
 
@@ -79,9 +86,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkLocationPermission();
-
+        fm = this.getSupportFragmentManager();
+        fragtrans = fm.beginTransaction();
+        fragtrans.add(new GoogleApi(), "GoogleApi");
+        fragtrans.addToBackStack("GoogleApi");
+        fragtrans.commit();
+        fm.executePendingTransactions();
+        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
+        System.out.println(googleApi);
         adapter = new MainListAdapter();
+
+        checkLocationPermission();
 
         //Start collecting events if we have access to the internet
         if (ConnectionManager.getInstance().isConnected()) {
@@ -144,11 +159,14 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             System.out.println("permission granted");
-            GoogleApi.getLocationManager(this).build();
+            googleApi.build();
+            googleApi.getmGoogleApiClient().connect();
+            googleApi.loopCoordinates();
+            /*GoogleApi.getLocationManager(this).build();
             GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
             GoogleApi.getLocationManager(this).loopCoordinates();
+            */
         }
-
         adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -161,7 +179,8 @@ public class MainActivity extends AppCompatActivity
                     if (ContextCompat.checkSelfPermission(getMain(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        GoogleApi.getLocationManager(getMain()).loopCoordinates();
+                        googleApi.loopCoordinates();
+                        //GoogleApi.getLocationManager(getMain()).loopCoordinates();
                     }
                     adapter.updateEventList();
                 } else {
@@ -229,8 +248,11 @@ public class MainActivity extends AppCompatActivity
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         System.out.println("permission granted");
-                        GoogleApi.getLocationManager(this).build();
-                        GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
+                        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
+                        googleApi.build();
+                        googleApi.getmGoogleApiClient().connect();
+                        //GoogleApi.getLocationManager(this).build();
+                        //GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
                     }
 
                 } else {
@@ -324,12 +346,18 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         //Stop location updates when Activity is no longer active
-       if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
+        if(googleApi.getmGoogleApiClient() != null){
+            if(googleApi.getmGoogleApiClient().isConnected()){
+                googleApi.removeLocationUpdates();
+            }
+        }
+
+       /*if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).removeLocationUpdates();
             }
         }
-    }
+*/    }
 
     @Override
     public void onBackPressed() {
@@ -365,7 +393,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             CharSequence[] items = StorageManager.getInstance().getOrgnzList().
                     toArray(new CharSequence[
-                    StorageManager.getInstance().getOrgnzList().size()]);
+                            StorageManager.getInstance().getOrgnzList().size()]);
 
             final ArrayList seletedItems=new ArrayList();
 
@@ -463,29 +491,36 @@ public class MainActivity extends AppCompatActivity
     public void setUpOnSettingsChangedListener() {
         SharedPreferences.OnSharedPreferenceChangeListener listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(StorageManager.getInstance().getSettingsKey())) {
-                    //Storage has changed
+                    @Override
+                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                        if (key.equals(StorageManager.getInstance().getSettingsKey())) {
+                            //Storage has changed
 
-                    //if firstDayOfWeek == 2 show monday as first
-                    boolean showMondayFirst = StorageManager.getInstance().getSettings().
-                            get("firstDayOfWeek")==2;
-                    mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
-                }
-            }
-        };
+                            //if firstDayOfWeek == 2 show monday as first
+                            boolean showMondayFirst = StorageManager.getInstance().getSettings().
+                                    get("firstDayOfWeek")==2;
+                            mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
+                        }
+                    }
+                };
         StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(googleApi.getmGoogleApiClient() != null){
+            if(googleApi.getmGoogleApiClient().isConnected()){
+                googleApi.loopCoordinates();
+            }
+        }
+        /*
         if(GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
                 GoogleApi.getLocationManager(this).loopCoordinates();
             }
         }
+        */
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
@@ -532,9 +567,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(googleApi.getmGoogleApiClient() !=null){
+            googleApi.getmGoogleApiClient().disconnect();
+        }
+        /*
         if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
             GoogleApi.getLocationManager(this).getmGoogleApiClient().disconnect();
         }
+        */
         if (profileTracker != null) {
             profileTracker.stopTracking();
         }

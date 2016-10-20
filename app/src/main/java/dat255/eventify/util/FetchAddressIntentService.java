@@ -34,7 +34,7 @@ public class FetchAddressIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         String errorMessage = "";
-        mReceiver = intent.getParcelableExtra("dat255.refugeeevent.RECEIVER");
+        mReceiver = intent.getParcelableExtra("dat255.eventify.RECEIVER");
 
         // Check if receiver was properly registered.
         if (mReceiver == null) {
