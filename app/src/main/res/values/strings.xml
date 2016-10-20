@@ -16,13 +16,13 @@
     <string name="settings">Settings</string>
 
     <!-- Languages -->
-    <string name="swedish">Swedish</string>
+    <string name="swedish">Svenska</string>
     <string name="english">English</string>
-    <string name="arabic">Arabic</string>
-    <string name="slovak">Slovak</string>
-    <string name="romanian">Romanian</string>
-    <string name="persian">Persian</string>
-    <string name="turkish">Turkish</string>
+    <string name="arabic">العربية</string>
+    <string name="slovak">Slovenský</string>
+    <string name="romanian">Românesc</string>
+    <string name="persian">فارسی</string>
+    <string name="turkish">Türk</string>
 
     <!-- Facebook -->
     <string name="facebook_app_id">342377189428679</string>
