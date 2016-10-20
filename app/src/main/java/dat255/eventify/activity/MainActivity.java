@@ -86,17 +86,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm = this.getSupportFragmentManager();
-        fragtrans = fm.beginTransaction();
-        fragtrans.add(new GoogleApi(), "GoogleApi");
-        fragtrans.addToBackStack("GoogleApi");
-        fragtrans.commit();
-        fm.executePendingTransactions();
-        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
-        System.out.println(googleApi);
+        initFragment();
+        checkLocationPermission();
         adapter = new MainListAdapter();
 
-        checkLocationPermission();
 
         //Start collecting events if we have access to the internet
         if (ConnectionManager.getInstance().isConnected()) {
@@ -162,10 +155,6 @@ public class MainActivity extends AppCompatActivity
             googleApi.build();
             googleApi.getmGoogleApiClient().connect();
             googleApi.loopCoordinates();
-            /*GoogleApi.getLocationManager(this).build();
-            GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
-            GoogleApi.getLocationManager(this).loopCoordinates();
-            */
         }
         adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
@@ -175,15 +164,18 @@ public class MainActivity extends AppCompatActivity
                 //Start collecting events if we have access to the internet
                 if (ConnectionManager.getInstance().isConnected()) {
                     startService(new Intent(MainActivity.this, FetchEventService.class));
-
                     if (ContextCompat.checkSelfPermission(getMain(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         googleApi.loopCoordinates();
-                        //GoogleApi.getLocationManager(getMain()).loopCoordinates();
                     }
                     adapter.updateEventList();
                 } else {
+                    if (ContextCompat.checkSelfPermission(getMain(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        googleApi.loopCoordinates();
+                    }
                     adapter.updateEventList();
                 }
                 swipeRefresh.setRefreshing(false);
@@ -200,8 +192,14 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public MainActivity getMain() {
-        return this;
+    public void initFragment(){
+        fm = this.getSupportFragmentManager();
+        fragtrans = fm.beginTransaction();
+        fragtrans.add(new GoogleApi(), "GoogleApi");
+        fragtrans.addToBackStack("GoogleApi");
+        fragtrans.commit();
+        fm.executePendingTransactions();
+        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
     }
 
     public boolean checkLocationPermission() {
@@ -232,6 +230,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -248,20 +247,21 @@ public class MainActivity extends AppCompatActivity
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         System.out.println("permission granted");
-                        googleApi = (GoogleApi) fm.findFragmentByTag("GoogleApi");
                         googleApi.build();
                         googleApi.getmGoogleApiClient().connect();
-                        //GoogleApi.getLocationManager(this).build();
-                        //GoogleApi.getLocationManager(this).getmGoogleApiClient().connect();
+                        googleApi.loopCoordinates();
+                        updateAdapter();
                     }
 
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
             }
         }
+    }
+
+    public MainActivity getMain() {
+        return this;
     }
 
     public void initCalendarDropDown() {
@@ -352,12 +352,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-       /*if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
-            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
-                GoogleApi.getLocationManager(this).removeLocationUpdates();
-            }
-        }
-*/    }
+  }
 
     @Override
     public void onBackPressed() {
@@ -512,15 +507,10 @@ public class MainActivity extends AppCompatActivity
         if(googleApi.getmGoogleApiClient() != null){
             if(googleApi.getmGoogleApiClient().isConnected()){
                 googleApi.loopCoordinates();
+            }else{
+                googleApi.getmGoogleApiClient().connect();
             }
         }
-        /*
-        if(GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
-            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
-                GoogleApi.getLocationManager(this).loopCoordinates();
-            }
-        }
-        */
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
@@ -550,13 +540,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStart(){
         super.onStart();
-        //adapter.updateEventList();
-        /*if(GoogleApi.getLocationManager(this).getmGoogleApiClient()!=null) {
-            if (GoogleApi.getLocationManager(this).getmGoogleApiClient().isConnected()) {
-                GoogleApi.getLocationManager(this).loopCoordinates();
-            }
-        }*/
-
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -570,11 +553,6 @@ public class MainActivity extends AppCompatActivity
         if(googleApi.getmGoogleApiClient() !=null){
             googleApi.getmGoogleApiClient().disconnect();
         }
-        /*
-        if (GoogleApi.getLocationManager(this).getmGoogleApiClient() != null) {
-            GoogleApi.getLocationManager(this).getmGoogleApiClient().disconnect();
-        }
-        */
         if (profileTracker != null) {
             profileTracker.stopTracking();
         }
