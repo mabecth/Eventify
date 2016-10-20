@@ -115,7 +115,9 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/locationTextView"
                                 android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical" />
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:orientation="horizontal"
