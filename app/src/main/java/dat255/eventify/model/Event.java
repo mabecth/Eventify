@@ -92,6 +92,7 @@ public class Event {
         return date;
     }
 
+    // yyyy-mm-dd
     public void setDate(String date) {
         this.date = date;
     }
