@@ -98,4 +98,21 @@ public class SortByDateTest {
         assertEquals("2016-10-14 13:00", list1.get(1).getDate() + " " + list1.get(1).getTime());
     }
 
+    @Test
+    public void sortByDateTest3() throws Exception {
+        initList();
+
+        List<Event> list2 = new ArrayList<>();
+
+        list2.add(event3);
+        list2.add(event4);
+
+        SortByDate.sortDates(list2);
+
+        System.out.println("Starting sortByDateTest3...");
+
+        assertEquals("2016-10-14 11:29", list2.get(0).getDate() + " " + list2.get(0).getTime());
+        assertEquals("2016-10-14 11:30", list2.get(1).getDate() + " " + list2.get(1).getTime());
+    }
+
 }
