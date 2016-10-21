@@ -1,5 +1,7 @@
 package dat255.eventify;
 
+import com.google.android.gms.fitness.result.DataSourceStatsResult;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import dat255.eventify.model.Event;
 import dat255.eventify.util.SortByDate;
 
 import static junit.framework.Assert.assertEquals;
+
+
 
 public class SortByDateTest {
 
@@ -21,6 +25,11 @@ public class SortByDateTest {
     Event event7;
 
     List<Event> fullList;
+
+    public SortByDateTest() throws Exception {
+        sortByDateTest1();
+        sortByDateTest2();
+    }
 
     public void initList() {
         fullList = new ArrayList<>();
@@ -58,9 +67,11 @@ public class SortByDateTest {
     }
 
     @Test
-    public void translateTest1() throws Exception {
+    public void sortByDateTest1() throws Exception {
         initList();
         SortByDate.sortDates(fullList);
+
+        System.out.println("Starting sortByDateTest1...");
 
         assertEquals("1996-04-06 17:36", fullList.get(0).getDate() + " " + fullList.get(0).getTime());
         assertEquals("2015-10-14 11:28", fullList.get(1).getDate() + " " + fullList.get(1).getTime());
@@ -68,6 +79,23 @@ public class SortByDateTest {
         assertEquals("2016-10-14 11:30", fullList.get(3).getDate() + " " + fullList.get(3).getTime());
         assertEquals("2016-10-14 13:00", fullList.get(4).getDate() + " " + fullList.get(4).getTime());
         assertEquals("2016-10-20 10:00", fullList.get(5).getDate() + " " + fullList.get(5).getTime());
+    }
+
+    @Test
+    public void sortByDateTest2() throws Exception {
+        initList();
+
+        List<Event> list1 = new ArrayList<>();
+
+        list1.add(event2);
+        list1.add(event6);
+
+        SortByDate.sortDates(list1);
+
+        System.out.println("Starting sortByDateTest2...");
+
+        assertEquals("1996-04-06 17:36", list1.get(0).getDate() + " " + list1.get(0).getTime());
+        assertEquals("2016-10-14 13:00", list1.get(1).getDate() + " " + list1.get(1).getTime());
     }
 
 }
