@@ -1,4 +1,3 @@
-
 package dat255.eventify.activity;
 
 import android.Manifest;
@@ -12,7 +11,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +22,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
@@ -79,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fm;
     private FragmentTransaction fragtrans;
 
+    private NavigationView navigationView;
+
     //Facebook
     private ProfileTracker profileTracker;
 
@@ -89,12 +88,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void displayAddress(String mAddressOutput){
-        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
         TextView locationTextView = (TextView) view.findViewById(R.id.locationTV);
-        if(mAddressOutput == locationTextView.getText()){
-        }else{
+
+        if (!mAddressOutput.equals(locationTextView.getText())) {
             locationTextView.setText(mAddressOutput);
         }
     }
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity
         initFragment();
         checkLocationPermission();
         adapter = new MainListAdapter();
-
 
         //Start collecting events if we have access to the internet
         if (ConnectionManager.getInstance().isConnected()) {
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         initCalendarDropDown();
@@ -138,30 +134,7 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_logout).setTitle(R.string.log_out);
         }
 
-        //Reach views from nav_header_main.xml
-        View view = navigationView.getHeaderView(0);
-        TextView fbName = (TextView) view.findViewById(R.id.nameTV);
-        ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
-
-        //Retrieve public profile info
-        if(Profile.getCurrentProfile() == null) {
-            profileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                    // profile2 is the new profile
-                    profileTracker.stopTracking();
-                }
-            };
-
-        } else {
-            //Use available info to update views
-            if (Profile.getCurrentProfile().getName() != null) {
-                fbName.setText(Profile.getCurrentProfile().getName());
-            }
-            if (Profile.getCurrentProfile().getId() != null) {
-                fbPicture.setProfileId(Profile.getCurrentProfile().getId());
-            }
-        }
+        setProfileInfo();
 
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
@@ -210,7 +183,34 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void initFragment(){
+    public void setProfileInfo() {
+        //Reach views from nav_header_main.xml
+        View view = navigationView.getHeaderView(0);
+        TextView fbName = (TextView) view.findViewById(R.id.nameTV);
+        ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
+
+        //Retrieve public profile info of the user
+        if(Profile.getCurrentProfile() == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    profileTracker.stopTracking();
+                }
+            };
+
+        } else {
+            //Use available info to update views
+            if (Profile.getCurrentProfile().getName() != null) {
+                fbName.setText(Profile.getCurrentProfile().getName());
+            }
+            if (Profile.getCurrentProfile().getId() != null) {
+                fbPicture.setProfileId(Profile.getCurrentProfile().getId());
+            }
+        }
+    }
+
+    public void initFragment() {
         fm = this.getSupportFragmentManager();
         fragtrans = fm.beginTransaction();
         fragtrans.add(new LocationUtil(), "LocationUtil");
@@ -248,7 +248,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -277,7 +276,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
 
     public void initCalendarDropDown() {
         //No title
@@ -362,7 +360,6 @@ public class MainActivity extends AppCompatActivity
                 locationUtil.removeLocationUpdates();
             }
         }
-
   }
 
     @Override
@@ -396,7 +393,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_filtering) {
             CharSequence[] items = StorageManager.getInstance().getOrgnzList().
                     toArray(new CharSequence[
                             StorageManager.getInstance().getOrgnzList().size()]);
@@ -413,7 +410,6 @@ public class MainActivity extends AppCompatActivity
                                             boolean isChecked) {
                             if (isChecked) {
                                 // If the user checked the item, add it to the selected items
-                                // write your code when user checked the checkbox
                                 seletedItems.add(StorageManager.getInstance().
                                         getOrgnzList().get(indexSelected));
                             } else if (seletedItems.contains(StorageManager.getInstance().
