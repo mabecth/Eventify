@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private CompactCalendarView mCompactCalendarView;
     private AppBarLayout mAppBarLayout;
     private boolean isCalendarExpanded = false;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     private FragmentManager fm;
     private FragmentTransaction fragtrans;
@@ -497,13 +498,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setUpOnSettingsChangedListener() {
-        SharedPreferences.OnSharedPreferenceChangeListener listener =
+        System.out.println("Debögar: Nu sätter vi lyssnaren");
+        listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                        System.out.println("Debögar: Nu körs lyssnaren" + key);
                         if (key.equals(StorageManager.getInstance().getSettingsKey())) {
                             //Storage has changed
-
+                            System.out.println("Debögar: Nu ändrar vi värdet");
                             //if firstDayOfWeek == 2 show monday as first
                             boolean showMondayFirst = StorageManager.getInstance().getSettings().
                                     get("firstDayOfWeek")==2;

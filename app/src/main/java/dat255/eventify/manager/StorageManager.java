@@ -81,6 +81,8 @@ public class StorageManager {
 
     public void registerOnSharedPreferenceChangeListener(
             SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        System.out.println("Nu sätter vi listener");
+        listener.onSharedPreferenceChanged(preferences, "1");
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
