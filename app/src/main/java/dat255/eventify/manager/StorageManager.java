@@ -59,7 +59,6 @@ public class StorageManager {
     }
 
     public void addToFavorite() {
-
         if (isFavorite()) {
             for (int i = 0; i < myEvents.size(); i++) {
                 if (myEvents.get(i).getId().equals(chosenEvent.getId()))
