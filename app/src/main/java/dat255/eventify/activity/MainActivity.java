@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import dat255.eventify.R;
+import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.util.FetchEventService;
 import dat255.eventify.util.LocationUtil;
 import dat255.eventify.util.MyActivityListener;
@@ -60,8 +61,9 @@ public class MainActivity extends AppCompatActivity
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     //Event list
-    private ListView listView;
+    private MyEventsManager myEventsManager;
     private MainListAdapter adapter;
+    private ListView listView;
     private String allEvents = "1";
     private String onlyFavorites = "2";
     private String filtered = "3";
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         initFragment();
         checkLocationPermission();
         adapter = new MainListAdapter();
+        myEventsManager = MyEventsManager.getInstance();
 
         //Start collecting events if we have access to the internet
         if (ConnectionManager.getInstance().isConnected()) {
@@ -160,15 +163,14 @@ public class MainActivity extends AppCompatActivity
                             == PackageManager.PERMISSION_GRANTED) {
                         locationUtil.loopCoordinates();
                     }
-                    adapter.updateEventList();
                 } else {
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         locationUtil.loopCoordinates();
                     }
-                    adapter.updateEventList();
                 }
+                adapter.updateEventList();
                 swipeRefresh.setRefreshing(false);
             }
         });
@@ -394,30 +396,27 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_filtering) {
-            CharSequence[] items = StorageManager.getInstance().getOrgnzList().
-                    toArray(new CharSequence[
-                            StorageManager.getInstance().getOrgnzList().size()]);
 
-            final ArrayList seletedItems=new ArrayList();
+            final ArrayList seletedItems = new ArrayList();
+            CharSequence[]allOrganization = myEventsManager.getAllOrganization().toArray(
+                    new CharSequence[myEventsManager.getAllOrganization().size()]);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Select The Organization");
-            builder.setMultiChoiceItems(items, null,
+            builder.setMultiChoiceItems(allOrganization, null,
                     new DialogInterface.OnMultiChoiceClickListener() {
                         // indexSelected contains the index of item (of which checkbox checked)
+
                         @Override
                         public void onClick(DialogInterface dialog, int indexSelected,
                                             boolean isChecked) {
                             if (isChecked) {
                                 // If the user checked the item, add it to the selected items
-                                seletedItems.add(StorageManager.getInstance().
-                                        getOrgnzList().get(indexSelected));
-                            } else if (seletedItems.contains(StorageManager.getInstance().
-                                    getOrgnzList().get(indexSelected))) {
+                                seletedItems.add(myEventsManager.getAllOrganization().get(indexSelected));
+                            } else if (seletedItems.contains(myEventsManager.getAllOrganization().get(indexSelected))) {
                                 // Else, if the item is already in the array, remove it
                                 // write your code when user Uchecked the checkbox
-                                seletedItems.remove(StorageManager.getInstance().
-                                        getOrgnzList().get(indexSelected));
+                                seletedItems.remove(myEventsManager.getAllOrganization().get(indexSelected));
                             }
                         }
                     })
@@ -430,9 +429,8 @@ public class MainActivity extends AppCompatActivity
                             for (int i = 0; i< seletedItems.size();i++){
                                 System.out.println(seletedItems.get(i) + "");
                             }
-                            adapter.setChosenOrgnz(seletedItems);
                             typeOfList = filtered;
-                            adapter.setChosenOrgnz(seletedItems);
+                            myEventsManager.setChosenOrgnization(seletedItems);
                             adapter.setOnlyFavorite(typeOfList);
                             adapter.updateEventList();
 

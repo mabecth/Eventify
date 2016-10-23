@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
 import dat255.eventify.R;
+import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.model.Event;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.util.SortByDate;
@@ -31,10 +32,12 @@ public class MainListAdapter extends BaseAdapter{
     private String onlyFavorites = "2";
     private String filtered = "3";
     private static String typeOfList = "1";
-    private static List<String> chosenOrgnz;
+    private MyEventsManager manager;
+
 
     public MainListAdapter(){
-        listOfEvents = StorageManager.getInstance().getEvents();
+        manager = MyEventsManager.getInstance();
+        listOfEvents = manager.getEvents();
 
         SharedPreferences.OnSharedPreferenceChangeListener listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -102,34 +105,20 @@ public class MainListAdapter extends BaseAdapter{
 
     public void setChosenEvent(int position)
     {
-        StorageManager.getInstance().setChosenEvent(listOfEvents.get(position));
-    }
-
-    public void setChosenOrgnz(List<String> orgnz)
-    {
-        chosenOrgnz = orgnz;
+        manager.setChosenEvent(listOfEvents.get(position));
     }
 
     public void updateEventList() {
-
         if (typeOfList.equals(onlyFavorites))
         {
-            listOfEvents = StorageManager.getInstance().getFavorites();
+            listOfEvents = manager.getFavorites();
         }
         else if (typeOfList.equals(allEvents)){
-            listOfEvents = StorageManager.getInstance().getEvents();
+            listOfEvents = manager.getEvents();
         }
-        else {
-            List<Event> temp = StorageManager.getInstance().getEvents();
-            listOfEvents.clear();
-            for (int i = 0; i<temp.size();i++)
-            {
-                if (chosenOrgnz.contains(temp.get(i).getOwner())){
-                    listOfEvents.add(temp.get(i));
-                }
-            }
+        else if (typeOfList.equals(filtered)){
+            listOfEvents = manager.getFilteredEvents();
         }
-
 
         SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();

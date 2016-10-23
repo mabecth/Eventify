@@ -31,54 +31,7 @@ public class StorageManager {
     private static HashMap<String, Integer> settings = new HashMap<>();
     private static List<Event> events = new CopyOnWriteArrayList<>();
 
-    //My events
-    private static List<Event> myEvents = new ArrayList<>();
-    private static Event chosenEvent = new Event();
 
-    public List<String> getOrgnzList() {
-        List<Event> allEvents = getEvents();
-        List<String> allOrgns = new ArrayList<>();
-
-        for (int i = 0; i < allEvents.size(); i++) {
-            if (allOrgns.contains(allEvents.get(i).getOwner())) {
-                System.out.println(allEvents.get(i).getOwner());
-            } else {
-                allOrgns.add(allEvents.get(i).getOwner());
-            }
-        }
-        return allOrgns;
-    }
-
-    public void setChosenEvent(Event e) {
-        chosenEvent = e;
-        System.out.println("Chosen Event is " + chosenEvent.getTitle());
-    }
-
-    public Event getChosenEvent() {
-        return chosenEvent;
-    }
-
-    public void addToFavorite() {
-        if (isFavorite()) {
-            for (int i = 0; i < myEvents.size(); i++) {
-                if (myEvents.get(i).getId().equals(chosenEvent.getId()))
-                    myEvents.remove(i);
-                }
-        }
-        else myEvents.add(chosenEvent);
-
-        storeFavorites();
-    }
-
-    public boolean isFavorite() {
-        boolean isFavorite = false;
-
-        for (int i = 0; i <myEvents.size(); i++) {
-            if (myEvents.get(i).getId().equals(chosenEvent.getId()))
-                isFavorite = true;
-        }
-        return isFavorite;
-    }
 
     private StorageManager() {
     }
@@ -157,7 +110,7 @@ public class StorageManager {
         }
     }
 
-    public void storeFavorites() {
+    public void storeFavorites(List<Event> myEvents) {
         String events_json = gson.toJson(myEvents);
         editor.putString(favoritesKey,events_json);
         editor.commit();
@@ -166,12 +119,12 @@ public class StorageManager {
     public List<Event> getFavorites() {
         String events_json = preferences.getString(favoritesKey,"");
 
+
         if (gson.fromJson(events_json,new TypeToken<List<Event>>(){}.getType()) == null) {
-            myEvents = new ArrayList<>();
+            return new ArrayList<>();
         } else {
-            myEvents = gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
+            return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
         }
-        return myEvents;
     }
 
     public void storeEvents(List<Event> events) {

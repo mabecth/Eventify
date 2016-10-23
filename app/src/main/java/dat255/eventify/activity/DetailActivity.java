@@ -22,6 +22,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.memetix.mst.language.Language;
 import dat255.eventify.R;
+import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.model.Event;
 import dat255.eventify.util.TranslateAsyncTask;
 import dat255.eventify.model.TranslateRequest;
@@ -31,6 +32,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private Event event;
     private TextView desc;
+    private MyEventsManager myEventsManager;
 
     FloatingActionButton fab;
     FloatingActionButton fab1;
@@ -48,7 +50,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        event = StorageManager.getInstance().getChosenEvent();
+        myEventsManager = MyEventsManager.getInstance();
+        event = myEventsManager.getChosenEvent();
         initView();
         initButtons();
 
@@ -98,10 +101,11 @@ public class DetailActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new BackBtnOnClick());
 
         favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
-        if (StorageManager.getInstance().isFavorite())
+        if (myEventsManager.isFavorited())
         {
             favoriteBtn.setBackgroundResource(R.drawable.ic_star);
         }
+        else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
 
         ImageButton facebook = (ImageButton) findViewById(R.id.facebookBtn);
@@ -192,9 +196,9 @@ public class DetailActivity extends AppCompatActivity {
     class FavoriteBtnOnClick implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            StorageManager.getInstance().addToFavorite();
+            myEventsManager.modifyFavorites();
 
-            if (StorageManager.getInstance().isFavorite()) {
+            if (myEventsManager.isFavorited()) {
                 favoriteBtn.setBackgroundResource(R.drawable.ic_star);
                 Toast.makeText(DetailActivity.this, "Event added to my events",
                         Toast.LENGTH_SHORT).show();
