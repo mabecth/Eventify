@@ -216,8 +216,4 @@ public class StorageManager {
         }
         return index;
     }
-
-    public Event getEvent(int index) {
-        return getEvents().get(index);
-    }
 }
