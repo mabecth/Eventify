@@ -33,6 +33,7 @@ public class MainListAdapter extends BaseAdapter{
     private String filtered = "3";
     private static String typeOfList = "1";
     private MyEventsManager manager;
+    private boolean onlyDistance = false;
 
 
     public MainListAdapter(){
@@ -150,10 +151,16 @@ public class MainListAdapter extends BaseAdapter{
                 currEvent.getDate().length()));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
-        locationTextView.setText(currEvent.getPlace());
         attendeesTextView.setText(currEvent.getNbrAttending());
-        distanceTextView.setText(currEvent.getDistance());
         orgTextView.setText(currEvent.getOwner());
+        if(!onlyDistance){
+            locationTextView.setText(currEvent.getPlace());
+            distanceTextView.setText(currEvent.getDistance());
+        }
+        else{
+            locationTextView.setText(currEvent.getDistance());
+            distanceTextView.setText("");
+        }
 
         //Display image
         Glide.with(viewGroup.getContext())
@@ -161,5 +168,13 @@ public class MainListAdapter extends BaseAdapter{
                 .fitCenter()
                 .centerCrop()
                 .into(eventProfilePictureView);
+    }
+
+    public void setOnlyDistanceTrue(){
+        onlyDistance=true;
+    }
+
+    public void setOnlyDistanceFalse(){
+        onlyDistance=false;
     }
 }

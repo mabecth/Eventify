@@ -498,19 +498,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setUpOnSettingsChangedListener() {
-        System.out.println("Debögar: Nu sätter vi lyssnaren");
         listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        System.out.println("Debögar: Nu körs lyssnaren" + key);
                         if (key.equals(StorageManager.getInstance().getSettingsKey())) {
                             //Storage has changed
-                            System.out.println("Debögar: Nu ändrar vi värdet");
+
                             //if firstDayOfWeek == 2 show monday as first
                             boolean showMondayFirst = StorageManager.getInstance().getSettings().
                                     get("firstDayOfWeek")==2;
                             mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
+
+                            if(StorageManager.getInstance().getSettings().get("distance")==0){
+                                adapter.setOnlyDistanceFalse();
+                            }
+                            else{
+                                adapter.setOnlyDistanceTrue();
+                            }
+
                         }
                     }
                 };
