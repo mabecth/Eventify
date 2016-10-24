@@ -105,7 +105,7 @@ public class StorageManager {
             settings.put("distance", 0);
             settings.put("notifyDay", 0);
             settings.put("notifyHour", 0);
-            settings.put("firstDayOfWeek", 2);
+            settings.put("firstDayOfWeek", 1);
             return settings;
         } else {
             return gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType());

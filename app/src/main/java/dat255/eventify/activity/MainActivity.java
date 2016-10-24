@@ -1,6 +1,8 @@
 package dat255.eventify.activity;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +15,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
@@ -49,6 +53,7 @@ import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.util.FetchEventService;
 import dat255.eventify.util.LocationUtil;
 import dat255.eventify.util.MyActivityListener;
+import dat255.eventify.util.NotificationsUtil;
 import dat255.eventify.view.adapter.MainListAdapter;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         initFragment();
         checkLocationPermission();
@@ -296,7 +303,7 @@ public class MainActivity extends AppCompatActivity
 
         //if saved vaule == 2 show monday as first
         boolean showMondayFirst = StorageManager.getInstance().getSettings().
-                get("firstDayOfWeek") == 2;
+                get("firstDayOfWeek") == 1;
         mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
 
         //If user change first day of week in settings, then update this calendar
@@ -507,7 +514,7 @@ public class MainActivity extends AppCompatActivity
 
                             //if firstDayOfWeek == 2 show monday as first
                             boolean showMondayFirst = StorageManager.getInstance().getSettings().
-                                    get("firstDayOfWeek")==2;
+                                    get("firstDayOfWeek")==1;
                             mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
 
                             if(StorageManager.getInstance().getSettings().get("distance")==0){

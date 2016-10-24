@@ -74,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
         notifyHours.setOnItemSelectedListener(dropdownListener);
 
 
-        firstDayArray = new String[]{"Saturday", "Sunday", "Monday"};
+        firstDayArray = new String[]{"Sunday", "Monday"};
         ArrayAdapter<String> adapterFirstDay = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, firstDayArray);
         firstDayCalendar.setAdapter(adapterFirstDay);

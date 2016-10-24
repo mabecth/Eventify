@@ -10,6 +10,9 @@ import java.util.List;
 import dat255.eventify.R;
 import dat255.eventify.model.Event;
 import dat255.eventify.util.Constants;
+import dat255.eventify.util.NotificationsUtil;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Long on 21/10/2016.
@@ -24,6 +27,7 @@ public class MyEventsManager {
     private Event chosenEvent;
     private static MyEventsManager myEventsManager;
     private StorageManager storageManager;
+    private NotificationsUtil notificationsUtil = new NotificationsUtil();
 
     public MyEventsManager() {
         storageManager = StorageManager.getInstance();
@@ -76,7 +80,12 @@ public class MyEventsManager {
                 }
             }
         }
-        else favorites.add(chosenEvent);
+        else {
+            favorites.add(chosenEvent);
+
+            notificationsUtil.buildNotification(getApplicationContext(),"debug title","debug body");
+            notificationsUtil.setNotificationTime(getApplicationContext());
+        }
         storageManager.storeFavorites(favorites);
     }
 
