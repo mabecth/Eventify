@@ -1,5 +1,6 @@
 package dat255.eventify.activity;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -21,6 +22,9 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.memetix.mst.language.Language;
+
+import java.lang.reflect.Method;
+
 import dat255.eventify.R;
 import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.model.Event;
@@ -51,7 +55,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         myEventsManager = MyEventsManager.getInstance();
-        event = myEventsManager.getChosenEvent();
+
+        //If opened from a notification
+        if (getIntent().getSerializableExtra("event") != null) {
+            event = (Event) getIntent().getSerializableExtra("event");
+        } else {
+            event = myEventsManager.getChosenEvent();
+        }
+
         initView();
         initButtons();
 

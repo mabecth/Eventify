@@ -1,6 +1,9 @@
 package dat255.eventify.manager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import dat255.eventify.model.Event;
 import dat255.eventify.util.Constants;
 import dat255.eventify.util.NotificationsUtil;
 
+import static android.content.Context.ALARM_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
@@ -42,7 +46,7 @@ public class MyEventsManager {
         if (myEventsManager == null) {
             myEventsManager = new MyEventsManager();
         }
-         return myEventsManager;
+        return myEventsManager;
     }
 
     /**
@@ -56,7 +60,7 @@ public class MyEventsManager {
     /**
      * Detail
      */
-     public void setChosenEvent(Event e) {
+    public void setChosenEvent(Event e) {
         chosenEvent = e;
     }
 
@@ -82,9 +86,7 @@ public class MyEventsManager {
         }
         else {
             favorites.add(chosenEvent);
-
-            notificationsUtil.buildNotification(getApplicationContext(),"debug title","debug body");
-            notificationsUtil.setNotificationTime(getApplicationContext());
+            handleNotification(getApplicationContext(), chosenEvent);
         }
         storageManager.storeFavorites(favorites);
     }
@@ -98,6 +100,17 @@ public class MyEventsManager {
         }
         return  result;
     }
+
+
+    public void handleNotification(Context context, Event event) {
+        Intent alarmIntent = new Intent(context, NotificationsUtil.class);
+        alarmIntent.putExtra("event", event);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, 5000, pendingIntent);
+    }
+
 
     /**
      * Filtering
@@ -121,7 +134,7 @@ public class MyEventsManager {
     public List<Event> getFilteredEvents()
     {
         filteredEvents = new ArrayList<>();
-        
+
         for (int i = 0;i < allEvents.size(); i++) {
             if(chosenOrgnization.contains(allEvents.get(i).getOwner())) {
                 filteredEvents.add(allEvents.get(i));

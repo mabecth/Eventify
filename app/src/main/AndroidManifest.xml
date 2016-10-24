@@ -29,6 +29,9 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".util.NotificationsUtil"
+            android:process=":remote"/>
+
         <!-- Facebook API -->
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -40,12 +43,13 @@
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.DetailActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.ActionBar.Transparent"></activity>
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:parentActivityName=".activity.MainActivity"/>
 
         <service
             android:name=".util.FetchAddressIntentService"
@@ -61,7 +65,7 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
