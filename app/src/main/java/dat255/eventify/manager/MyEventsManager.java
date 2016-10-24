@@ -33,7 +33,7 @@ public class MyEventsManager {
     private StorageManager storageManager;
     private NotificationsUtil notificationsUtil = new NotificationsUtil();
 
-    public MyEventsManager() {
+    private MyEventsManager() {
         storageManager = StorageManager.getInstance();
         allEvents = storageManager.getEvents();
         favorites = storageManager.getFavorites();
