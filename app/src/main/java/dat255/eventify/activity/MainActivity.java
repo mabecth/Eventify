@@ -224,7 +224,6 @@ public class MainActivity extends AppCompatActivity
         fm = this.getSupportFragmentManager();
         fragtrans = fm.beginTransaction();
         fragtrans.add(new LocationUtil(), "LocationUtil");
-        fragtrans.addToBackStack("LocationUtil");
         fragtrans.commit();
         fm.executePendingTransactions();
         locationUtil = (LocationUtil) fm.findFragmentByTag("LocationUtil");
