@@ -23,22 +23,22 @@
             <LinearLayout
                 android:id="@+id/compactcalendar_view_container"
                 android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="vertical"
                 android:paddingTop="?attr/actionBarSize"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="1.0"
-                android:orientation="vertical"
-                android:layout_height="300dp">
+                app:layout_collapseParallaxMultiplier="1.0">
 
                 <TextView
-                    android:text="September"
-                    android:layout_width="match_parent"
                     android:id="@+id/monthTextView"
-                    android:textColor="#fff"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp" />
+                    android:layout_marginStart="10dp"
+                    android:text="September"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
 
                 <com.github.sundeepk.compactcalendarview.CompactCalendarView
                     android:id="@+id/compactcalendar_view"
@@ -59,8 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <TextView
                     android:id="@+id/toolbar_title"
@@ -73,25 +73,26 @@
                     android:textStyle="bold" />
 
                 <ImageButton
+                    android:id="@+id/calBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar_dropdown"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/calBtn"
                     android:layout_gravity="end"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"/>
+                    android:layout_marginRight="5dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_calendar_dropdown" />
+
                 <ImageView
+                    android:id="@+id/arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_up"
-                    android:id="@+id/arrow"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_arrow_up" />
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>

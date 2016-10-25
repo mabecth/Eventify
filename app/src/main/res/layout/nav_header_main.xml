@@ -16,31 +16,31 @@
         android:id="@+id/profilePictureIV"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/nameTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_alignParentLeft="true"
-        android:text="@string/guest"
-        android:layout_below="@+id/profilePictureIV"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/profilePictureIV"
+        android:text="@string/guest"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/locationTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="53dp"
-        android:layout_marginEnd="53dp"
-        android:text=""
-        android:layout_below="@+id/nameTV"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/nameTV"
+        android:layout_marginEnd="53dp"
+        android:layout_marginRight="53dp"
+        android:text=""
         android:textSize="12sp" />
 
 </RelativeLayout>

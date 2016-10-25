@@ -15,30 +15,30 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <ImageButton
-                android:src="@drawable/ic_keyboard_backspace"
-                android:background="@android:color/transparent"
-                android:scaleType="centerCrop"
+                android:id="@+id/backBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:id="@+id/backBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_keyboard_backspace" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/settings_name"
+                android:layout_weight="1"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:layout_weight="1">
+                app:title="@string/settings_name">
 
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
@@ -46,107 +46,110 @@
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/content"
         android:layout_marginTop="?attr/actionBarSize"
         android:padding="20dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <Switch
-                android:text="Notifications: "
+                android:id="@+id/notiSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/notiSwitch"
-                android:textSize="20sp"
                 android:checked="true"
-                android:paddingBottom="10dp" />
+                android:paddingBottom="10dp"
+                android:text="Notifications: "
+                android:textSize="20sp" />
 
             <TextView
-                android:text="How many days ahead?"
+                android:id="@+id/daysText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/daysText"
+                android:text="How many days ahead?"
                 android:textColor="#212121" />
 
             <Spinner
-                android:layout_height="wrap_content"
                 android:id="@+id/spinnerDays"
-                android:layout_width="150dp" />
+                android:layout_width="150dp"
+                android:layout_height="wrap_content" />
+
             <TextView
-                android:text="At which time?"
+                android:id="@+id/hoursText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:id="@+id/hoursText"
+                android:text="At which time?"
                 android:textColor="#212121" />
 
             <Spinner
-                android:layout_height="wrap_content"
                 android:id="@+id/spinnerHours"
-                android:layout_width="150dp" />
+                android:layout_width="150dp"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:background="#BCBCBC"
                 android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:background="#BCBCBC"
+                android:orientation="horizontal">
 
             </LinearLayout>
 
             <TextView
-                android:text="First day of the week?"
+                android:id="@+id/firstDayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:id="@+id/firstDayText"
+                android:text="First day of the week?"
                 android:textColor="#212121"
                 android:textSize="20sp" />
 
             <Spinner
-                android:layout_height="wrap_content"
                 android:id="@+id/spinnerFirstDay"
-                android:layout_width="150dp" />
+                android:layout_width="150dp"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:background="#BCBCBC"
                 android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:background="#BCBCBC"
+                android:orientation="horizontal">
 
             </LinearLayout>
+
             <Switch
-                android:text="Show distance only:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/distanceSwitch"
-                android:textSize="20sp"
-                android:checked="true" />
-            <TextView
-                android:text="In events, replace location with distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Show distance only:"
+                android:textSize="20sp" />
+
+            <TextView
                 android:id="@+id/Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="In events, replace location with distance"
                 android:textSize="14sp" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:background="#BCBCBC"
                 android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:background="#BCBCBC"
+                android:orientation="horizontal">
 
             </LinearLayout>
 

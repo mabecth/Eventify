@@ -6,199 +6,203 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="#E9E9E9">
+        android:background="#E9E9E9"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_height="match_parent"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingEnd="10dp"
             android:paddingLeft="10dp"
-            android:paddingStart="10dp"
             android:paddingRight="10dp"
-            android:paddingEnd="10dp">
+            android:paddingStart="10dp">
 
             <TextView
-                android:text="23"
-                android:layout_width="match_parent"
                 android:id="@+id/dateTextView"
-                android:layout_height="wrap_content"
-                android:textSize="32sp"
-                android:textAlignment="center"
-                android:textColor="@color/colorTextDark"/>
-
-            <TextView
-                android:text="Sep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/monthTextView"
-                android:layout_marginTop="-5dp"
-                android:textSize="18sp"
+                android:text="23"
                 android:textAlignment="center"
-                android:textColor="@color/colorTextDark" />
+                android:textColor="@color/colorTextDark"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/monthTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:text="Sep"
+                android:textAlignment="center"
+                android:textColor="@color/colorTextDark"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
             android:padding="6dp">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:text="Titel syns här"
+                    android:id="@+id/nameTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nameTextView"
                     android:layout_weight="1"
-                    android:textSize="18sp"
-                    android:maxWidth="150dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/colorTextDark" />
+                    android:maxWidth="150dp"
+                    android:text="Titel syns här"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:orientation="horizontal"
                     android:paddingTop="10dp">
 
                     <ImageView
-                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:id="@+id/eventProfilePictureView"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/com_facebook_button_icon_blue"
+                        android:layout_width="80dp"
                         android:layout_height="match_parent"
-                        android:layout_width="80dp" />
+                        android:scaleType="fitXY"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        app:srcCompat="@drawable/com_facebook_button_icon_blue" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_height="match_parent"
                     android:layout_width="fill_parent"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="5dp">
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="10dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
                             <ImageView
                                 android:id="@+id/placeImg"
-                                android:src="@drawable/ic_place"
+                                android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:layout_width="20dp" />
+                                android:src="@drawable/ic_place" />
 
                             <TextView
-                                android:text="Angereds Torg 13"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
                                 android:id="@+id/locationTextView"
-                                android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginStart="5dp"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/timeImg"
-                                android:src="@drawable/ic_access_time"
-                                android:layout_height="20dp"
-                                android:layout_width="20dp" />
-
-                            <TextView
-                                android:text="19:00"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/timeTextView"
-                                android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginStart="5dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/attendingImg"
-                                android:src="@drawable/ic_supervisor_account"
-                                android:layout_height="20dp"
-                                android:layout_width="20dp" />
-
-                            <TextView
-                                android:text="10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/attendeesTextView"
-                                android:textColor="@color/colorTextDark"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginStart="5dp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/orgImg"
-                                android:src="@drawable/ic_business"
-                                android:layout_height="20dp"
-                                android:layout_width="20dp" />
-
-                            <TextView
-                                android:text="Blå hoppet"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/orgTextView"
-                                android:textColor="@color/colorTextDark"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginStart="5dp"
-                                android:maxLines="1" />
+                                android:text="Angereds Torg 13"
+                                android:textColor="@color/colorTextDark" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/timeImg"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_access_time" />
+
+                            <TextView
+                                android:id="@+id/timeTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
+                                android:text="19:00"
+                                android:textColor="@color/colorTextDark" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/attendingImg"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_supervisor_account" />
+
+                            <TextView
+                                android:id="@+id/attendeesTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
+                                android:text="10"
+                                android:textColor="@color/colorTextDark" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/orgImg"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_business" />
+
+                            <TextView
+                                android:id="@+id/orgTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
+                                android:maxLines="1"
+                                android:text="Blå hoppet"
+                                android:textColor="@color/colorTextDark" />
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_height="20dp"
                         android:layout_width="match_parent"
-                        android:minWidth="120dp">
+                        android:layout_height="20dp"
+                        android:minWidth="120dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:text="10km"
-                            android:layout_height="wrap_content"
                             android:id="@+id/distanceTextView"
-                            android:textAlignment="textEnd"
                             android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
+                            android:text="10km"
+                            android:textAlignment="textEnd"
                             android:textColor="#3b5998" />
                     </LinearLayout>
                 </LinearLayout>
