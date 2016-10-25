@@ -1,7 +1,5 @@
 package dat255.eventify;
 
-import com.google.android.gms.fitness.result.DataSourceStatsResult;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,8 +9,6 @@ import dat255.eventify.model.Event;
 import dat255.eventify.util.SortByDate;
 
 import static junit.framework.Assert.assertEquals;
-
-
 
 public class SortByDateTest {
 

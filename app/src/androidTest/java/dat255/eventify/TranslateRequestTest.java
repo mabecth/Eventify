@@ -12,15 +12,10 @@ import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
 
-import dat255.eventify.activity.MainActivity;
 import dat255.eventify.model.TranslateRequest;
 import dat255.eventify.util.TranslateAsyncTask;
 
 import static org.junit.Assert.assertEquals;
-
-/**
- * Created by alexsundback on 2016-10-21.
- */
 
 public class TranslateRequestTest {
 

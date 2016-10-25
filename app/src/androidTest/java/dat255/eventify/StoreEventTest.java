@@ -14,10 +14,6 @@ import dat255.eventify.model.Event;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * Created by alexsundback on 2016-10-21.
- */
-
 public class StoreEventTest {
 
     private List<Event> myTestEvents = new ArrayList<>();
@@ -41,7 +37,5 @@ public class StoreEventTest {
         StorageManager.getInstance().storeEvents(myTestEvents);
 
         assertEquals("1", StorageManager.getInstance().getEvents().get(0).getId());
-
-
     }
 }

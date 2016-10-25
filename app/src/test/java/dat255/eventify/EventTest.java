@@ -1,13 +1,14 @@
 package dat255.eventify;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import dat255.eventify.model.Event;
 
 public class EventTest {
     @Test
-    public void eventClassTest() throws Exception{
+    public void eventClassTest() throws Exception {
         Event event = new Event();
         event.setTitle("Title");
         event.setPlace("Place");
