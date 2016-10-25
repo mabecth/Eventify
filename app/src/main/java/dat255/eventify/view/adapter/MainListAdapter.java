@@ -21,7 +21,7 @@ public class MainListAdapter extends BaseAdapter {
 
     private static final String TAG = "MainListAdapter";
 
-    private static List<Event> listOfEvents;
+    private List<Event> listOfEvents;
     private Event currEvent;
     private Event lastEvent;
     private ImageView eventProfilePictureView;
@@ -32,7 +32,7 @@ public class MainListAdapter extends BaseAdapter {
     private String allEvents = "1";
     private String onlyFavorites = "2";
     private String filtered = "3";
-    private static String typeOfList = "1";
+    private String typeOfList = "1";
     private MyEventsManager manager;
     private boolean onlyDistance = false;
 
@@ -109,7 +109,7 @@ public class MainListAdapter extends BaseAdapter {
     }
 
     public void setOnlyFavorite(String typeOfList) {
-        MainListAdapter.typeOfList = typeOfList;
+        this.typeOfList = typeOfList;
     }
 
     private void initializeView() {
