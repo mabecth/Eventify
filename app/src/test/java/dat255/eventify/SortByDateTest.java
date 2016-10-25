@@ -1,5 +1,7 @@
 package dat255.eventify;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public class SortByDateTest {
         initList();
         SortByDate.sortDates(fullList);
 
-        System.out.println("Starting sortByDateTest1...");
+        Log.i("SortByDateTest", "Starting sortByDateTest1...");
 
         assertEquals("1996-04-06 17:36", fullList.get(0).getDate() + " " + fullList.get(0).getTime());
         assertEquals("2015-10-14 11:28", fullList.get(1).getDate() + " " + fullList.get(1).getTime());
@@ -88,7 +90,7 @@ public class SortByDateTest {
 
         SortByDate.sortDates(list1);
 
-        System.out.println("Starting sortByDateTest2...");
+        Log.i("SortByDateTest", "Starting sortByDateTest2...");
 
         assertEquals("1996-04-06 17:36", list1.get(0).getDate() + " " + list1.get(0).getTime());
         assertEquals("2016-10-14 13:00", list1.get(1).getDate() + " " + list1.get(1).getTime());
@@ -105,7 +107,7 @@ public class SortByDateTest {
 
         SortByDate.sortDates(list2);
 
-        System.out.println("Starting sortByDateTest3...");
+        Log.i("SortByDateTest", "Starting sortByDateTest3...");
 
         assertEquals("2016-10-14 11:29", list2.get(0).getDate() + " " + list2.get(0).getTime());
         assertEquals("2016-10-14 11:30", list2.get(1).getDate() + " " + list2.get(1).getTime());

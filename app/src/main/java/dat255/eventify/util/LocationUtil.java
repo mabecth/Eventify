@@ -72,7 +72,9 @@ public class LocationUtil extends Fragment implements
     }
 
     public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
         long factor = (long) Math.pow(10, places);
         value = value * factor;
         long tmp = Math.round(value);
@@ -87,14 +89,14 @@ public class LocationUtil extends Fragment implements
             if (listOfEvents.size() > 0) {
                 for (int index = 0; index < listOfEvents.size(); index++) {
                     LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(), StorageManager.getInstance().getEvents().get(index).getLongitude());
-                    CalculationByDistance(latLng, endLatLng, index);
+                    calculationByDistance(latLng, endLatLng, index);
                 }
             }
         }
     }
 
 
-    public synchronized void CalculationByDistance(LatLng StartP, LatLng EndP, int index) {
+    public synchronized void calculationByDistance(LatLng StartP, LatLng EndP, int index) {
         int Radius = 6371;// radius of earth in Km
         double lat1 = StartP.latitude;
         double lat2 = EndP.latitude;
@@ -115,7 +117,6 @@ public class LocationUtil extends Fragment implements
         int meterInDec = Integer.valueOf(newFormat.format(meter));
         Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
                 + " Meter   " + meterInDec);
-        System.out.println("Distance: " + Radius * c);
         updateDistance(index, round(Radius * c, 1) + " km");
     }
 
@@ -167,10 +168,8 @@ public class LocationUtil extends Fragment implements
     public void sendAddressResultToMain() {
         if (ConnectionManager.getInstance().isConnected()) {
             myActivityListener.displayAddress(mAddressOutput);
-        } else if (!ConnectionManager.getInstance().isConnected()) {
-            if (StorageManager.getInstance().getAddress() != null) {
-                myActivityListener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
-            }
+        } else if (!ConnectionManager.getInstance().isConnected() && StorageManager.getInstance().getAddress() != null) {
+            myActivityListener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
         }
 
         Log.d(TAG, mAddressOutput);

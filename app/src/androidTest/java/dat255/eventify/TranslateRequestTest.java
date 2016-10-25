@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.memetix.mst.language.Language;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -24,7 +23,7 @@ public class TranslateRequestTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        Assert.assertEquals("dat255.eventify", appContext.getPackageName());
+        assertEquals("dat255.eventify", appContext.getPackageName());
 
         TranslateRequest translateTest = new TranslateRequest(Language.FRENCH, "Tack");
 
@@ -43,12 +42,11 @@ public class TranslateRequestTest {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e("TranslateRequestTest", "InterruptedException", e);
                 }
                 assertEquals("Merci", textView.getText());
                 Log.d("Translate", textView.getText().toString());
                 signal.countDown();
-
 
             }
         });

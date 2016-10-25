@@ -25,6 +25,7 @@
     <string name="turkish">Türk</string>
 
     <!-- Facebook -->
+    <string name="facebook">facebook</string>
     <string name="facebook_app_id">342377189428679</string>
     <string name="facebook_login_button_text">Log in with Facebook</string>
 

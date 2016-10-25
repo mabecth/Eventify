@@ -3,7 +3,6 @@ package dat255.eventify;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class StoreEventTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        Assert.assertEquals("dat255.eventify", appContext.getPackageName());
+        assertEquals("dat255.eventify", appContext.getPackageName());
 
         StorageManager.getInstance().setContext(appContext);
 

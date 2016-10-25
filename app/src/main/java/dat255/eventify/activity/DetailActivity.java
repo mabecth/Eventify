@@ -111,7 +111,9 @@ public class DetailActivity extends AppCompatActivity {
         favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
         if (myEventsManager.isFavorited()) {
             favoriteBtn.setBackgroundResource(R.drawable.ic_star);
-        } else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+        } else  {
+            favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+        }
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
 
         ImageButton facebook = (ImageButton) findViewById(R.id.facebookBtn);
@@ -192,7 +194,7 @@ public class DetailActivity extends AppCompatActivity {
             if (event.getPlace() == null) {
                 Toast.makeText(DetailActivity.this, "Event has no address", Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Intent intent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
                 startActivity(intent);
             }
@@ -208,7 +210,9 @@ public class DetailActivity extends AppCompatActivity {
                 favoriteBtn.setBackgroundResource(R.drawable.ic_star);
                 Toast.makeText(DetailActivity.this, "Event added to my events",
                         Toast.LENGTH_SHORT).show();
-            } else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+            } else {
+                favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+            }
         }
     }
 

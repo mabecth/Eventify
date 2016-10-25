@@ -146,11 +146,11 @@ public class MainActivity extends AppCompatActivity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            System.out.println("permission granted");
             locationUtil.buildGoogleApi();
             locationUtil.getmGoogleApiClient().connect();
             locationUtil.loopCoordinates();
         }
+
         adapter.updateEventList();
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -265,7 +265,6 @@ public class MainActivity extends AppCompatActivity
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        System.out.println("permission granted");
                         locationUtil.buildGoogleApi();
                         locationUtil.getmGoogleApiClient().connect();
                         locationUtil.loopCoordinates();
@@ -304,7 +303,6 @@ public class MainActivity extends AppCompatActivity
         //Show the events in the calendar view
         List<Event> eventToShowInCal = new ArrayList<>();
         for (dat255.eventify.model.Event e : StorageManager.getInstance().getEvents()) {
-            System.out.println(e.getEventTimeInMillis());
             eventToShowInCal.add(new Event(Color.parseColor("#039BE5"), e.getEventTimeInMillis()));
         }
         mCompactCalendarView.addEvents(eventToShowInCal);
@@ -357,10 +355,8 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         //Stop location updates when Activity is no longer active
-        if (locationUtil.getmGoogleApiClient() != null) {
-            if (locationUtil.getmGoogleApiClient().isConnected()) {
-                locationUtil.removeLocationUpdates();
-            }
+        if (locationUtil.getmGoogleApiClient() != null && locationUtil.getmGoogleApiClient().isConnected()) {
+            locationUtil.removeLocationUpdates();
         }
     }
 
@@ -426,9 +422,6 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int id) {
                             //  Your code when user clicked on OK
                             //  You can write the code  to save the selected item here
-                            for (int i = 0; i < seletedItems.size(); i++) {
-                                System.out.println(seletedItems.get(i) + "");
-                            }
                             typeOfList = filtered;
                             myEventsManager.setChosenOrgnization(seletedItems);
                             adapter.setOnlyFavorite(typeOfList);
@@ -461,10 +454,8 @@ public class MainActivity extends AppCompatActivity
             toolbarTitle.setText(R.string.app_name);
             typeOfList = allEvents;
             adapter.setOnlyFavorite(typeOfList);
-            if (locationUtil.getmGoogleApiClient() != null) {
-                if (locationUtil.getmGoogleApiClient().isConnected()) {
-                    locationUtil.loopCoordinates();
-                }
+            if (locationUtil.getmGoogleApiClient() != null && locationUtil.getmGoogleApiClient().isConnected()) {
+                locationUtil.loopCoordinates();
             }
             adapter.updateEventList();
 
@@ -478,7 +469,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,
                     ScreenManager.getInstance().getSettingsActivity()));
         } else if (id == R.id.nav_logout) {
-            if (StorageManager.getInstance().getLoginType().equals("facebook")) {
+            if (StorageManager.getInstance().getLoginType().equals(getString(R.string.facebook))) {
                 LoginManager.getInstance().logOut();
                 startActivity(new Intent(MainActivity.this,
                         ScreenManager.getInstance().getLoginActivity()));
@@ -534,7 +525,7 @@ public class MainActivity extends AppCompatActivity
         adapter.updateEventList();
         toolbarTitle.setText(R.string.app_name);
 
-        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+        if (StorageManager.getInstance().getLoginType().equals(getString(R.string.facebook)) &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(MainActivity.this,
                     ScreenManager.getInstance().getLoginActivity()));
@@ -551,7 +542,7 @@ public class MainActivity extends AppCompatActivity
     public void onRestart() {
         super.onRestart();
         //adapter.updateEventList();
-        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+        if (StorageManager.getInstance().getLoginType().equals(getString(R.string.facebook)) &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(MainActivity.this,
                     ScreenManager.getInstance().getLoginActivity()));
@@ -563,7 +554,7 @@ public class MainActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         adapter.updateEventList();
-        if (StorageManager.getInstance().getLoginType().equals("facebook") &&
+        if (StorageManager.getInstance().getLoginType().equals(getString(R.string.facebook)) &&
                 Profile.getCurrentProfile() == null) {
             startActivity(new Intent(MainActivity.this,
                     ScreenManager.getInstance().getLoginActivity()));

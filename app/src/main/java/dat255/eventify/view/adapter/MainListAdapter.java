@@ -74,7 +74,9 @@ public class MainListAdapter extends BaseAdapter {
 
         if (position > 0) {
             lastEvent = listOfEvents.get(position - 1);
-        } else lastEvent = null;
+        } else {
+            lastEvent = null;
+        }
 
         //Only display date once if two or more events have the same date
         if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate())) {
@@ -103,7 +105,6 @@ public class MainListAdapter extends BaseAdapter {
 
         SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();
-        System.out.println(typeOfList + "");
         Log.d(TAG, "Event List Updated");
     }
 

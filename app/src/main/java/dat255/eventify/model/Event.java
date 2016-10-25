@@ -1,5 +1,7 @@
 package dat255.eventify.model;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ public class Event implements Serializable {
 
     private String id, title, place, owner, date, time, desc, nbrAttending, cover, distance,
             latitude, longitude;
+    private final static String TAG = "Event";
 
     public double getLatitude() {
         if (latitude != null) {
@@ -112,7 +115,7 @@ public class Event implements Serializable {
             Date mDate = sdf.parse(getDate() + " " + getTime());
             return mDate.getTime();
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, "ParseException", e);
         }
         return 0;
     }
