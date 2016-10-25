@@ -12,7 +12,7 @@ public class Event implements Serializable {
             latitude, longitude;
 
     public double getLatitude() {
-        if (latitude!=null){
+        if (latitude != null) {
             return Double.parseDouble(latitude);
         }
         return 0.0;
@@ -23,7 +23,7 @@ public class Event implements Serializable {
     }
 
     public double getLongitude() {
-        if (longitude!=null){
+        if (longitude != null) {
             return Double.parseDouble(longitude);
         }
         return 0.0;
@@ -32,7 +32,6 @@ public class Event implements Serializable {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
-
 
     public String getId() {
         return id;
@@ -85,6 +84,7 @@ public class Event implements Serializable {
     public String getDistance() {
         return distance;
     }
+
     public void setDistance(String distance) {
         this.distance = distance;
     }
@@ -106,10 +106,10 @@ public class Event implements Serializable {
         this.time = time;
     }
 
-    public long getEventTimeInMillis(){
+    public long getEventTimeInMillis() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         try {
-            Date mDate = sdf.parse(getDate()+" " + getTime());
+            Date mDate = sdf.parse(getDate() + " " + getTime());
             return mDate.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -119,7 +119,7 @@ public class Event implements Serializable {
 
     public String getMonth() {
         String month;
-        switch (date.substring(5,7)) {
+        switch (date.substring(5, 7)) {
             case "01":
                 month = "Jan";
                 break;

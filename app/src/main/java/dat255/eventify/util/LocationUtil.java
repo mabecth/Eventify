@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 import android.os.Handler;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -52,6 +53,7 @@ public class LocationUtil extends Fragment implements
         try {
             myActivityListener = (MyActivityListener) context;
         } catch (ClassCastException castException) {
+            Log.e(TAG, "ClassCastException", castException);
         }
     }
 
@@ -64,7 +66,7 @@ public class LocationUtil extends Fragment implements
         setRetainInstance(true);
         mAddressRequested = false;
         mAddressOutput = "";
-        if(listOfEvents == null) {
+        if (listOfEvents == null) {
             listOfEvents = StorageManager.getInstance().getEvents();
         }
     }
@@ -77,14 +79,14 @@ public class LocationUtil extends Fragment implements
         return (double) tmp / factor;
     }
 
-    public synchronized void loopCoordinates(){
+    public synchronized void loopCoordinates() {
         listOfEvents = StorageManager.getInstance().getEvents();
         updatedList = StorageManager.getInstance().getEvents();
-        if(latLng ==null){
-        }else{
+        if (latLng == null) {
+        } else {
             if (listOfEvents.size() > 0) {
                 for (int index = 0; index < listOfEvents.size(); index++) {
-                    LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(),StorageManager.getInstance().getEvents().get(index).getLongitude());
+                    LatLng endLatLng = new LatLng(StorageManager.getInstance().getEvents().get(index).getLatitude(), StorageManager.getInstance().getEvents().get(index).getLongitude());
                     CalculationByDistance(latLng, endLatLng, index);
                 }
             }
@@ -113,8 +115,8 @@ public class LocationUtil extends Fragment implements
         int meterInDec = Integer.valueOf(newFormat.format(meter));
         Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
                 + " Meter   " + meterInDec);
-        System.out.println("Distance: "+ Radius * c);
-        updateDistance(index, round(Radius * c,1) + " km");
+        System.out.println("Distance: " + Radius * c);
+        updateDistance(index, round(Radius * c, 1) + " km");
     }
 
     public synchronized void updateDistance(int id, String result) {
@@ -122,7 +124,7 @@ public class LocationUtil extends Fragment implements
         StorageManager.getInstance().storeEvents(updatedList);
     }
 
-    public synchronized void buildGoogleApi(){
+    public synchronized void buildGoogleApi() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -136,15 +138,15 @@ public class LocationUtil extends Fragment implements
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        try{
+        try {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             }
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }catch (java.lang.IllegalStateException e){
-            Log.e(TAG,"GoogleApiClient is not connected");
+        } catch (java.lang.IllegalStateException e) {
+            Log.e(TAG, "GoogleApiClient is not connected");
         }
 
     }
@@ -163,9 +165,9 @@ public class LocationUtil extends Fragment implements
     }
 
     public void sendAddressResultToMain() {
-        if(ConnectionManager.getInstance().isConnected()){
+        if (ConnectionManager.getInstance().isConnected()) {
             myActivityListener.displayAddress(mAddressOutput);
-        }else if(!ConnectionManager.getInstance().isConnected()){
+        } else if (!ConnectionManager.getInstance().isConnected()) {
             if (StorageManager.getInstance().getAddress() != null) {
                 myActivityListener.displayAddress("Recent: " + StorageManager.getInstance().getAddress());
             }
@@ -188,7 +190,7 @@ public class LocationUtil extends Fragment implements
             // service kills itself automatically once all intents are processed.
             getActivity().startService(intent);
 
-        }else{
+        } else {
             sendAddressResultToMain();
         }
     }
@@ -224,11 +226,12 @@ public class LocationUtil extends Fragment implements
         public AddressResultReceiver(Handler handler) {
             super(handler);
         }
+
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            if(ConnectionManager.getInstance().isConnected()) {
+            if (ConnectionManager.getInstance().isConnected()) {
                 StorageManager.getInstance().storeAddress(mAddressOutput);
             }
             sendAddressResultToMain();

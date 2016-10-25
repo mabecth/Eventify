@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -20,11 +21,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import dat255.eventify.R;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
 
-/** Class used for handling the login system through Facebook and Firebase **/
+/**
+ * Class used for handling the login system through Facebook and Firebase
+ **/
 public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
@@ -94,13 +98,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                    Toast.makeText(LoginActivity.this, "Authentication successful",
-                            Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Authentication successful",
+                        Toast.LENGTH_SHORT).show();
 
-                    StorageManager.getInstance().setLoginTypeFacebook();
-                    startActivity(new Intent(LoginActivity.this,
-                            ScreenManager.getInstance().getMainActivity()));
-                    finish();
+                StorageManager.getInstance().setLoginTypeFacebook();
+                startActivity(new Intent(LoginActivity.this,
+                        ScreenManager.getInstance().getMainActivity()));
+                finish();
             }
 
             @Override

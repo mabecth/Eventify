@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -16,11 +17,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import dat255.eventify.R;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.model.Event;
@@ -49,7 +53,7 @@ public class FetchEventService extends Service {
         dataCollectCycles = 0;
 
         if (StorageManager.getInstance().getLoginType().equals("facebook")) {
-            for(String s : organisations) {
+            for (String s : organisations) {
                 getEventsFromFacebook(s, "facebook", null);
             }
         } else {
@@ -103,14 +107,14 @@ public class FetchEventService extends Service {
         if (loginType.equals("facebook")) {
             accessToken = AccessToken.getCurrentAccessToken();
             graphPath = "/" + id + "/events?fields=id,name,description,attending_count," +
-                    "cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="
-                    +monthForward+"";
+                    "cover,owner,start_time,place&limit=" + limit + "&since=" + now + "&until="
+                    + monthForward + "";
 
         } else {
             accessToken = null;
             graphPath = "/" + id + "/events?fields=id,name,description,attending_count," +
-                    "cover,owner,start_time,place&limit="+limit+"&since="+now+"&until="
-                    +monthForward+"&access_token="+userToken+"";
+                    "cover,owner,start_time,place&limit=" + limit + "&since=" + now + "&until="
+                    + monthForward + "&access_token=" + userToken + "";
         }
 
         new GraphRequest(
@@ -166,11 +170,11 @@ public class FetchEventService extends Service {
 
                                         events.add(event);
                                     } catch (JSONException e) {
-                                        Log.e(TAG,"JSONException", e);
+                                        Log.e(TAG, "JSONException", e);
                                     }
                                 }
                             } catch (JSONException e) {
-                                Log.e(TAG,"JSONException", e);
+                                Log.e(TAG, "JSONException", e);
                             }
                         }
                         dataCollectCycles++;

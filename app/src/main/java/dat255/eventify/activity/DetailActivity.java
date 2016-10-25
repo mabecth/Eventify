@@ -1,6 +1,5 @@
 package dat255.eventify.activity;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -18,19 +17,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.memetix.mst.language.Language;
-
-import java.lang.reflect.Method;
 
 import dat255.eventify.R;
 import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.model.Event;
 import dat255.eventify.util.TranslateAsyncTask;
 import dat255.eventify.model.TranslateRequest;
-import dat255.eventify.manager.StorageManager;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -93,7 +90,7 @@ public class DetailActivity extends AppCompatActivity {
                 (FloatingActionButton) findViewById(R.id.showMapsBtn);
         showMapsBtn.setOnClickListener(new MapsBtnOnClick());
 
-        appBarLayout.addOnOffsetChangedListener(new   AppBarLayout.OnOffsetChangedListener() {
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (Math.abs(verticalOffset) > Math.round(appBarLayout.getTotalScrollRange() / 3)) {
@@ -112,11 +109,9 @@ public class DetailActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new BackBtnOnClick());
 
         favoriteBtn = (ImageButton) findViewById(R.id.favoriteBtn);
-        if (myEventsManager.isFavorited())
-        {
+        if (myEventsManager.isFavorited()) {
             favoriteBtn.setBackgroundResource(R.drawable.ic_star);
-        }
-        else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+        } else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
         favoriteBtn.setOnClickListener(new FavoriteBtnOnClick());
 
         ImageButton facebook = (ImageButton) findViewById(R.id.facebookBtn);
@@ -141,7 +136,7 @@ public class DetailActivity extends AppCompatActivity {
         fab6.setOnClickListener(transOnClick);
     }
 
-    public void initView(){
+    public void initView() {
         title = (TextView) findViewById(R.id.titleText);
         TextView date = (TextView) findViewById(R.id.dateText);
         TextView time = (TextView) findViewById(R.id.timeText);
@@ -184,19 +179,19 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     //Listeners
-    class BackBtnOnClick implements View.OnClickListener{
+    class BackBtnOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             finish(); //Goes back to the list view
         }
     }
 
-    class MapsBtnOnClick implements View.OnClickListener{
+    class MapsBtnOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if(event.getPlace() == null) {
+            if (event.getPlace() == null) {
                 Toast.makeText(DetailActivity.this, "Event has no address", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?daddr=" + event.getPlace()));
                 startActivity(intent);
@@ -204,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    class FavoriteBtnOnClick implements View.OnClickListener{
+    class FavoriteBtnOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             myEventsManager.modifyFavorites();
@@ -213,12 +208,11 @@ public class DetailActivity extends AppCompatActivity {
                 favoriteBtn.setBackgroundResource(R.drawable.ic_star);
                 Toast.makeText(DetailActivity.this, "Event added to my events",
                         Toast.LENGTH_SHORT).show();
-            }
-            else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
+            } else favoriteBtn.setBackgroundResource(R.drawable.ic_star_border);
         }
     }
 
-    class FacebookBtnOnClick implements View.OnClickListener{
+    class FacebookBtnOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             //Facebook intent
@@ -226,52 +220,60 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://event/" +
                         event.getId()));
                 startActivity(intent);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.facebook.com/events/"+event.getId())));
+                        Uri.parse("http://www.facebook.com/events/" + event.getId())));
             }
         }
     }
 
-    class TranslateBtnOnClick implements View.OnClickListener{
+    class TranslateBtnOnClick implements View.OnClickListener {
 
-        TranslateBtnOnClick(){
+        TranslateBtnOnClick() {
         }
 
         @Override
         public void onClick(View view) {
             desc.setGravity(Gravity.LEFT);
-            switch (view.getId()){
-                case R.id.fab: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.SWEDISH, event.getDesc()));
+            switch (view.getId()) {
+                case R.id.fab:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.SWEDISH, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab1: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
+                case R.id.fab1:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.ENGLISH, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab2: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
+                case R.id.fab2:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.ARABIC, event.getDesc()));
                     desc.setGravity(Gravity.RIGHT);
                     transMenu.close(true);
                     break;
-                case R.id.fab3: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
+                case R.id.fab3:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.SLOVAK, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab4: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
+                case R.id.fab4:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.ROMANIAN, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab5: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
+                case R.id.fab5:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.PERSIAN, event.getDesc()));
                     transMenu.close(true);
                     break;
-                case R.id.fab6: new TranslateAsyncTask(desc).
-                        execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
+                case R.id.fab6:
+                    new TranslateAsyncTask(desc).
+                            execute(new TranslateRequest(Language.TURKISH, event.getDesc()));
                     transMenu.close(true);
                     break;
-                default: break;
+                default:
+                    break;
             }
 
         }

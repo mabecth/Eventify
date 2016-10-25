@@ -2,8 +2,10 @@ package dat255.eventify.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,10 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import dat255.eventify.model.Event;
 import dat255.eventify.util.Constants;
 
-/** Class used for storing data locally on the phone**/
+/**
+ * Class used for storing data locally on the phone
+ **/
 public class StorageManager {
 
     private SharedPreferences preferences;
@@ -30,7 +35,6 @@ public class StorageManager {
     //Empty objects to avoid null
     private static HashMap<String, Integer> settings = new HashMap<>();
     private static List<Event> events = new CopyOnWriteArrayList<>();
-
 
 
     private StorageManager() {
@@ -99,7 +103,8 @@ public class StorageManager {
 
     public HashMap<String, Integer> getSettings() {
         String events_json = preferences.getString(settingsKey, "");
-        if (gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType())
+        if (gson.fromJson(events_json, new TypeToken<HashMap<String, Integer>>() {
+        }.getType())
                 == null) {
             settings.put("notification", 1);
             settings.put("distance", 0);
@@ -108,24 +113,27 @@ public class StorageManager {
             settings.put("firstDayOfWeek", 1);
             return settings;
         } else {
-            return gson.fromJson(events_json, new TypeToken<HashMap<String,Integer>>(){}.getType());
+            return gson.fromJson(events_json, new TypeToken<HashMap<String, Integer>>() {
+            }.getType());
         }
     }
 
     public void storeFavorites(List<Event> myEvents) {
         String events_json = gson.toJson(myEvents);
-        editor.putString(favoritesKey,events_json);
+        editor.putString(favoritesKey, events_json);
         editor.commit();
     }
 
     public List<Event> getFavorites() {
-        String events_json = preferences.getString(favoritesKey,"");
+        String events_json = preferences.getString(favoritesKey, "");
 
 
-        if (gson.fromJson(events_json,new TypeToken<List<Event>>(){}.getType()) == null) {
+        if (gson.fromJson(events_json, new TypeToken<List<Event>>() {
+        }.getType()) == null) {
             return new ArrayList<>();
         } else {
-            return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
+            return gson.fromJson(events_json, new TypeToken<List<Event>>() {
+            }.getType());
         }
     }
 
@@ -135,22 +143,24 @@ public class StorageManager {
         editor.commit();
     }
 
-    public void storeAddress(String address){
-        editor.putString("address",address);
+    public void storeAddress(String address) {
+        editor.putString("address", address);
         editor.commit();
     }
 
     public String getAddress() {
-        String address = preferences.getString("address","");
+        String address = preferences.getString("address", "");
         return address;
     }
 
     public List<Event> getEvents() {
         String events_json = preferences.getString(eventsKey, "");
-        if (gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType()) == null) {
+        if (gson.fromJson(events_json, new TypeToken<List<Event>>() {
+        }.getType()) == null) {
             return events;
         } else {
-            return gson.fromJson(events_json, new TypeToken<List<Event>>(){}.getType());
+            return gson.fromJson(events_json, new TypeToken<List<Event>>() {
+            }.getType());
         }
     }
 
@@ -162,9 +172,9 @@ public class StorageManager {
         int month = Integer.parseInt(date.split("-")[1]);
         int day = Integer.parseInt(date.split("-")[2]);
         for (Event e : getEvents()) {
-            if (Integer.parseInt(e.getDate().split("-")[0])>=year &&
-                    Integer.parseInt(e.getDate().split("-")[1])>=month &&
-                    Integer.parseInt(e.getDate().split("-")[2])>=day){
+            if (Integer.parseInt(e.getDate().split("-")[0]) >= year &&
+                    Integer.parseInt(e.getDate().split("-")[1]) >= month &&
+                    Integer.parseInt(e.getDate().split("-")[2]) >= day) {
                 break;
             }
             index++;

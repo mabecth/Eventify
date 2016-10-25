@@ -3,8 +3,11 @@ package dat255.eventify.util;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
+
 import com.memetix.mst.translate.Translate;
+
 import java.lang.ref.WeakReference;
+
 import dat255.eventify.model.TranslateRequest;
 
 public class TranslateAsyncTask extends AsyncTask<TranslateRequest, Void, String> {
@@ -34,7 +37,7 @@ public class TranslateAsyncTask extends AsyncTask<TranslateRequest, Void, String
     @Override
     protected void onPostExecute(String s) {
         TextView output = translatedView.get();
-        if (output != null){
+        if (output != null) {
             output.setText(s);
         }
     }

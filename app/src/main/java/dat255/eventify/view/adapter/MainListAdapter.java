@@ -1,6 +1,5 @@
 package dat255.eventify.view.adapter;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +7,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
+
 import java.util.List;
+
 import dat255.eventify.R;
 import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.model.Event;
-import dat255.eventify.manager.StorageManager;
 import dat255.eventify.util.SortByDate;
 
-public class MainListAdapter extends BaseAdapter{
+public class MainListAdapter extends BaseAdapter {
 
     private static final String TAG = "MainListAdapter";
 
@@ -36,24 +37,9 @@ public class MainListAdapter extends BaseAdapter{
     private boolean onlyDistance = false;
 
 
-    public MainListAdapter(){
+    public MainListAdapter() {
         manager = MyEventsManager.getInstance();
         listOfEvents = manager.getEvents();
-
-        SharedPreferences.OnSharedPreferenceChangeListener listener =
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(StorageManager.getInstance().getEventsKey())) {
-                    //Events changed
-                    Log.d(TAG, "Events in storage changed!");
-                    //Kommentera bort detta så funkar ej distance då den skrivs över
-                    //updateEventList();
-                }
-            }
-        };
-
-        StorageManager.getInstance().registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -88,15 +74,13 @@ public class MainListAdapter extends BaseAdapter{
 
         if (position > 0) {
             lastEvent = listOfEvents.get(position - 1);
-        }
-        else lastEvent = null;
+        } else lastEvent = null;
 
         //Only display date once if two or more events have the same date
         if (lastEvent != null && lastEvent.getDate().equals(currEvent.getDate())) {
             dateTextView.setVisibility(View.INVISIBLE);
             monthTextView.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             dateTextView.setVisibility(View.VISIBLE);
             monthTextView.setVisibility(View.VISIBLE);
         }
@@ -104,33 +88,29 @@ public class MainListAdapter extends BaseAdapter{
         return result;
     }
 
-    public void setChosenEvent(int position)
-    {
+    public void setChosenEvent(int position) {
         manager.setChosenEvent(listOfEvents.get(position));
     }
 
     public void updateEventList() {
-        if (typeOfList.equals(onlyFavorites))
-        {
+        if (typeOfList.equals(onlyFavorites)) {
             listOfEvents = manager.getFavorites();
-        }
-        else if (typeOfList.equals(allEvents)){
+        } else if (typeOfList.equals(allEvents)) {
             listOfEvents = manager.getEvents();
-        }
-        else if (typeOfList.equals(filtered)){
+        } else if (typeOfList.equals(filtered)) {
             listOfEvents = manager.getFilteredEvents();
         }
 
         SortByDate.sortDates(listOfEvents);
         notifyDataSetChanged();
         System.out.println(typeOfList + "");
-        Log.d(TAG,"Event List Updated");
+        Log.d(TAG, "Event List Updated");
     }
 
-    public void setOnlyFavorite(String typeOfList)
-    {
+    public void setOnlyFavorite(String typeOfList) {
         MainListAdapter.typeOfList = typeOfList;
     }
+
     private void initializeView() {
         eventProfilePictureView = (ImageView) result.findViewById(R.id.eventProfilePictureView);
         nameTextView = (TextView) result.findViewById(R.id.nameTextView);
@@ -147,17 +127,16 @@ public class MainListAdapter extends BaseAdapter{
 
     private void setViewData(final ViewGroup viewGroup) {
         nameTextView.setText(currEvent.getTitle());
-        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length()-2,
+        dateTextView.setText(currEvent.getDate().substring(currEvent.getDate().length() - 2,
                 currEvent.getDate().length()));
         monthTextView.setText(currEvent.getMonth());
         timeTextView.setText(currEvent.getTime());
         attendeesTextView.setText(currEvent.getNbrAttending());
         orgTextView.setText(currEvent.getOwner());
-        if(!onlyDistance){
+        if (!onlyDistance) {
             locationTextView.setText(currEvent.getPlace());
             distanceTextView.setText(currEvent.getDistance());
-        }
-        else{
+        } else {
             locationTextView.setText(currEvent.getDistance());
             distanceTextView.setText("");
         }
@@ -170,11 +149,11 @@ public class MainListAdapter extends BaseAdapter{
                 .into(eventProfilePictureView);
     }
 
-    public void setOnlyDistanceTrue(){
-        onlyDistance=true;
+    public void setOnlyDistanceTrue() {
+        onlyDistance = true;
     }
 
-    public void setOnlyDistanceFalse(){
-        onlyDistance=false;
+    public void setOnlyDistanceFalse() {
+        onlyDistance = false;
     }
 }

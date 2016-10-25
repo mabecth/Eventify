@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/** Class used for analysing the internet connection on the users phone**/
+/**
+ * Class used for analysing the internet connection on the users phone
+ **/
 public class ConnectionManager {
 
     private static ConnectivityManager connectivityManager;

@@ -2,6 +2,7 @@ package dat255.eventify.util;
 
 import java.util.Collections;
 import java.util.List;
+
 import dat255.eventify.model.Event;
 
 /**
@@ -18,7 +19,7 @@ public class SortByDate {
         for (int i = 0; i < eventList.size() - 1; i++) {
             //Checking if the event, date or time is null. Also checks next event
             if (eventList.get(i) != null || eventList.get(i).getDate() != null || eventList.get(i).getTime() != null) {
-                if (eventList.get(i+1) != null || eventList.get(i+1).getDate() != null || eventList.get(i+1).getTime() != null) {
+                if (eventList.get(i + 1) != null || eventList.get(i + 1).getDate() != null || eventList.get(i + 1).getTime() != null) {
 
                     a = Integer.parseInt(eventList.get(i).getDate().split("-")[0]);
                     b = Integer.parseInt(eventList.get(i + 1).getDate().split("-")[0]);

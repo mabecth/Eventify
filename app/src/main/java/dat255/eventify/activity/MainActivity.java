@@ -1,8 +1,6 @@
 package dat255.eventify.activity;
 
 import android.Manifest;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +13,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
@@ -53,7 +49,6 @@ import dat255.eventify.manager.MyEventsManager;
 import dat255.eventify.util.FetchEventService;
 import dat255.eventify.util.LocationUtil;
 import dat255.eventify.util.MyActivityListener;
-import dat255.eventify.util.NotificationsUtil;
 import dat255.eventify.view.adapter.MainListAdapter;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
@@ -90,12 +85,12 @@ public class MainActivity extends AppCompatActivity
     private ProfileTracker profileTracker;
 
     @Override
-    public void updateAdapter(){
+    public void updateAdapter() {
         adapter.updateEventList();
     }
 
     @Override
-    public void displayAddress(String mAddressOutput){
+    public void displayAddress(String mAddressOutput) {
         View view = navigationView.getHeaderView(0);
         TextView locationTextView = (TextView) view.findViewById(R.id.locationTV);
 
@@ -108,8 +103,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         initFragment();
         checkLocationPermission();
@@ -159,7 +152,7 @@ public class MainActivity extends AppCompatActivity
             locationUtil.loopCoordinates();
         }
         adapter.updateEventList();
-        swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -200,7 +193,7 @@ public class MainActivity extends AppCompatActivity
         ProfilePictureView fbPicture = (ProfilePictureView) view.findViewById(R.id.profilePictureIV);
 
         //Retrieve public profile info of the user
-        if(Profile.getCurrentProfile() == null) {
+        if (Profile.getCurrentProfile() == null) {
             profileTracker = new ProfileTracker() {
                 @Override
                 protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
@@ -354,7 +347,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void setMonthText(Date date){
+    public void setMonthText(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
         TextView monthView = (TextView) findViewById(R.id.monthTextView);
         monthView.setText(dateFormat.format(date));
@@ -364,12 +357,12 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         //Stop location updates when Activity is no longer active
-        if(locationUtil.getmGoogleApiClient() != null){
-            if(locationUtil.getmGoogleApiClient().isConnected()){
+        if (locationUtil.getmGoogleApiClient() != null) {
+            if (locationUtil.getmGoogleApiClient().isConnected()) {
                 locationUtil.removeLocationUpdates();
             }
         }
-  }
+    }
 
     @Override
     public void onBackPressed() {
@@ -382,7 +375,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu (Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         return true;
     }
@@ -405,7 +398,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_filtering) {
 
             final ArrayList seletedItems = new ArrayList();
-            CharSequence[]allOrganization = myEventsManager.getAllOrganization().toArray(
+            CharSequence[] allOrganization = myEventsManager.getAllOrganization().toArray(
                     new CharSequence[myEventsManager.getAllOrganization().size()]);
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -433,7 +426,7 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int id) {
                             //  Your code when user clicked on OK
                             //  You can write the code  to save the selected item here
-                            for (int i = 0; i< seletedItems.size();i++){
+                            for (int i = 0; i < seletedItems.size(); i++) {
                                 System.out.println(seletedItems.get(i) + "");
                             }
                             typeOfList = filtered;
@@ -468,7 +461,7 @@ public class MainActivity extends AppCompatActivity
             toolbarTitle.setText(R.string.app_name);
             typeOfList = allEvents;
             adapter.setOnlyFavorite(typeOfList);
-            if(locationUtil.getmGoogleApiClient() != null) {
+            if (locationUtil.getmGoogleApiClient() != null) {
                 if (locationUtil.getmGoogleApiClient().isConnected()) {
                     locationUtil.loopCoordinates();
                 }
@@ -513,13 +506,12 @@ public class MainActivity extends AppCompatActivity
 
                             //if firstDayOfWeek == 2 show monday as first
                             boolean showMondayFirst = StorageManager.getInstance().getSettings().
-                                    get("firstDayOfWeek")==1;
+                                    get("firstDayOfWeek") == 1;
                             mCompactCalendarView.setShouldShowMondayAsFirstDay(showMondayFirst);
 
-                            if(StorageManager.getInstance().getSettings().get("distance")==0){
+                            if (StorageManager.getInstance().getSettings().get("distance") == 0) {
                                 adapter.setOnlyDistanceFalse();
-                            }
-                            else{
+                            } else {
                                 adapter.setOnlyDistanceTrue();
                             }
 
@@ -532,10 +524,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        if(locationUtil.getmGoogleApiClient() != null){
-            if(locationUtil.getmGoogleApiClient().isConnected()){
+        if (locationUtil.getmGoogleApiClient() != null) {
+            if (locationUtil.getmGoogleApiClient().isConnected()) {
                 locationUtil.loopCoordinates();
-            }else{
+            } else {
                 locationUtil.getmGoogleApiClient().connect();
             }
         }
@@ -568,7 +560,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         adapter.updateEventList();
         if (StorageManager.getInstance().getLoginType().equals("facebook") &&
@@ -582,7 +574,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(locationUtil.getmGoogleApiClient() !=null){
+        if (locationUtil.getmGoogleApiClient() != null) {
             locationUtil.getmGoogleApiClient().disconnect();
         }
         if (profileTracker != null) {

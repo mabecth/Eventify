@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+
 import java.util.HashMap;
+
 import dat255.eventify.R;
 import dat255.eventify.manager.StorageManager;
 
@@ -39,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         initView();
     }
 
-    public void initView(){
+    public void initView() {
         //find views
         notifications = (Switch) findViewById(R.id.notiSwitch);
         distance = (Switch) findViewById(R.id.distanceSwitch);
@@ -65,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
         notifyDay.setSelection(settingsMap.get("notifyDay"));
         notifyDay.setOnItemSelectedListener(dropdownListener);
 
-        notifyHoursArray = new String[]{"08:00", "10:00", "12:00", "14:00", "16:00","18:00",
+        notifyHoursArray = new String[]{"08:00", "10:00", "12:00", "14:00", "16:00", "18:00",
                 "20:00", "22:00"};
         ArrayAdapter<String> adapterHours = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, notifyHoursArray);
@@ -82,31 +84,31 @@ public class SettingsActivity extends AppCompatActivity {
         firstDayCalendar.setOnItemSelectedListener(dropdownListener);
     }
 
-    class NotifyOnClickListener implements View.OnClickListener{
+    class NotifyOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            settingsMap.put("notification", notifications.isChecked()?1:0);
+            settingsMap.put("notification", notifications.isChecked() ? 1 : 0);
         }
     }
 
-    class DistanceOnClickListener implements View.OnClickListener{
+    class DistanceOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            settingsMap.put("distance", distance.isChecked()?1:0);
+            settingsMap.put("distance", distance.isChecked() ? 1 : 0);
         }
     }
 
-    class BackOnClickListener implements View.OnClickListener{
+    class BackOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             finish();
         }
     }
 
-    class DropdownOnItemSelectedListener implements AdapterView.OnItemSelectedListener{
+    class DropdownOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            switch (adapterView.getId()){
+            switch (adapterView.getId()) {
                 case R.id.spinnerDays:
                     settingsMap.put("notifyDay", adapterView.getSelectedItemPosition());
                     break;
@@ -123,6 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> adapterView) {
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();
