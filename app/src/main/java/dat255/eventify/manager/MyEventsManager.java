@@ -37,12 +37,13 @@ public class MyEventsManager {
     private StorageManager storageManager;
     private NotificationsUtil notificationsUtil = new NotificationsUtil();
     private NotificationsManager notificationsManger = new NotificationsManager();
+    private static int st = 0;
 
 
     private MyEventsManager() {
         storageManager = StorageManager.getInstance();
-        allEvents = storageManager.getEvents();
-        favorites = storageManager.getFavorites();
+        allEvents = getEvents();
+        favorites = getFavorites();
     }
 
     /**
@@ -79,7 +80,35 @@ public class MyEventsManager {
      */
     public List<Event> getFavorites() {
         favorites = storageManager.getFavorites();
+        checkFavoriteExpried();
         return favorites;
+    }
+
+    private void checkFavoriteExpried(){
+        getEvents();
+        if (favorites.size() > 0)
+        {
+            for (int i = 0; i < favorites.size();i++){
+                if (checkExpriedEvent(favorites.get(i)))
+                {
+                    favorites.remove(i);
+                }
+            }
+        }
+        SortByDate.sortDates(favorites);
+        storageManager.storeFavorites(favorites);
+    }
+
+    private boolean checkExpriedEvent(Event e){
+        boolean isExpried = true;
+        for (int i = 0; i<allEvents.size();i++)
+        {
+            if (allEvents.get(i).getId().equals(e.getId()))
+            {
+                isExpried = false;
+            }
+        }
+        return isExpried;
     }
 
     public void modifyFavorites() {
@@ -93,6 +122,16 @@ public class MyEventsManager {
             storageManager.storeFavorites(favorites);
         }
         else {
+            if(st==0){
+                chosenEvent.setTime("16:27");
+            }
+            if(st==1){
+                chosenEvent.setTime("16:40");
+            }
+            if(st==2){
+                chosenEvent.setTime("16:30");
+            }
+            st++;
             favorites.add(chosenEvent);
             SortByDate.sortDates(favorites);
             storageManager.storeFavorites(favorites);

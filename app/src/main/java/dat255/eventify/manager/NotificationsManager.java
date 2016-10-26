@@ -22,11 +22,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class NotificationsManager {
     public void createNotification(){
         long hoursToEvent = (int) TimeUnit.MILLISECONDS.toMinutes(StorageManager.getInstance().getFavorites().get(0).getEventTimeInMillis()-System.currentTimeMillis())/ 60;
-
+        long hoursToNotification = hoursToEvent;
         long hours = StorageManager.getInstance().getSettings().get("notifyHour");
 
         //long delayToNotification = (int) TimeUnit.MILLISECONDS.toMinutes()
-        scheduleNotification("You have an event in "+hoursToEvent+"h",5000);
+        scheduleNotification("You have an event in "+hoursToEvent+"h",50000);
     }
 
     public void scheduleNotification(String content, int delay) {
