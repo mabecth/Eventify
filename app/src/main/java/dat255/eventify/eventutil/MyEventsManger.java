@@ -144,6 +144,8 @@ public class MyEventsManger {
 
         if (filteredEvents.size() == 0) {
             return allEvents;
-        } else return filteredEvents;
+        } else {
+            return filteredEvents;
+        }
     }
 }
