@@ -1,4 +1,4 @@
-package dat255.eventify.util;
+package dat255.eventify.helper;
 
 public final class Constants {
     public static final int SUCCESS_RESULT = 0;

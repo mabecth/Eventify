@@ -24,16 +24,16 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.memetix.mst.language.Language;
 
 import dat255.eventify.R;
-import dat255.eventify.manager.MyEventsManager;
+import dat255.eventify.eventutil.MyEventsManger;
 import dat255.eventify.model.Event;
-import dat255.eventify.util.TranslateAsyncTask;
+import dat255.eventify.helper.TranslateAsyncTask;
 import dat255.eventify.model.TranslateRequest;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Event event;
     private TextView desc;
-    private MyEventsManager myEventsManager;
+    private MyEventsManger myEventsManager;
 
     FloatingActionButton fab;
     FloatingActionButton fab1;
@@ -51,7 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        myEventsManager = MyEventsManager.getInstance();
+        myEventsManager = MyEventsManger.getInstance();
 
         //If opened from a notification
         if (getIntent().getSerializableExtra("event") != null) {

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import dat255.eventify.R;
+import dat255.eventify.helper.SortByDate;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.model.Event;
 

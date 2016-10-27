@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dat255.eventify.model.Event;
-import dat255.eventify.util.SortByDate;
+import dat255.eventify.helper.SortByDate;
 
 import static junit.framework.Assert.assertEquals;
 

@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import dat255.eventify.helper.Constants;
 import dat255.eventify.manager.ConnectionManager;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.model.Event;

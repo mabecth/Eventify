@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import dat255.eventify.model.Event;
-import dat255.eventify.util.Constants;
+import dat255.eventify.helper.Constants;
 
 /**
  * Class used for storing data locally on the phone

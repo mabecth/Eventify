@@ -1,4 +1,4 @@
-package dat255.eventify.util;
+package dat255.eventify.helper;
 
 import android.os.AsyncTask;
 import android.util.Log;

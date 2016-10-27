@@ -1,31 +1,24 @@
-package dat255.eventify.manager;
+package dat255.eventify.eventutil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dat255.eventify.helper.SortByDate;
+import dat255.eventify.manager.StorageManager;
 import dat255.eventify.model.Event;
-import dat255.eventify.util.NotificationsUtil;
-import dat255.eventify.util.SortByDate;
 
-/**
- * Created by Long on 21/10/2016.
- */
-
-public class MyEventsManager {
+public class MyEventsManger {
     private List<Event> allEvents;
     private List<Event> favorites;
     private List<Event> filteredEvents;
     private List<String> allOrganization;
     private List<String> chosenOrgnization;
     private Event chosenEvent;
-    private static MyEventsManager myEventsManager;
+    private static MyEventsManger myEventsManager;
     private StorageManager storageManager;
-    private NotificationsUtil notificationsUtil = new NotificationsUtil();
-    private NotificationsManager notificationsManger = new NotificationsManager();
-    private static int st = 0;
+    private NotificationUtil notificationsManger = new NotificationUtil();
 
-
-    private MyEventsManager() {
+    private MyEventsManger() {
         storageManager = StorageManager.getInstance();
         allEvents = getEvents();
         favorites = getFavorites();
@@ -34,9 +27,9 @@ public class MyEventsManager {
     /**
      * Setup
      */
-    public static MyEventsManager getInstance() {
+    public static MyEventsManger getInstance() {
         if (myEventsManager == null) {
-            myEventsManager = new MyEventsManager();
+            myEventsManager = new MyEventsManger();
         }
         return myEventsManager;
     }
@@ -44,7 +37,7 @@ public class MyEventsManager {
     /**
      * MainList
      */
-    public List<Event> getEvents(){
+    public List<Event> getEvents() {
         allEvents = storageManager.getEvents();
         return allEvents;
     }
@@ -69,13 +62,11 @@ public class MyEventsManager {
         return favorites;
     }
 
-    private void checkFavoriteExpried(){
+    private void checkFavoriteExpried() {
         getEvents();
-        if (favorites.size() > 0)
-        {
-            for (int i = 0; i < favorites.size();i++){
-                if (checkExpriedEvent(favorites.get(i)))
-                {
+        if (favorites.size() > 0) {
+            for (int i = 0; i < favorites.size(); i++) {
+                if (checkExpriedEvent(favorites.get(i))) {
                     favorites.remove(i);
                 }
             }
@@ -84,12 +75,10 @@ public class MyEventsManager {
         storageManager.storeFavorites(favorites);
     }
 
-    private boolean checkExpriedEvent(Event e){
+    private boolean checkExpriedEvent(Event e) {
         boolean isExpried = true;
-        for (int i = 0; i<allEvents.size();i++)
-        {
-            if (allEvents.get(i).getId().equals(e.getId()))
-            {
+        for (int i = 0; i < allEvents.size(); i++) {
+            if (allEvents.get(i).getId().equals(e.getId())) {
                 isExpried = false;
             }
         }
@@ -100,18 +89,17 @@ public class MyEventsManager {
     public void modifyFavorites() {
         if (isFavorited()) {
             for (int i = 0; i < favorites.size(); i++) {
-                if ( favorites.get(i).getId().equals(chosenEvent.getId())) {
+                if (favorites.get(i).getId().equals(chosenEvent.getId())) {
                     favorites.remove(i);
                 }
             }
             SortByDate.sortDates(favorites);
             storageManager.storeFavorites(favorites);
-        }
-        else {
+        } else {
             favorites.add(chosenEvent);
             SortByDate.sortDates(favorites);
             storageManager.storeFavorites(favorites);
-            if(storageManager.getSettings().get("notification")==1){
+            if (storageManager.getSettings().get("notification") == 1) {
                 notificationsManger.createNotification();
             }
         }
@@ -124,16 +112,16 @@ public class MyEventsManager {
                 result = true;
             }
         }
-        return  result;
+        return result;
     }
 
     /**
      * Filtering
      */
-    public List<String> getAllOrganization(){
+    public List<String> getAllOrganization() {
         allOrganization = new ArrayList<>();
 
-        for (int i = 0; i<allEvents.size();i++) {
+        for (int i = 0; i < allEvents.size(); i++) {
             if (!allOrganization.contains(allEvents.get(i).getOwner())) {
                 allOrganization.add(allEvents.get(i).getOwner());
             }
@@ -141,24 +129,21 @@ public class MyEventsManager {
         return allOrganization;
     }
 
-    public void setChosenOrgnization(List<String> listOfOrgnz)
-    {
+    public void setChosenOrgnization(List<String> listOfOrgnz) {
         chosenOrgnization = listOfOrgnz;
     }
 
-    public List<Event> getFilteredEvents()
-    {
+    public List<Event> getFilteredEvents() {
         filteredEvents = new ArrayList<>();
 
-        for (int i = 0;i < allEvents.size(); i++) {
-            if(chosenOrgnization.contains(allEvents.get(i).getOwner())) {
+        for (int i = 0; i < allEvents.size(); i++) {
+            if (chosenOrgnization.contains(allEvents.get(i).getOwner())) {
                 filteredEvents.add(allEvents.get(i));
             }
         }
 
         if (filteredEvents.size() == 0) {
             return allEvents;
-        }
-        else return filteredEvents;
+        } else return filteredEvents;
     }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import dat255.eventify.R;
+import dat255.eventify.helper.Constants;
 
 public class FetchAddressIntentService extends IntentService {
 

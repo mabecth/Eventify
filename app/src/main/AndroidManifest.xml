@@ -30,7 +30,7 @@
         </activity>
 
         <receiver
-            android:name=".util.NotificationsUtil"
+            android:name=".eventutil.NotificationReceiver"
             android:process=":remote" />
 
         <!-- Facebook API -->

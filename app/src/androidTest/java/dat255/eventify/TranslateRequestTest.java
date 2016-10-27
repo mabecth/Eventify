@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 
 import dat255.eventify.model.TranslateRequest;
-import dat255.eventify.util.TranslateAsyncTask;
+import dat255.eventify.helper.TranslateAsyncTask;
 
 import static org.junit.Assert.assertEquals;
 

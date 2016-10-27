@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import dat255.eventify.R;
-import dat255.eventify.manager.MyEventsManager;
+import dat255.eventify.eventutil.MyEventsManger;
 import dat255.eventify.model.Event;
-import dat255.eventify.util.SortByDate;
+import dat255.eventify.helper.SortByDate;
 
 public class MainListAdapter extends BaseAdapter {
 
@@ -33,12 +33,12 @@ public class MainListAdapter extends BaseAdapter {
     private String onlyFavorites = "2";
     private String filtered = "3";
     private String typeOfList = "1";
-    private MyEventsManager manager;
+    private MyEventsManger manager;
     private boolean onlyDistance = false;
 
 
     public MainListAdapter() {
-        manager = MyEventsManager.getInstance();
+        manager = MyEventsManger.getInstance();
         listOfEvents = manager.getEvents();
     }
 

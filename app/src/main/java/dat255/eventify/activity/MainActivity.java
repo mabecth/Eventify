@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import dat255.eventify.R;
-import dat255.eventify.manager.MyEventsManager;
+import dat255.eventify.eventutil.MyEventsManger;
 import dat255.eventify.util.FetchEventService;
 import dat255.eventify.util.LocationUtil;
 import dat255.eventify.util.MyActivityListener;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     //Event list
-    private MyEventsManager myEventsManager;
+    private MyEventsManger myEventsManager;
     private MainListAdapter adapter;
     private ListView listView;
     private String allEvents = "1";
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         initFragment();
         checkLocationPermission();
         adapter = new MainListAdapter();
-        myEventsManager = MyEventsManager.getInstance();
+        myEventsManager = MyEventsManger.getInstance();
 
         //Start collecting events if we have access to the internet
         if (ConnectionManager.getInstance().isConnected()) {
