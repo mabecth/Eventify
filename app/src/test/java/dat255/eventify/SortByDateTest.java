@@ -69,8 +69,6 @@ public class SortByDateTest {
         initList();
         SortByDate.sortDates(fullList);
 
-        Log.i("SortByDateTest", "Starting sortByDateTest1...");
-
         assertEquals("1996-04-06 17:36", fullList.get(0).getDate() + " " + fullList.get(0).getTime());
         assertEquals("2015-10-14 11:28", fullList.get(1).getDate() + " " + fullList.get(1).getTime());
         assertEquals("2016-10-14 11:29", fullList.get(2).getDate() + " " + fullList.get(2).getTime());
@@ -90,8 +88,6 @@ public class SortByDateTest {
 
         SortByDate.sortDates(list1);
 
-        Log.i("SortByDateTest", "Starting sortByDateTest2...");
-
         assertEquals("1996-04-06 17:36", list1.get(0).getDate() + " " + list1.get(0).getTime());
         assertEquals("2016-10-14 13:00", list1.get(1).getDate() + " " + list1.get(1).getTime());
     }
@@ -106,8 +102,6 @@ public class SortByDateTest {
         list2.add(event4);
 
         SortByDate.sortDates(list2);
-
-        Log.i("SortByDateTest", "Starting sortByDateTest3...");
 
         assertEquals("2016-10-14 11:29", list2.get(0).getDate() + " " + list2.get(0).getTime());
         assertEquals("2016-10-14 11:30", list2.get(1).getDate() + " " + list2.get(1).getTime());
