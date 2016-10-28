@@ -38,7 +38,6 @@ public class FavoriteTest {
         event1.setTime("10:00");
         event1.setNbrAttending("13");
         event1.setOwner("Organisation");
-        event1.setId("123456");
         event1.setDesc("Description");
         event1.setCover("url..");
         event1.setDistance("14");

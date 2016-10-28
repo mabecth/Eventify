@@ -134,6 +134,7 @@ public class MyEventsManger {
     }
 
     public List<Event> getFilteredEvents() {
+
         filteredEvents = new ArrayList<>();
 
         for (int i = 0; i < allEvents.size(); i++) {
