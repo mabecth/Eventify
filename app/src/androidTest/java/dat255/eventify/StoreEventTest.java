@@ -15,6 +15,11 @@ import static junit.framework.Assert.assertEquals;
 
 public class StoreEventTest {
 
+    /*
+    Test that puts a hardcoded event in a list and uses methods for checking if the test is
+    succesfully added to the list.
+     */
+
     private List<Event> myTestEvents = new ArrayList<>();
 
     Event event;

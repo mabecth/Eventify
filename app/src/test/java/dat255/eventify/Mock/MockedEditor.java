@@ -4,13 +4,16 @@ import android.content.SharedPreferences;
 
 import java.util.Set;
 
-/**
- * Created by Johannes on 2016-10-28.
+/*
+    Mock class of Editor from SharedPreferences. Created to be able to use storageManager
+     and save without relying on external parts.
  */
 
 public class MockedEditor implements SharedPreferences.Editor {
     private static String defValue;
-
+/*
+    Saves a key for MockSharedPreferences to fetch for gson in StorageManager
+ */
     @Override
     public SharedPreferences.Editor putString(String key, String value) {
         defValue=value;
