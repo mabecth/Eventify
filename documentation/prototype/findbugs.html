@@ -78,9 +78,9 @@
 <br/>
 </p>
 <h2>Metrics</h2>
-<p>13379 lines of code analyzed,
-	in 175 classes, 
-	in 19 packages.</p>
+<p>13554 lines of code analyzed,
+	in 180 classes, 
+	in 20 packages.</p>
 <table width="500" cellpadding="5" cellspacing="2">
 <tr class="tableheader">
 <th align="left">Metric</th>
@@ -89,8 +89,8 @@
 </tr>
 <tr class="tablerow0">
 <td>High Priority Warnings</td>
-<td align="right"/>
-<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.07</td>
 </tr>
 <tr class="tablerow1">
 <td>Medium Priority Warnings</td>
@@ -102,10 +102,10 @@
 <b>Total Warnings</b>
 </td>
 <td align="right">
-<b>0</b>
+<b>1</b>
 </td>
 <td align="right">
-<b>0.00</b>
+<b>0.07</b>
 </td>
 </tr>
 </table>
@@ -119,6 +119,9 @@
 <h2>Contents</h2>
 <ul>
 <li>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</li>
+<li>
 <a href="#Details">Details</a>
 </li>
 </ul>
@@ -130,17 +133,55 @@
 </tr>
 <tr class="tablerow0">
 <td>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</td>
+<td align="right">1</td>
+</tr>
+<tr class="tablerow1">
+<td>
 <b>Total</b>
 </td>
 <td align="right">
-<b>0</b>
+<b>1</b>
 </td>
 </tr>
 </table>
 <h1>Warnings</h1>
 <p>Click on a warning row to see full context information.</p>
+<h2>
+<a name="Warnings_STYLE">Dodgy code Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65610');">
+<td>
+<span class="priority-1">ST</span>
+</td>
+<td>Write to static field dat255.eventify.Mock.MockedEditor.defValue from instance method dat255.eventify.Mock.MockedEditor.putString(String, String)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65610" style="display: none;">
+<a href="#ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">Bug type ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD (click for details)</a>
+<br/>In class dat255.eventify.Mock.MockedEditor<br/>In method dat255.eventify.Mock.MockedEditor.putString(String, String)<br/>Field dat255.eventify.Mock.MockedEditor.defValue<br/>At MockedEditor.java:[line 19]</p>
+</td>
+</tr>
+</table>
 <h1>
 <a name="Details">Details</a>
 </h1>
-</body>
+<h2>
+<a name="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD: Write to static field from instance method</a>
+</h2>
+
+  <p> This instance method writes to a static field. This is tricky to get
+correct if multiple instances are being manipulated,
+and generally bad practice.
+</p>
+
+    </body>
 </html>
