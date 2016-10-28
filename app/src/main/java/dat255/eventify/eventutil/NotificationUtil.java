@@ -24,7 +24,7 @@ public class NotificationUtil {
         long delay = calculateSettingsDelay();
         long hoursToEvent = (int) TimeUnit.MILLISECONDS.toHours(delay);
         delay = delayToNotification(delay);
-        scheduleNotification(StorageManager.getInstance().getFavorites().get(0).getTitle(), "You have an event in " + hoursToEvent + "h", 5000);
+        scheduleNotification(StorageManager.getInstance().getFavorites().get(0).getTitle(), "You have an event in " + hoursToEvent + "h", delay);
     }
 
     //scheduler for notifcation so it triggers at the right time
