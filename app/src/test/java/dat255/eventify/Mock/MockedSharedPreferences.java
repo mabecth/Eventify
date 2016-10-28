@@ -6,13 +6,13 @@ import android.support.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Johannes on 2016-10-28.
+/*
+    Mock class of SharedPreferences. Created to be able to use storageManager
+     and get saved without relying on external parts.
  */
 
 public class MockedSharedPreferences implements SharedPreferences {
     public MockedSharedPreferences(){
-
     }
 
     @Override
@@ -20,6 +20,10 @@ public class MockedSharedPreferences implements SharedPreferences {
         return null;
     }
 
+
+    /*
+    Returns defValue that will enable gson in storage to find the correct saved info.
+     */
     @Nullable
     @Override
     public String getString(String key, String defValue) {
