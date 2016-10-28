@@ -1,4 +1,4 @@
-package dat255.eventify.Mock;
+package dat255.eventify.mock;
 
 
 import android.content.SharedPreferences;

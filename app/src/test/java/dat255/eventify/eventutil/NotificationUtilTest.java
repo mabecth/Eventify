@@ -1,12 +1,11 @@
 package dat255.eventify.eventutil;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import dat255.eventify.Mock.MockedContext;
+import dat255.eventify.mock.MockedContext;
 import dat255.eventify.manager.StorageManager;
 
 import static org.junit.Assert.*;

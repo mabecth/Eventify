@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import dat255.eventify.Mock.MockedContext;
-import dat255.eventify.eventutil.MyEventsManger;
+import dat255.eventify.mock.MockedContext;
 import dat255.eventify.manager.StorageManager;
 import dat255.eventify.model.Event;
 
