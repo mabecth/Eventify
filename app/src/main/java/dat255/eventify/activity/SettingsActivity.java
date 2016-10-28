@@ -67,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
         notifyDay.setSelection(settingsMap.get("notifyDay"));
         notifyDay.setOnItemSelectedListener(dropdownListener);
 
-        notifyHoursArray = new String[]{"08:00", "10:00", "12:00", "14:00", "16:00"};
+        notifyHoursArray = new String[]{"0", "2", "4", "6", "8","10","12"};
         ArrayAdapter<String> adapterHours = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, notifyHoursArray);
         notifyHours.setAdapter(adapterHours);

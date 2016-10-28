@@ -1,4 +1,4 @@
-package dat255.eventify;
+package dat255.eventify.model;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
