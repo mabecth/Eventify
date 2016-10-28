@@ -23,7 +23,7 @@ public class MockedSharedPreferences implements SharedPreferences {
     @Nullable
     @Override
     public String getString(String key, String defValue) {
-        return null;
+        return MockedEditor.getDefValue();
     }
 
     @Nullable

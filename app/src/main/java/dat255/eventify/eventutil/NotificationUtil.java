@@ -57,6 +57,7 @@ public class NotificationUtil {
                 .setContentText(content)
                 .setSmallIcon(R.drawable.logo_android)
                 .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
                 .setContentIntent(resultPendingIntent);
         return builder.build();
     }
@@ -90,16 +91,16 @@ public class NotificationUtil {
             case 0:
                 break;
             case 1:
-                delay = +oneHourInMS * 24;
+                delay +=oneHourInMS * 24;
                 break;
             case 2:
-                delay = +oneHourInMS * 48;
+                delay +=oneHourInMS * 48;
                 break;
             case 3:
-                delay = +oneHourInMS * 72;
+                delay +=oneHourInMS * 72;
                 break;
             case 4:
-                delay = +oneHourInMS * 96;
+                delay +=oneHourInMS * 96;
                 break;
         }
 

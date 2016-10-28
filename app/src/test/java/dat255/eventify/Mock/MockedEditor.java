@@ -9,8 +9,11 @@ import java.util.Set;
  */
 
 public class MockedEditor implements SharedPreferences.Editor {
+    private static String defValue;
+
     @Override
     public SharedPreferences.Editor putString(String key, String value) {
+        defValue=value;
         return null;
     }
 
@@ -57,5 +60,9 @@ public class MockedEditor implements SharedPreferences.Editor {
     @Override
     public void apply() {
 
+    }
+
+    public static String getDefValue(){
+        return defValue;
     }
 }
